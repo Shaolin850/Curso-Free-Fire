@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('https://i0.wp.com/www.salvandonerd.blog.br/wp-content/uploads/2022/06/Freefa.jpg?fit=1920%2C1080&ssl=1');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .login-container {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 350px;
+        }
+        h1 {
+            color: #333;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 15px;
+            background-color: #FF5A00;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #D94500;
+        }
+        .btn-gerar {
+            margin-top: 20px;
+            background-color: #28a745;
+        }
+        .btn-gerar:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h1>Login</h1>
+        <form id="loginForm">
+            <input type="text" id="login" placeholder="Usuário" required>
+            <input type="password" id="senha" placeholder="Senha" required>
+            <button type="submit">Entrar</button>
+        </form>
+
+        <button class="btn-gerar" id="gerarBtn">Gerar Login e Senha Aleatórios</button>
+    </div>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            // Verificar se o login/senha é válido
+            var login = document.getElementById("login").value;
+            var senha = document.getElementById("senha").value;
+
+            // Aqui você pode comparar com o JSON armazenado ou API
+            // Para simulação:
+            if (login === "usuario_teste" && senha === "senha_teste") {
+                localStorage.setItem("pagamentoConfirmado", "true");
+                window.location.href = "https://free-fire-booster.netlify.app/sensibilidade.html";
+            } else {
+                alert("Login ou senha inválidos.");
+            }
+        });
+
+        document.getElementById("gerarBtn").addEventListener("click", function() {
+            const login = 'user' + Math.floor(Math.random() * 1000);
+            const senha = Math.random().toString(36).slice(-8); // Senha aleatória
+            alert("Login gerado: " + login + "\nSenha gerada: " + senha);
+
+            // Armazenar no arquivo JSON (supondo que você tenha um backend para fazer isso)
+            const newUser = { login: login, senha: senha };
+            
+            // Aqui seria feito um AJAX para o backend gravar no JSON, por exemplo.
+        });
+    </script>
+</body>
+</html>
