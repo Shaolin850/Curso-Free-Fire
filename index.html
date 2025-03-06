@@ -3,99 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Login</title>
+    <title>Pagamento - Free Fire Booster</title>
     <style>
+        /* Estilo geral */
         body {
             font-family: Arial, sans-serif;
+            line-height: 1.6;
             margin: 0;
             padding: 0;
-            background-image: url('https://i0.wp.com/www.salvandonerd.blog.br/wp-content/uploads/2022/06/Freefa.jpg?fit=1920%2C1080&ssl=1');
+            background-color: #f9f9f9;
+            color: #333;
+            background-image: url('https://i0.wp.com/www.salvandonerd.blog.br/wp-content/uploads/2022/06/Freefa.jpg?fit=1920%2C1080&ssl=1');  
             background-size: cover;
             background-position: center;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background-repeat: no-repeat;
         }
-        .login-container {
-            background: rgba(255, 255, 255, 0.8);
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            width: 350px;
-        }
-        h1 {
-            color: #333;
-        }
-        input[type="text"], input[type="password"] {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        button {
-            padding: 15px;
-            background-color: #FF5A00;
+
+        header {
+            background-color: #333;
             color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
+            padding: 20px;
+            text-align: center;
         }
-        button:hover {
-            background-color: #D94500;
+
+        header h1 {
+            margin: 0;
         }
-        .btn-gerar {
+
+        nav {
+            display: none; /* Inicialmente escondido */
+            text-align: center;
             margin-top: 20px;
-            background-color: #28a745;
         }
-        .btn-gerar:hover {
-            background-color: #218838;
+
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* Seção de pagamento */
+        #pagamento {
+            background-color: white;
+            padding: 40px 20px;
+            text-align: center;
+            margin: 30px auto;
+            max-width: 800px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        #pagamento h2 {
+            color: #2c3e50;
+        }
+
+        #pagamento p {
+            font-size: 1.2em;
+            color: #555;
+        }
+
+        .btn-pagamento {
+            background-color: #009b08;
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-pagamento:hover {
+            background-color: #009427;
+        }
+
+        .informacoes {
+            text-align: left;
+            margin-top: 30px;
+            color: #555;
+        }
+
+        .informacoes ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+
+        /* Rodapé */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            #pagamento {
+                padding: 20px;
+            }
+
+            .btn-pagamento {
+                width: 100%;
+            }
+
+            .informacoes ul {
+                padding-left: 10px;
+            }
         }
     </style>
 </head>
 <body>
+    <header>
+        <h1>Free Fire Booster</h1>
+        <nav id="nav-pagamento">
+            <a href="index.html">Início</a>
+            <a href="videos.html">Vídeos</a>
+            <a href="otimizacao.html">Otimização</a>
+        </nav>
+    </header>
 
-    <div class="login-container">
-        <h1>Login</h1>
-        <form id="loginForm">
-            <input type="text" id="login" placeholder="Usuário" required>
-            <input type="password" id="senha" placeholder="Senha" required>
-            <button type="submit">Entrar</button>
-        </form>
+    <section id="pagamento">
+        <h2>Adquira Conteúdo Exclusivo</h2>
+        <p>Por apenas <strong>R$5,00</strong>, você terá acesso a todas as dicas e truques para otimizar seu desempenho no Free Fire!</p>
+        
+        <div id="botao-pagamento">
+            <!-- Link de pagamento Kiwify -->
+            <a href="https://pay.kiwify.com.br/gde5HO1" target="_blank">
+                <button class="btn-pagamento">Comprar Agora - R$5</button>
+            </a>
+        </div>
 
-        <button class="btn-gerar" id="gerarBtn">Gerar Login e Senha Aleatórios</button>
-    </div>
+        <div class="informacoes">
+            <h3>O que você vai receber:</h3>
+            <ul>
+                <li>Dicas de otimização para melhorar o desempenho no Free Fire.</li>
+                <li>Truques para configurar seu dispositivo Android ou iPhone.</li>
+                <li>Redução de lags e aumento de FPS para um jogo mais fluido.</li>
+                <li>E sensibilidades atualizadas diariamente.</li>
+            </ul>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Free Fire Booster. Todos os direitos reservados.</p>
+    </footer>
 
     <script>
-        document.getElementById("loginForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-            // Verificar se o login/senha é válido
-            var login = document.getElementById("login").value;
-            var senha = document.getElementById("senha").value;
-
-            // Aqui você pode comparar com o JSON armazenado ou API
-            // Para simulação:
-            if (login === "usuario_teste" && senha === "senha_teste") {
-                localStorage.setItem("pagamentoConfirmado", "true");
-                window.location.href = "https://free-fire-booster.netlify.app/sensibilidade.html";
-            } else {
-                alert("Login ou senha inválidos.");
-            }
-        });
-
-        document.getElementById("gerarBtn").addEventListener("click", function() {
-            const login = 'user' + Math.floor(Math.random() * 1000);
-            const senha = Math.random().toString(36).slice(-8); // Senha aleatória
-            alert("Login gerado: " + login + "\nSenha gerada: " + senha);
-
-            // Armazenar no arquivo JSON (supondo que você tenha um backend para fazer isso)
-            const newUser = { login: login, senha: senha };
+        document.addEventListener("DOMContentLoaded", function () {
+            const paginaAposPagamento = "sensibilidade.html"; // Página desbloqueada após pagamento
             
-            // Aqui seria feito um AJAX para o backend gravar no JSON, por exemplo.
+            // Verifica se o usuário já pagou (usando localStorage)
+            if (localStorage.getItem("pagamentoConfirmado") === "true") {
+                window.location.href = paginaAposPagamento; // Redireciona automaticamente
+            } else {
+                // Esconde os botões de navegação até o pagamento ser confirmado
+                document.getElementById("nav-pagamento").style.display = "none";
+            }
+
+            // Simulação de pagamento confirmado (o ideal é configurar Webhooks no Kiwify)
+            window.addEventListener("message", function (event) {
+                if (event.data === "pagamento_sucesso") {
+                    localStorage.setItem("pagamentoConfirmado", "true");
+                    window.location.href = paginaAposPagamento;
+                }
+            });
         });
     </script>
 </body>
