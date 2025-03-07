@@ -85,11 +85,11 @@
             cursor: pointer;
             margin-top: 10px;
         }
-        #mensagem-recarga {
-            display: none;
-            color: red;
+        .mensagem {
+            font-size: 18px;
+            color: #FF0000;
+            margin-bottom: 20px;
             font-weight: bold;
-            margin-top: 20px;
         }
     </style>
 </head>
@@ -105,11 +105,11 @@
 
         <button class="btn-comprar" id="btnCompra">Comprar por R$5</button>
 
-        <div id="mensagem-recarga">
-            <p>Por favor, recarregue o navegador para liberar o login e a senha.</p>
+        <div class="mensagem" id="mensagemPagamento">
+            <p>Faça o pagamento para que os logins e senhas abaixo funcionem corretamente.</p>
         </div>
 
-        <div class="tabela-container" id="tabela-login" style="display:none;">
+        <div class="tabela-container">
             <h2>Tabela de Logins e Senhas</h2>
             <table class="tabela">
                 <thead>
@@ -140,6 +140,7 @@
         // Função para gerar tabela de logins
         function gerarTabela() {
             const tabela = document.getElementById("tabelaLogins");
+            tabela.innerHTML = ''; // Limpa a tabela antes de gerar novos dados
             usuarios.forEach(user => {
                 const row = document.createElement("tr");
                 const loginCell = document.createElement("td");
@@ -193,20 +194,20 @@
             }, 5000); // Simula o pagamento sendo confirmado após 5 segundos
         });
 
+        // Função para atualizar os logins e senhas da tabela diariamente
+        function atualizarTabelaDiariamente() {
+            setInterval(function() {
+                // Aqui você pode substituir por uma função que pegue os logins e senhas de uma fonte externa ou faça qualquer atualização necessária
+                usuarios.push({ login: `user${usuarios.length + 1}`, senha: `senha${usuarios.length + 1}` });
+                gerarTabela();
+            }, 24 * 60 * 60 * 1000); // Atualiza a cada 24 horas
+        }
+
         // Chama a função para gerar a tabela de logins
         gerarTabela();
 
-        // Mostra a mensagem e a tabela após recarregar
-        window.onload = function() {
-            if (localStorage.getItem("login") && localStorage.getItem("senha")) {
-                // Mostra a tabela e oculta a mensagem de recarga
-                document.getElementById("tabela-login").style.display = "block";
-                document.getElementById("mensagem-recarga").style.display = "none";
-            } else {
-                // Exibe a mensagem para recarregar o navegador
-                document.getElementById("mensagem-recarga").style.display = "block";
-            }
-        };
+        // Inicia a atualização diária da tabela
+        atualizarTabelaDiariamente();
     </script>
 
 </body>
