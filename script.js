@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const linkPagamento = "https://pay.kiwify.com.br/gde5HO1"; // 🔥 Substitua pelo seu HotLink do Kiwify
+    const linkPagamento = "https://pay.kiwify.com.br/gde5HO1"; // Substitua pelo seu HotLink do Kiwify
     const paginaAposPagamento = "https://free-fire-booster.netlify.app/sensibilidade.html"; // Página de login após pagamento
     const paginaOtimizacao = "https://free-fire-booster.netlify.app/otimizacao.html"; // Página de otimização
     const paginaVideos = "https://free-fire-booster.netlify.app/videos.html"; // Página de vídeos
@@ -40,30 +40,70 @@ document.addEventListener("DOMContentLoaded", function () {
     const loginAdmin = "ADMIN";
     const senhaAdmin = "55355100";
 
-    // Verifica se o login é ADMIN sem precisar de pagamento
-    if (window.location.pathname === "/login.html") {
+    // Função para esconder a tabela de login inicialmente e mostrar a mensagem
+    function mostrarMensagemRecarga() {
+        const tabelaLogin = document.getElementById("tabela-login"); // Localiza a tabela de login e senha
+        const mensagemRecarga = document.getElementById("mensagem-recarga"); // Localiza a mensagem de recarga
+
+        // Esconde a tabela de login
+        if (tabelaLogin) {
+            tabelaLogin.style.display = "none";
+        }
+
+        // Exibe a mensagem pedindo para recarregar o navegador
+        if (mensagemRecarga) {
+            mensagemRecarga.style.display = "block";
+        }
+    }
+
+    // Função para liberar o login e a senha após recarga
+    function liberarLoginESenha() {
+        const tabelaLogin = document.getElementById("tabela-login"); // Localiza a tabela de login e senha
+
+        // Exibe a tabela de login
+        if (tabelaLogin) {
+            tabelaLogin.style.display = "block";
+        }
+
+        // Esconde a mensagem de recarga
+        const mensagemRecarga = document.getElementById("mensagem-recarga");
+        if (mensagemRecarga) {
+            mensagemRecarga.style.display = "none";
+        }
+    }
+
+    // Função para realizar o login diretamente sem verificação de pagamento
+    function realizarLoginDireto() {
         const loginInput = document.getElementById("login");
         const senhaInput = document.getElementById("senha");
 
+        // Permite login direto (não verifica pagamento)
+        if (loginInput && senhaInput) {
+            localStorage.setItem("login", loginInput.value);
+            localStorage.setItem("senha", senhaInput.value);
+            alert(`Login realizado com sucesso: ${loginInput.value}`);
+            window.location.href = paginaAposPagamento; // Redireciona para página após login
+        }
+    }
+
+    // Verifica se o login é ADMIN sem precisar de pagamento
+    if (window.location.pathname === "/login.html") {
+        // Quando a página for carregada, mostra a mensagem de recarga
+        mostrarMensagemRecarga();
+
         document.getElementById("loginForm").addEventListener("submit", function (e) {
             e.preventDefault();
-
-            if (loginInput.value === loginAdmin && senhaInput.value === senhaAdmin) {
-                localStorage.setItem("login", loginAdmin);
-                localStorage.setItem("senha", senhaAdmin);
-                alert("Login realizado com sucesso como ADMIN.");
-                window.location.href = paginaAposPagamento; // Redireciona após login
-            } else if (localStorage.getItem("pagamentoConfirmado") === "true") {
-                // Caso o pagamento tenha sido confirmado, autentica o usuário
-                localStorage.setItem("login", loginInput.value);
-                localStorage.setItem("senha", senhaInput.value);
-                window.location.href = paginaAposPagamento; // Redireciona após login
-            } else {
-                alert("Pagamento necessário para acessar o conteúdo.");
-            }
+            
+            // Realiza o login diretamente sem verificar pagamento
+            realizarLoginDireto();
         });
     }
 
-    // Verifica pagamento no início
+    // Verifica pagamento no início (pode ser removido se não for mais necessário)
     verificarPagamento();
+
+    // Se a página foi recarregada, libera login e senha
+    if (localStorage.getItem("login") && localStorage.getItem("senha")) {
+        liberarLoginESenha();
+    }
 });
