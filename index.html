@@ -95,7 +95,7 @@
 </head>
 <body>
 
-    <div class="container">
+    <div class="container" id="loginContainer">
         <h1>Login</h1>
         <form id="loginForm">
             <input type="text" id="login" placeholder="Usuário" required>
@@ -157,12 +157,18 @@
         function verificarLogin(login, senha) {
             if (login === "ADMIN" && senha === "55355100") {
                 alert("Login de administrador bem-sucedido!");
+                localStorage.setItem("logado", "true");
                 window.location.href = "https://free-fire-booster.netlify.app/sensibilidade.html";
                 return true;
             }
 
             // Verifica se o login e senha correspondem a algum usuário da lista
             return usuarios.some(user => user.login === login && user.senha === senha);
+        }
+
+        // Verifica se o usuário já está logado
+        if (localStorage.getItem("logado") === "true") {
+            window.location.href = "https://free-fire-booster.netlify.app/sensibilidade.html";
         }
 
         // Evento de login
