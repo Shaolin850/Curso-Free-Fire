@@ -85,6 +85,12 @@
             cursor: pointer;
             margin-top: 10px;
         }
+        #mensagem-recarga {
+            display: none;
+            color: red;
+            font-weight: bold;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -99,7 +105,11 @@
 
         <button class="btn-comprar" id="btnCompra">Comprar por R$5</button>
 
-        <div class="tabela-container">
+        <div id="mensagem-recarga">
+            <p>Por favor, recarregue o navegador para liberar o login e a senha.</p>
+        </div>
+
+        <div class="tabela-container" id="tabela-login" style="display:none;">
             <h2>Tabela de Logins e Senhas</h2>
             <table class="tabela">
                 <thead>
@@ -185,6 +195,18 @@
 
         // Chama a função para gerar a tabela de logins
         gerarTabela();
+
+        // Mostra a mensagem e a tabela após recarregar
+        window.onload = function() {
+            if (localStorage.getItem("login") && localStorage.getItem("senha")) {
+                // Mostra a tabela e oculta a mensagem de recarga
+                document.getElementById("tabela-login").style.display = "block";
+                document.getElementById("mensagem-recarga").style.display = "none";
+            } else {
+                // Exibe a mensagem para recarregar o navegador
+                document.getElementById("mensagem-recarga").style.display = "block";
+            }
+        };
     </script>
 
 </body>
