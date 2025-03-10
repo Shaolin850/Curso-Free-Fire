@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personalizador de Bio do Free Fire</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    header h1 {
+      font-size: 2em;
+    }
+
+    nav a {
+      margin: 0 10px;
+      text-decoration: none;
+      color: #ffffff;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"],
+    textarea {
+      width: calc(100% - 22px);
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    .nick-list {
+      margin-top: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .btn-copy {
+      background: #007bff;
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .btn-copy:hover {
+      background: #0056b3;
+    }
+
+    #descricao {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .bio-preview {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f1f1f1;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+
+    .color-picker {
+      width: 100px;
+    }
+
+    .generate-btn {
+      margin-top: 10px;
+      background-color: #007bff;
+    }
+
+    .generate-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .copy-btn {
+      background-color: #28a745;
+      color: white;
+      border-radius: 4px;
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+
+    .copy-btn:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Gerador de Bio do Free Fire</h1>
+    <nav>
+      <a href="sensibilidade.html">Sensibilidade</a>
+      <a href="otimizacao.html">Otimização</a>
+      <a href="videos.html">Vídeos</a>
+      <a href="gerar-nick.html">Gerar Nick</a>
+      <a href="gerar-bio.html">Gerar Bio</a>
+    </nav>        
+  </header>
+
+  <div class="container">
+    <!-- Seção de Introdução -->
+    <section class="section">
+      <h2>Introdução</h2>
+      <p>Personalize sua bio no Free Fire utilizando códigos que permitem alterar cores, inserir símbolos e frases criativas. Abaixo, você pode gerar e visualizar como ficará sua bio antes de aplicá-la.</p>
+    </section>
+
+    <!-- Seção de Geração de Bio -->
+    <section class="section">
+      <h2>Gere sua Bio</h2>
+      <label for="bioInput">Digite o texto para sua bio:</label>
+      <textarea id="bioInput" rows="4" cols="50" placeholder="Exemplo: [c][b]Jogador Profissional[FF0000]"></textarea><br>
+      <label for="colorPicker">Escolha a cor do texto:</label>
+      <input type="color" id="colorPicker" class="color-picker" value="#FF0000">
+      <button class="generate-btn" onclick="gerarBio()">Gerar Exemplo</button>
+      <div id="bioPreview" class="bio-preview"></div>
+      <button class="copy-btn" id="copyBioBtn" style="display:none;" onclick="copiarBio()">Copiar Bio</button>
+    </section>
+
+    <!-- Seção de Frases Criativas para Bio -->
+    <section class="section">
+      <h2>Frases Criativas para Sua Bio</h2>
+      <p>Inspire-se com algumas frases para adicionar à sua bio:</p>
+      <ul>
+        <li><span style="color: #FF0000;">[c][b]Ousadia e Alegria[FF0000]</span> - Frase motivacional.</li>
+        <li><span style="color: #00FF00;">[c][i]A Lenda Nunca Morre[00FF00]</span> - Frase para jogadores experientes.</li>
+        <li><span style="color: #0000FF;">[c][u]Vitória Sempre[0000FF]</span> - Frase otimista.</li>
+        <li><span style="color: #FF9900;">[c][b]Lutando até o fim[FF9900]</span> - Para jogadores persistentes.</li>
+        <li><span style="color: #FFFF00;">[c][i]Viciados em Free Fire[FFFF00]</span> - Frase para fanáticos.</li>
+        <li><span style="color: #00FFFF;">[c][u]Quem não arrisca, não vence[00FFFF]</span> - Frase para os ousados.</li>
+        <li><span style="color: #FF6347;">[c][b]A vitória é nossa[FF6347]</span> - Para jogadores confiantes.</li>
+        <li><span style="color: #8A2BE2;">[c][i]Não existe limite para a vitória[8A2BE2]</span> - Frase motivacional.</li>
+        <li><span style="color: #800080;">[c][u]A cada derrota, aprendo mais[800080]</span> - Frase para quem aprende com os erros.</li>
+        <li><span style="color: #FFD700;">[c][b]Com garra, vamos à luta[FFD700]</span> - Frase otimista.</li>
+        <li><span style="color: #FF1493;">[c][i]Lutadores, não desistimos nunca[FF1493]</span> - Para quem é persistente.</li>
+        <li><span style="color: #7FFF00;">[c][u]O jogo nunca acaba[7FFF00]</span> - Para jogadores dedicados.</li>
+        <li><span style="color: #FF4500;">[c][b]Equipe imbatível[FF4500]</span> - Frase para times fortes.</li>
+        <li><span style="color: #ADFF2F;">[c][i]A batalha está só começando[ADFF2F]</span> - Para quem está começando.</li>
+        <li><span style="color: #20B2AA;">[c][u]Estamos prontos para vencer[20B2AA]</span> - Para jogadores confiantes.</li>
+        <li><span style="color: #F0E68C;">[c][b]Jogo para ganhar[F0E68C]</span> - Frase para quem quer sempre vencer.</li>
+        <li><span style="color: #8B4513;">[c][i]A luta é nossa[8B4513]</span> - Frase motivacional.</li>
+        <li><span style="color: #D2691E;">[c][u]A vitória será nossa[D2691E]</span> - Para quem não desiste.</li>
+        <li><span style="color: #98FB98;">[c][b]Cada vitória é uma conquista[98FB98]</span> - Frase de superação.</li>
+        <li><span style="color: #D3D3D3;">[c][i]Conquistando a vitória juntos[D3D3D3]</span> - Frase de união.</li>
+        <li><span style="color: #A9A9A9;">[c][u]Sempre prontos para a próxima batalha[A9A9A9]</span> - Frase para guerreiros.</li>
+        <li><span style="color: #FF0000;">[c][b]Lenda do Free Fire[FF0000]</span> - Frase de destaque.</li>
+        <li><span style="color: #00FF00;">[c][i]Lutando em cada partida[00FF00]</span> - Para jogadores persistentes.</li>
+        <li><span style="color: #0000FF;">[c][u]Somente os fortes sobrevivem[0000FF]</span> - Para jogadores corajosos.</li>
+        <li><span style="color: #FF6347;">[c][b]Sempre em frente, nunca para trás[FF6347]</span> - Frase para motivação.</li>
+        <li><span style="color: #8A2BE2;">[c][i]Em cada batalha, um aprendizado[8A2BE2]</span> - Para quem aprende com a experiência.</li>
+        <li><span style="color: #800080;">[c][u]Vencer é a única opção[800080]</span> - Frase para quem tem foco em vencer.</li>
+        <li><span style="color: #FFD700;">[c][b]A guerra é nossa[FFD700]</span> - Para quem não teme desafios.</li>
+        <li><span style="color: #FF1493;">[c][i]Jogue até o fim[FF1493]</span> - Para quem não desiste.</li>
+        <li><span style="color: #7FFF00;">[c][u]A vitória é minha[7FFF00]</span> - Para jogadores confiantes.</li>
+        <li><span style="color: #FF4500;">[c][b]Cada morte, uma lição[FF4500]</span> - Para quem aprende com os erros.</li>
+        <li><span style="color: #ADFF2F;">[c][i]Vivo para o Free Fire[ADFF2F]</span> - Para quem é viciado no jogo.</li>
+        <li><span style="color: #20B2AA;">[c][u]A batalha nunca acaba[20B2AA]</span> - Para guerreiros incansáveis.</li>
+        <li><span style="color: #F0E68C;">[c][b]Somos imbatíveis[F0E68C]</span> - Para equipes fortes.</li>
+        <li><span style="color: #8B4513;">[c][i]Cada tiro é um passo[8B4513]</span> - Frase para quem é preciso no jogo.</li>
+        <li><span style="color: #D2691E;">[c][u]Em busca da vitória[D2691E]</span> - Para jogadores focados.</li>
+        <li><span style="color: #98FB98;">[c][b]O que não nos mata, nos fortalece[98FB98]</span> - Para quem nunca desiste.</li>
+        <li><span style="color: #D3D3D3;">[c][i]Sempre lutando, nunca perdendo[D3D3D3]</span> - Para quem nunca abandona a luta.</li>
+        <li><span style="color: #A9A9A9;">[c][u]A cada vitória, um novo desafio[A9A9A9]</span> - Para jogadores que sempre buscam crescer
+      </ul>
+    </section>
+  </div>
+
+  <script>
+    // Função para gerar e exibir a bio personalizada
+    function gerarBio() {
+      const bioInput = document.getElementById("bioInput").value;
+      const colorPicker = document.getElementById("colorPicker").value;
+      const bioPreview = document.getElementById("bioPreview");
+      bioPreview.textContent = `[c][b]${bioInput}[${colorPicker}]`;
+      document.getElementById("copyBioBtn").style.display = "inline-block";
+    }
+
+    // Função para copiar a bio gerada
+    function copiarBio() {
+      const bioPreview = document.getElementById("bioPreview").textContent;
+      navigator.clipboard.writeText(bioPreview).then(function() {
+        alert("Bio copiada com sucesso!");
+      }, function() {
+        alert("Falha ao copiar a bio.");
+      });
+    }
+
+    // Função para copiar um código específico
+    function copiarCodigo(codigo) {
+      navigator.clipboard.writeText(codigo).then(function() {
+        alert("Código copiado com sucesso!");
+      }, function() {
+        alert("Falha ao copiar o código.");
+      });
+    }
+  </script>
+
+</body>
+</html>

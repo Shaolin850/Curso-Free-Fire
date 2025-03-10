@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerador de Nicks Personalizados para Free Fire</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    header h1 {
+      font-size: 2em;
+    }
+
+    nav a {
+      margin: 0 10px;
+      text-decoration: none;
+      color: #ffffff;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      width: calc(100% - 22px);
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    .nick-list {
+      margin-top: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .btn-copy {
+      background: #007bff;
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .btn-copy:hover {
+      background: #0056b3;
+    }
+
+    #descricao {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Gerador de Nicks Personalizados para Free Fire</h1>
+    <nav>
+      <a href="sensibilidade.html">Sensibilidade</a>
+      <a href="otimizacao.html">Otimização</a>
+      <a href="videos.html">Vídeos</a>
+      <a href="gerar-nick.html">Gerar Nick</a>
+      <a href="gerar-bio.html">Gerar Bio</a>
+    </nav>        
+  </header>
+
+  <section id="descricao">
+    <p>
+      Nesta página, você pode gerar nicks personalizados para usar no Free Fire. Basta digitar seu nome, e o gerador criará várias opções de nicks estilizados para você escolher!
+    </p>
+  </section>
+
+  <div class="container">
+    <input type="text" id="nomeInput" placeholder="Digite seu nome">
+    <button onclick="gerarNicks()">Gerar Nicks</button>
+    
+    <div class="nick-list" id="nickList">
+      <table id="nickTable">
+        <thead>
+          <tr>
+            <th>Nick Personalizado</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Exemplos de Nicks -->
+          <tr>
+            <td>꧁༒☬Exemplo1☬༒꧂</td>
+            <td><button class="btn-copy" onclick="copiarNick('꧁༒☬Exemplo1☬༒꧂')">Copiar</button></td>
+          </tr>
+          <tr>
+            <td>★彡Exemplo2彡★</td>
+            <td><button class="btn-copy" onclick="copiarNick('★彡Exemplo2彡★')">Copiar</button></td>
+          </tr>
+          <tr>
+            <td>✞Exemplo3✞</td>
+            <td><button class="btn-copy" onclick="copiarNick('✞Exemplo3✞')">Copiar</button></td>
+          </tr>
+          <tr>
+            <td>𖣘Exemplo4𖣘</td>
+            <td><button class="btn-copy" onclick="copiarNick('𖣘Exemplo4𖣘')">Copiar</button></td>
+          </tr>
+          <tr>
+            <td>♛Exemplo5♛</td>
+            <td><button class="btn-copy" onclick="copiarNick('♛Exemplo5♛')">Copiar</button></td>
+          </tr>
+          <tr>
+            <td>ツExemplo6ツ</td>
+            <td><button class="btn-copy" onclick="copiarNick('ツExemplo6ツ')">Copiar</button></td>
+          </tr>
+          <tr>
+            <td>×͜×Exemplo7×͜×</td>
+            <td><button class="btn-copy" onclick="copiarNick('×͜×Exemplo7×͜×')">Copiar</button></td>
+          </tr>
+          <tr>
+            <td>✧Exemplo8✧</td>
+            <td><button class="btn-copy" onclick="copiarNick('✧Exemplo8✧')">Copiar</button></td>
+          </tr>
+          <tr>
+            <td>★Exemplo9★</td>
+            <td><button class="btn-copy" onclick="copiarNick('★Exemplo9★')">Copiar</button></td>
+          </tr>
+          <tr>
+            <td>𖣘Exemplo10𖣘</td>
+            <td><button class="btn-copy" onclick="copiarNick('𖣘Exemplo10𖣘')">Copiar</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const estilos = [
+      { prefixo: '꧁༒☬', sufixo: '☬༒꧂' },
+      { prefixo: '★彡', sufixo: '彡★' },
+      { prefixo: '✞', sufixo: '✞' },
+      { prefixo: '𖣘', sufixo: '𖣘' },
+      { prefixo: '♛', sufixo: '♛' },
+      { prefixo: 'ツ', sufixo: 'ツ' },
+      { prefixo: '×͜×', sufixo: '×͜×' },
+      { prefixo: '✧', sufixo: '✧' }
+    ];
+
+    function gerarNicks() {
+      const nome = document.getElementById('nomeInput').value.trim();
+      const nickTableBody = document.querySelector('#nickTable tbody');
+      nickTableBody.innerHTML = '';
+
+      if (nome === '') {
+        alert('Por favor, digite um nome.');
+        return;
+      }
+
+      for (let i = 0; i < 50; i++) {
+        const estilo = estilos[Math.floor(Math.random() * estilos.length)];
+        const nick = `${estilo.prefixo}${nome}${estilo.sufixo}`;
+        const row = document.createElement('tr');
+
+        const nickCell = document.createElement('td');
+        nickCell.textContent = nick;
+        row.appendChild(nickCell);
+
+        const actionCell = document.createElement('td');
+        const btnCopy = document.createElement('button');
+        btnCopy.textContent = 'Copiar';
+        btnCopy.className = 'btn-copy';
+        btnCopy.addEventListener('click', () => copiarNick(nick));
+        actionCell.appendChild(btnCopy);
+        row.appendChild(actionCell);
+
+        nickTableBody.appendChild(row);
+      }
+    }
+
+    function copiarNick(nick) {
+      navigator.clipboard.writeText(nick).then(() => {
+        alert(`Nick "${nick}" copiado para a área de transferência!`);
+      });
+    }
+  </script>
+</body>
+</html>
