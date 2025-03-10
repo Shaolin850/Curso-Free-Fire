@@ -106,4 +106,58 @@ document.addEventListener("DOMContentLoaded", function () {
     if (localStorage.getItem("login") && localStorage.getItem("senha")) {
         liberarLoginESenha();
     }
+    
+    /* ------------------- NOVAS FUNCIONALIDADES ------------------- */
+    
+    // Página para criação de nome personalizado (nome-personalizado.html)
+    if (window.location.pathname.endsWith("nome-personalizado.html")) {
+        const formNome = document.getElementById("formNome");
+        formNome.addEventListener("submit", function(e) {
+            e.preventDefault();
+            const nomeInput = document.getElementById("nomePersonalizado");
+            const invisivelInput = document.getElementById("invisivel");
+            let nome = nomeInput.value.trim();
+            if (invisivelInput.checked) {
+                // Adiciona um espaço invisível (caractere zero-width space)
+                nome += "\u200B";
+            }
+            localStorage.setItem("nomePersonalizado", nome);
+            alert("Nome personalizado salvo com sucesso!");
+            // Opcional: redireciona para a página do avatar
+            window.location.href = "avatar.html";
+        });
+    }
+
+    // Página para geração de avatar com nome personalizado (avatar.html)
+    if (window.location.pathname.endsWith("avatar.html")) {
+        const canvas = document.getElementById("avatarCanvas");
+        if (canvas.getContext) {
+            const ctx = canvas.getContext("2d");
+            const nome = localStorage.getItem("nomePersonalizado") || "Player";
+            
+            // Limpa o canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Cria um gradiente de fundo para efeito neon
+            let gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            gradient.addColorStop(0, "#0f0");
+            gradient.addColorStop(1, "#00f");
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Configura o estilo do texto para simular um efeito neon
+            ctx.font = "30px Arial";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillStyle = "#fff";
+            ctx.shadowColor = "#0ff";
+            ctx.shadowBlur = 20;
+            ctx.fillText(nome, canvas.width / 2, canvas.height / 2);
+
+            // Adiciona um contorno neon ao texto
+            ctx.lineWidth = 5;
+            ctx.strokeStyle = "#0ff";
+            ctx.strokeText(nome, canvas.width / 2, canvas.height / 2);
+        }
+    }
 });
