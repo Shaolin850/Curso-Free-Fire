@@ -168,7 +168,7 @@
     <section class="section">
       <h2>Gere sua Bio</h2>
       <label for="bioInput">Digite o texto para sua bio:</label>
-      <textarea id="bioInput" rows="4" cols="50" placeholder="Exemplo: [c][b]Jogador Profissional[FF0000]"></textarea><br>
+      <textarea id="bioInput" rows="4" cols="50" placeholder="Exemplo: [c][b][FF0000]Jogador Profissional"></textarea><br>
       <label for="colorPicker">Escolha a cor do texto:</label>
       <input type="color" id="colorPicker" class="color-picker" value="#FF0000">
       <button class="generate-btn" onclick="gerarBio()">Gerar Exemplo</button>
@@ -181,46 +181,53 @@
       <h2>Frases Criativas para Sua Bio</h2>
       <p>Inspire-se com algumas frases para adicionar à sua bio:</p>
       <ul>
-        <li><span style="color: #FF0000;">[c][b]Ousadia e Alegria[FF0000]</span> - Frase motivacional.</li>
-        <li><span style="color: #00FF00;">[c][i]A Lenda Nunca Morre[00FF00]</span> - Frase para jogadores experientes.</li>
-        <li><span style="color: #0000FF;">[c][u]Vitória Sempre[0000FF]</span> - Frase otimista.</li>
-        <li><span style="color: #FF9900;">[c][b]Lutando até o fim[FF9900]</span> - Para jogadores persistentes.</li>
-        <li><span style="color: #FFFF00;">[c][i]Viciados em Free Fire[FFFF00]</span> - Frase para fanáticos.</li>
-        <li><span style="color: #00FFFF;">[c][u]Quem não arrisca, não vence[00FFFF]</span> - Frase para os ousados.</li>
-        <li><span style="color: #FF6347;">[c][b]A vitória é nossa[FF6347]</span> - Para jogadores confiantes.</li>
-        <li><span style="color: #8A2BE2;">[c][i]Não existe limite para a vitória[8A2BE2]</span> - Frase motivacional.</li>
-        <li><span style="color: #800080;">[c][u]A cada derrota, aprendo mais[800080]</span> - Frase para quem aprende com os erros.</li>
-        <li><span style="color: #FFD700;">[c][b]Com garra, vamos à luta[FFD700]</span> - Frase otimista.</li>
-        <li><span style="color: #FF1493;">[c][i]Lutadores, não desistimos nunca[FF1493]</span> - Para quem é persistente.</li>
-        <li><span style="color: #7FFF00;">[c][u]O jogo nunca acaba[7FFF00]</span> - Para jogadores dedicados.</li>
-        <li><span style="color: #FF4500;">[c][b]Equipe imbatível[FF4500]</span> - Frase para times fortes.</li>
-        <li><span style="color: #ADFF2F;">[c][i]A batalha está só começando[ADFF2F]</span> - Para quem está começando.</li>
-        <li><span style="color: #20B2AA;">[c][u]Estamos prontos para vencer[20B2AA]</span> - Para jogadores confiantes.</li>
-        <li><span style="color: #F0E68C;">[c][b]Jogo para ganhar[F0E68C]</span> - Frase para quem quer sempre vencer.</li>
-        <li><span style="color: #8B4513;">[c][i]A luta é nossa[8B4513]</span> - Frase motivacional.</li>
-        <li><span style="color: #D2691E;">[c][u]A vitória será nossa[D2691E]</span> - Para quem não desiste.</li>
-        <li><span style="color: #98FB98;">[c][b]Cada vitória é uma conquista[98FB98]</span> - Frase de superação.</li>
-        <li><span style="color: #D3D3D3;">[c][i]Conquistando a vitória juntos[D3D3D3]</span> - Frase de união.</li>
-        <li><span style="color: #A9A9A9;">[c][u]Sempre prontos para a próxima batalha[A9A9A9]</span> - Frase para guerreiros.</li>
-        <li><span style="color: #FF0000;">[c][b]Lenda do Free Fire[FF0000]</span> - Frase de destaque.</li>
-        <li><span style="color: #00FF00;">[c][i]Lutando em cada partida[00FF00]</span> - Para jogadores persistentes.</li>
-        <li><span style="color: #0000FF;">[c][u]Somente os fortes sobrevivem[0000FF]</span> - Para jogadores corajosos.</li>
-        <li><span style="color: #FF6347;">[c][b]Sempre em frente, nunca para trás[FF6347]</span> - Frase para motivação.</li>
-        <li><span style="color: #8A2BE2;">[c][i]Em cada batalha, um aprendizado[8A2BE2]</span> - Para quem aprende com a experiência.</li>
-        <li><span style="color: #800080;">[c][u]Vencer é a única opção[800080]</span> - Frase para quem tem foco em vencer.</li>
-        <li><span style="color: #FFD700;">[c][b]A guerra é nossa[FFD700]</span> - Para quem não teme desafios.</li>
-        <li><span style="color: #FF1493;">[c][i]Jogue até o fim[FF1493]</span> - Para quem não desiste.</li>
-        <li><span style="color: #7FFF00;">[c][u]A vitória é minha[7FFF00]</span> - Para jogadores confiantes.</li>
-        <li><span style="color: #FF4500;">[c][b]Cada morte, uma lição[FF4500]</span> - Para quem aprende com os erros.</li>
-        <li><span style="color: #ADFF2F;">[c][i]Vivo para o Free Fire[ADFF2F]</span> - Para quem é viciado no jogo.</li>
-        <li><span style="color: #20B2AA;">[c][u]A batalha nunca acaba[20B2AA]</span> - Para guerreiros incansáveis.</li>
-        <li><span style="color: #F0E68C;">[c][b]Somos imbatíveis[F0E68C]</span> - Para equipes fortes.</li>
-        <li><span style="color: #8B4513;">[c][i]Cada tiro é um passo[8B4513]</span> - Frase para quem é preciso no jogo.</li>
-        <li><span style="color: #D2691E;">[c][u]Em busca da vitória[D2691E]</span> - Para jogadores focados.</li>
-        <li><span style="color: #98FB98;">[c][b]O que não nos mata, nos fortalece[98FB98]</span> - Para quem nunca desiste.</li>
-        <li><span style="color: #D3D3D3;">[c][i]Sempre lutando, nunca perdendo[D3D3D3]</span> - Para quem nunca abandona a luta.</li>
-        <li><span style="color: #A9A9A9;">[c][u]A cada vitória, um novo desafio[A9A9A9]</span> - Para jogadores que sempre buscam crescer
+        <li><span style="color: #FF0000;">[c][b][FF0000]Ousadia e Alegria</span> - Frase motivacional.</li>
+        <li><span style="color: #00FF00;">[c][i][00FF00]A Lenda Nunca Morre</span> - Frase para jogadores experientes.</li>
+        <li><span style="color: #0000FF;">[c][u][0000FF]Vitória Sempre</span> - Frase otimista.</li>
+        <li><span style="color: #FF9900;">[c][b][FF9900]Lutando até o fim</span> - Para jogadores persistentes.</li>
+        <li><span style="color: #FFFF00;">[c][i][FFFF00]Viciados em Free Fire</span> - Frase para fanáticos.</li>
+        <li><span style="color: #00FFFF;">[c][u][00FFFF]Quem não arrisca, não vence</span> - Frase para os ousados.</li>
+        <li><span style="color: #FF6347;">[c][b][FF6347]A vitória é nossa</span> - Para jogadores confiantes.</li>
+        <li><span style="color: #8A2BE2;">[c][i][8A2BE2]Não existe limite para a vitória</span> - Frase motivacional.</li>
+        <li><span style="color: #800080;">[c][u][800080]A cada derrota, aprendo mais</span> - Frase para quem aprende com os erros.</li>
+        <li><span style="color: #FFD700;">[c][b][FFD700]Com garra, vamos à luta</span> - Frase otimista.</li>
+        <li><span style="color: #FF1493;">[c][i][FF1493]Lutadores, não desistimos nunca</span> - Para quem é persistente.</li>
+        <li><span style="color: #7FFF00;">[c][u][7FFF00]O jogo nunca acaba</span> - Para jogadores dedicados.</li>
+        <li><span style="color: #FF4500;">[c][b][FF4500]Acredite, você pode mais</span> - Frase motivacional.</li>
+        <li><span style="color: #32CD32;">[c][i][32CD32]Nada é impossível</span> - Para os que acreditam em superação.</li>
+        <li><span style="color: #00008B;">[c][u][00008B]A vitória é a recompensa dos perseverantes</span> - Para quem não desiste.</li>
+        <li><span style="color: #8B0000;">[c][b][8B0000]Lutar é a única opção</span> - Frase de motivação.</li>
+        <li><span style="color: #4B0082;">[c][i][4B0082]Sempre em frente, nunca para trás</span> - Para quem busca evolução.</li>
+        <li><span style="color: #DAA520;">[c][u][DAA520]A força está dentro de você</span> - Frase inspiradora.</li>
+        <li><span style="color: #7B68EE;">[c][b][7B68EE]Cada batalha é uma conquista</span> - Para os persistentes.</li>
+        <li><span style="color: #DC143C;">[c][i][DC143C]A coragem é o primeiro passo para a vitória</span> - Frase de motivação.</li>
+        <li><span style="color: #FF8C00;">[c][u][FF8C00]Não há limites para os corajosos</span> - Para os ousados.</li>
+        <li><span style="color: #F0E68C;">[c][b][F0E68C]Com dedicação, o impossível se torna possível</span> - Para os persistentes.</li>
+        <li><span style="color: #ADFF2F;">[c][i][ADFF2F]Cada derrota é um aprendizado</span> - Para quem aprende com os erros.</li>
+        <li><span style="color: #C71585;">[c][u][C71585]A luta não é contra os outros, mas contra você mesmo</span> - Frase de autoconhecimento.</li>
+        <li><span style="color: #FF00FF;">[c][b][FF00FF]A vitória começa com a confiança</span> - Frase de motivação.</li>
+        <li><span style="color: #98FB98;">[c][i][98FB98]O verdadeiro guerreiro nunca desiste</span> - Para os determinados.</li>
+        <li><span style="color: #FF69B4;">[c][u][FF69B4]A superação é o segredo da vitória</span> - Frase inspiradora.</li>
+        <li><span style="color: #8B4513;">[c][b][8B4513]Jogue com paixão, vença com honra</span> - Para quem ama o jogo.</li>
+        <li><span style="color: #808000;">[c][i][808000]Quem persevera sempre alcança</span> - Frase de persistência.</li>
+        <li><span style="color: #A52A2A;">[c][u][A52A2A]O segredo é nunca desistir</span> - Frase motivacional.</li>
+        <li><span style="color: #B0C4DE;">[c][b][B0C4DE]A força de vontade é a chave da vitória</span> - Para quem busca a superação.</li>
+        <li><span style="color: #D2691E;">[c][i][D2691E]O jogo é só o começo</span> - Para os iniciantes.</li>
+        <li><span style="color: #20B2AA;">[c][u][20B2AA]Se você pode sonhar, você pode vencer</span> - Frase motivacional.</li>
+        <li><span style="color: #A9A9A9;">[c][b][A9A9A9]Nada é fácil, mas tudo é possível</span> - Frase de persistência.</li>
+        <li><span style="color: #FF4500;">[c][i][FF4500]O impossível é só uma questão de perspectiva</span> - Para quem enfrenta desafios.</li>
+        <li><span style="color: #800000;">[c][u][800000]Sua determinação define seu destino</span> - Frase de autoconfiança.</li>
+        <li><span style="color: #FFFFE0;">[c][b][FFFFE0]Com coragem, a vitória é certa</span> - Para quem é destemido.</li>
+        <li><span style="color: #E0FFFF;">[c][i][E0FFFF]Sempre há uma luz no fim do túnel</span> - Frase otimista.</li>
+        <li><span style="color: #00FA9A;">[c][u][00FA9A]A única derrota é a desistência</span> - Para quem não desiste.</li>
+        <li><span style="color: #F08080;">[c][b][F08080]Cada passo te aproxima da vitória</span> - Frase de encorajamento.</li>
+        <li><span style="color: #D3D3D3;">[c][i][D3D3D3]A jornada é tão importante quanto o destino</span> - Para quem valoriza o processo.</li>
+        <li><span style="color: #228B22;">[c][u][228B22]O segredo da vitória está na persistência</span> - Para os persistentes.</li>
+        <li><span style="color: #00CED1;">[c][b][00CED1]O caminho para a vitória começa com um único passo</span> - Frase motivacional.</li>
+        <li><span style="color: #FFDAB9;">[c][i][FFDAB9]O fracasso não é o fim, é o começo da superação</span> - Para os resilientes.</li>
+        <!-- Mais frases podem ser adicionadas aqui -->
       </ul>
+      
     </section>
   </div>
 
@@ -229,8 +236,10 @@
     function gerarBio() {
       const bioInput = document.getElementById("bioInput").value;
       const colorPicker = document.getElementById("colorPicker").value;
+      // Remove o "#" da cor
+      const colorCode = colorPicker.substring(1);
       const bioPreview = document.getElementById("bioPreview");
-      bioPreview.textContent = `[c][b]${bioInput}[${colorPicker}]`;
+      bioPreview.innerHTML = `[c][b][${colorCode}]${bioInput}`;
       document.getElementById("copyBioBtn").style.display = "inline-block";
     }
 
