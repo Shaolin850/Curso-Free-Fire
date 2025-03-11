@@ -12,22 +12,18 @@
       margin: 0;
       padding: 20px;
     }
-
     header {
       text-align: center;
       margin-bottom: 20px;
     }
-
     header h1 {
       font-size: 2em;
     }
-
     nav a {
       margin: 0 10px;
       text-decoration: none;
       color: #ffffff;
     }
-
     .container {
       max-width: 800px;
       margin: 0 auto;
@@ -36,12 +32,10 @@
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-
     h1 {
       text-align: center;
       margin-bottom: 20px;
     }
-
     input[type="text"] {
       width: calc(100% - 22px);
       padding: 10px;
@@ -50,7 +44,6 @@
       border-radius: 4px;
       font-size: 16px;
     }
-
     button {
       width: 100%;
       padding: 10px;
@@ -61,31 +54,25 @@
       font-size: 16px;
       cursor: pointer;
     }
-
     button:hover {
       background-color: #218838;
     }
-
     .nick-list {
       margin-top: 20px;
     }
-
     table {
       width: 100%;
       border-collapse: collapse;
     }
-
     th, td {
       border: 1px solid #ddd;
       padding: 8px;
       text-align: center;
     }
-
     th {
       background-color: #28a745;
       color: white;
     }
-
     .btn-copy {
       background: #007bff;
       color: #fff;
@@ -95,11 +82,9 @@
       border-radius: 4px;
       font-size: 14px;
     }
-
     .btn-copy:hover {
       background: #0056b3;
     }
-
     #descricao {
       text-align: center;
       margin-bottom: 30px;
@@ -137,7 +122,7 @@
           </tr>
         </thead>
         <tbody>
-          <!-- Exemplos de Nicks -->
+          <!-- Exemplos de Nicks (serão gerados dinamicamente) -->
           <tr>
             <td>꧁༒☬Exemplo1☬༒꧂</td>
             <td><button class="btn-copy" onclick="copiarNick('꧁༒☬Exemplo1☬༒꧂')">Copiar</button></td>
@@ -184,17 +169,51 @@
   </div>
 
   <script>
-    const estilos = [
-      { prefixo: '꧁༒☬', sufixo: '☬༒꧂' },
-      { prefixo: '★彡', sufixo: '彡★' },
-      { prefixo: '✞', sufixo: '✞' },
-      { prefixo: '𖣘', sufixo: '𖣘' },
-      { prefixo: '♛', sufixo: '♛' },
-      { prefixo: 'ツ', sufixo: 'ツ' },
-      { prefixo: '×͜×', sufixo: '×͜×' },
-      { prefixo: '✧', sufixo: '✧' }
-    ];
+    // Gerar o array "estilos" com no mínimo 500 símbolos únicos
+    const estilos = [];
 
+    // Adiciona símbolos do bloco Miscellaneous Symbols (U+2600 a U+26FF)
+    for (let code = 0x2600; code <= 0x26FF; code++) {
+      const char = String.fromCharCode(code);
+      // Evita duplicatas (exemplo, se houver símbolos vazios ou repetidos)
+      if (!estilos.some(item => item.prefixo === char)) {
+        estilos.push({ prefixo: char, sufixo: char });
+      }
+    }
+
+    // Adiciona símbolos do bloco Dingbats (U+2700 a U+27BF)
+    for (let code = 0x2700; code <= 0x27BF; code++) {
+      const char = String.fromCharCode(code);
+      if (!estilos.some(item => item.prefixo === char)) {
+        estilos.push({ prefixo: char, sufixo: char });
+      }
+    }
+
+    // Adiciona símbolos do bloco Miscellaneous Symbols and Pictographs (U+1F300 a U+1F5FF)
+    for (let code = 0x1F300; code <= 0x1F5FF && estilos.length < 500; code++) {
+      try {
+        const char = String.fromCodePoint(code);
+        if (!estilos.some(item => item.prefixo === char)) {
+          estilos.push({ prefixo: char, sufixo: char });
+        }
+      } catch(e) {
+        // Ignore codepoints que não geram caracteres válidos
+      }
+    }
+
+    // Se necessário, adicione mais blocos para alcançar 500 símbolos únicos
+    if (estilos.length < 500) {
+      for (let code = 0x1F600; code <= 0x1F64F && estilos.length < 500; code++) { // Emojis
+        try {
+          const char = String.fromCodePoint(code);
+          if (!estilos.some(item => item.prefixo === char)) {
+            estilos.push({ prefixo: char, sufixo: char });
+          }
+        } catch(e) {}
+      }
+    }
+
+    // Função para gerar nicks personalizados
     function gerarNicks() {
       const nome = document.getElementById('nomeInput').value.trim();
       const nickTableBody = document.querySelector('#nickTable tbody');
@@ -205,6 +224,7 @@
         return;
       }
 
+      // Gera 50 nicks usando símbolos aleatórios do array "estilos"
       for (let i = 0; i < 50; i++) {
         const estilo = estilos[Math.floor(Math.random() * estilos.length)];
         const nick = `${estilo.prefixo}${nome}${estilo.sufixo}`;
@@ -226,6 +246,7 @@
       }
     }
 
+    // Função para copiar um nick
     function copiarNick(nick) {
       navigator.clipboard.writeText(nick).then(() => {
         alert(`Nick "${nick}" copiado para a área de transferência!`);
