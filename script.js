@@ -1,28 +1,89 @@
 document.addEventListener("DOMContentLoaded", function () {
     const linkPagamento = "https://pay.kiwify.com.br/gde5HO1"; // Substitua pelo seu HotLink do Kiwify
     const paginaAposPagamento = "https://free-fire-booster.netlify.app/sensibilidade"; // Página de login após pagamento
-    const paginaOtimizacao = "https://free-fire-booster.netlify.app/otimizacao"; // Página de otimização
-    const paginaVideos = "https://free-fire-booster.netlify.app/videos"; // Página de vídeos
-    const paginaGeranik = "https://free-fire-booster.netlify.app/gerar-nick"; // Página de gerar nick
-    const paginaGrearbio = "https://free-fire-booster.netlify.app/gerar-bio"; // Página de gerar bio
+    const paginaLogin = "https://free-fire-booster.netlify.app"; // Página de login e pagamento
+    const paginasProtegidas = [
+        "sensibilidade", 
+        "otimizacao", 
+        "videos", 
+        "gerar-nick", 
+        "gerar-bio"
+    ];
 
-    // Função para verificar o status de pagamento no servidor
+    // Função para verificar se o pagamento foi feito
     function verificarPagamento() {
-        fetch("kiwify-webhook.php", {
-            method: "GET", // Usando GET para verificar o status de pagamento
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message === 'Pagamento confirmado') {
-                localStorage.setItem("pagamentoConfirmado", "true");
-                window.location.href = paginaAposPagamento;
-            }
-        })
-        .catch(error => {
-            console.error('Erro ao verificar pagamento:', error);
+        // Verifica no localStorage se o pagamento foi confirmado
+        return localStorage.getItem("pagamentoConfirmado") === "true";
+    }
+
+    // Função para redirecionar o usuário para a página de pagamento, se necessário
+    function redirecionarParaPagamento() {
+        if (!verificarPagamento()) {
+            window.location.href = paginaLogin; // Redireciona para a página de login e pagamento
+        }
+    }
+
+    // Verifica se a página que o usuário está tentando acessar é uma das protegidas
+    if (paginasProtegidas.some(page => window.location.pathname.includes(page))) {
+        // Se o pagamento não foi confirmado, redireciona para a página de login e pagamento
+        redirecionarParaPagamento();
+    }
+
+    // Função para realizar o login diretamente sem verificação de pagamento
+    function realizarLoginDireto() {
+        const loginInput = document.getElementById("login");
+        const senhaInput = document.getElementById("senha");
+
+        // Permite login direto (não verifica pagamento)
+        if (loginInput && senhaInput) {
+            localStorage.setItem("login", loginInput.value);
+            localStorage.setItem("senha", loginInput.value);
+            alert(`Login realizado com sucesso: ${loginInput.value}`);
+            window.location.href = paginaAposPagamento; // Redireciona para página após login
+        }
+    }
+
+    // Página de login
+    if (window.location.pathname === "/login.html") {
+        // Quando a página for carregada, verifica se o pagamento foi feito
+        if (verificarPagamento()) {
+            window.location.href = paginaAposPagamento; // Se o pagamento foi feito, redireciona para a página de conteúdo
+        }
+
+        document.getElementById("loginForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            realizarLoginDireto();
         });
     }
 
+    // Verifica pagamento no início
+    verificarPagamento();
+
+    // Função para liberar o login e a senha após recarga
+    function liberarLoginESenha() {
+        const tabelaLogin = document.getElementById("tabela-login");
+        if (tabelaLogin) {
+            tabelaLogin.style.display = "block";
+        }
+
+        const mensagemRecarga = document.getElementById("mensagem-recarga");
+        if (mensagemRecarga) {
+            mensagemRecarga.style.display = "none";
+        }
+    }
+
+    // Se o pagamento foi confirmado, libera o acesso às páginas
+    if (localStorage.getItem("login") && localStorage.getItem("senha")) {
+        liberarLoginESenha();
+    }
+    
+    // Redireciona para a página de pagamento caso o usuário não tenha feito o pagamento
+    if (!verificarPagamento() && !window.location.pathname.includes("login.html")) {
+        window.location.href = paginaLogin; // Redireciona para a página de login e pagamento
+    }
+
+    /* ------------------- NOVAS FUNCIONALIDADES ------------------- */
+    
     // Função para gerar login e senha aleatórios
     function gerarLoginESenha() {
         const login = "user_" + Math.random().toString(36).substr(2, 8); // Gerando login aleatório
@@ -82,22 +143,26 @@ document.addEventListener("DOMContentLoaded", function () {
         // Permite login direto (não verifica pagamento)
         if (loginInput && senhaInput) {
             localStorage.setItem("login", loginInput.value);
-            localStorage.setItem("senha", senhaInput.value);
+            localStorage.setItem("senha", loginInput.value);
             alert(`Login realizado com sucesso: ${loginInput.value}`);
             window.location.href = paginaAposPagamento; // Redireciona para página após login
         }
     }
 
-    // Verifica se o login é ADMIN sem precisar de pagamento
-    if (window.location.pathname === "/login.html") {
-        // Quando a página for carregada, mostra a mensagem de recarga
-        mostrarMensagemRecarga();
-
-        document.getElementById("loginForm").addEventListener("submit", function (e) {
-            e.preventDefault();
-            
-            // Realiza o login diretamente sem verificar pagamento
-            realizarLoginDireto();
+    // Função para verificar o status de pagamento no servidor
+    function verificarPagamento() {
+        fetch("kiwify-webhook.php", {
+            method: "GET", // Usando GET para verificar o status de pagamento
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === 'Pagamento confirmado') {
+                localStorage.setItem("pagamentoConfirmado", "true");
+                window.location.href = paginaAposPagamento;
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao verificar pagamento:', error);
         });
     }
 
@@ -108,24 +173,34 @@ document.addEventListener("DOMContentLoaded", function () {
     if (localStorage.getItem("login") && localStorage.getItem("senha")) {
         liberarLoginESenha();
     }
-    
-    /* ------------------- NOVAS FUNCIONALIDADES ------------------- */
-    
-    // Página para criação de nome personalizado (nome-personalizado.html)
-    if (window.location.pathname.endsWith("nome-personalizado.html")) {
-        const formNome = document.getElementById("formNome");
-        formNome.addEventListener("submit", function(e) {
-            e.preventDefault();
-            const nomeInput = document.getElementById("nomePersonalizado");
-            const invisivelInput = document.getElementById("invisivel");
-            let nome = nomeInput.value.trim();
-            if (invisivelInput.checked) {
-                // Adiciona um espaço invisível (caractere zero-width space)
-                nome += "\u200B";
-            }
-            localStorage.setItem("nomePersonalizado", nome);
-            alert("Nome personalizado salvo com sucesso!");
-            // Opcional: redireciona para a página do avatar
-            window.location.href = "avatar.html";
-        });
+
+    // Função para realizar o login diretamente sem verificação de pagamento
+    function realizarLoginDireto() {
+        const loginInput = document.getElementById("login");
+        const senhaInput = document.getElementById("senha");
+
+        // Permite login direto (não verifica pagamento)
+        if (loginInput && senhaInput) {
+            localStorage.setItem("login", loginInput.value);
+            localStorage.setItem("senha", senhaInput.value);
+            alert(`Login realizado com sucesso: ${loginInput.value}`);
+            window.location.href = paginaAposPagamento; // Redireciona para página após login
+        }
     }
+
+    // Função para esconder a tabela de login inicialmente e mostrar a mensagem
+    function mostrarMensagemRecarga() {
+        const tabelaLogin = document.getElementById("tabela-login"); // Localiza a tabela de login e senha
+        const mensagemRecarga = document.getElementById("mensagem-recarga"); // Localiza a mensagem de recarga
+
+        // Esconde a tabela de login
+        if (tabelaLogin) {
+            tabelaLogin.style.display = "none";
+        }
+
+        // Exibe a mensagem pedindo para recarregar o navegador
+        if (mensagemRecarga) {
+            mensagemRecarga.style.display = "block";
+        }
+    }
+});
