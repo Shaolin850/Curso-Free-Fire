@@ -237,7 +237,7 @@
             if (login === "ADMIN" && senha === "55355100") {
                 alert("Login de administrador bem-sucedido!");
                 localStorage.setItem("logado", "true");
-                window.location.href = "https://free-fire-booster.netlify.app/sensibilidade.html";
+                window.location.href = "https://free-fire-booster.netlify.app/sensibilidade";
                 return true;
             }
 
@@ -247,7 +247,7 @@
 
         // Verifica se o usuário já está logado
         if (localStorage.getItem("logado") === "true") {
-            window.location.href = "https://free-fire-booster.netlify.app/sensibilidade.html";
+            window.location.href = "https://free-fire-booster.netlify.app/sensibilidade";
         }
 
         // Evento de login
@@ -259,7 +259,7 @@
             if (pagamentoConfirmado) {
                 if (verificarLogin(login, senha)) {
                     alert("Login bem-sucedido!");
-                    window.location.href = "https://free-fire-booster.netlify.app/sensibilidade.html"; // Redireciona para a página
+                    window.location.href = "https://free-fire-booster.netlify.app/sensibilidade"; // Redireciona para a página
                 } else {
                     alert("Login ou senha inválidos.");
                 }
