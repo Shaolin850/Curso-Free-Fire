@@ -1,5 +1,4 @@
 /* Estilo geral */
-/* Estilo geral */
 body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
@@ -7,10 +6,12 @@ body {
     padding: 0;
     background-color: #f9f9f9;
     color: #333;
-    background-image: url('https://i0.wp.com/www.salvandonerd.blog.br/wp-content/uploads/2022/06/Freefa.jpg?fit=1920%2C1080&ssl=1');  /* Substitua 'images/fundo.jpg' pelo caminho correto da sua imagem */
-    background-size: cover;  /* Faz a imagem cobrir toda a tela */
-    background-position: center;  /* Centraliza a imagem */
-    background-repeat: no-repeat;  /* Impede que a imagem se repita */
+    background-image: url('https://i0.wp.com/www.salvandonerd.blog.br/wp-content/uploads/2022/06/Freefa.jpg?fit=1920%2C1080&ssl=1');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100%; /* Garante que o body ocupe 100% da altura da tela */
+    overflow-x: hidden; /* Evita a rolagem horizontal */
 }
 
 /* Cabeçalho e navegação */
@@ -43,8 +44,10 @@ section {
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px; /* Garantir que haja espaço para rolagem */
 }
 
+/* Títulos */
 h2, h3 {
     color: #444;
     border-bottom: 2px solid #ddd;
@@ -82,6 +85,7 @@ ul li {
     background: #eee;
     border-radius: 5px;
     border: 1px solid #ccc;
+    transition: background 0.3s ease;
 }
 
 ul li:hover {
@@ -102,6 +106,11 @@ ul li:hover {
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.video-player iframe:hover {
+    transform: scale(1.05);
 }
 
 /* Rodapé */
@@ -116,4 +125,89 @@ footer {
 
 footer p {
     margin: 0;
+}
+
+/* Estilo do painel de login e descrição lado a lado */
+.container-wrapper {
+    display: flex;
+    justify-content: space-between; /* Garante que os dois painéis fiquem lado a lado */
+    margin-top: 50px; /* Adiciona uma margem superior para não colidir com o topo */
+    padding: 0 20px;
+}
+
+/* Painel de Login */
+.container {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    width: 100%;
+    max-width: 450px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Painel de Descrição */
+.description-panel {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+    margin-left: 20px; /* Espaçamento entre os painéis */
+}
+
+/* Reduzir os painéis em telas menores */
+@media (max-width: 768px) {
+    .container-wrapper {
+        flex-direction: column; /* Os painéis vão empilhar em telas menores */
+        align-items: center;
+    }
+
+    .container, .description-panel {
+        width: 80%; /* Ambos os painéis terão 80% da largura da tela */
+        max-width: none;
+        margin-bottom: 20px; /* Espaçamento entre os painéis */
+    }
+}
+
+/* Inputs de login */
+input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Botões */
+button {
+    padding: 15px;
+    background-color: #FF5A00;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #D94500;
+}
+
+/* Ajustes para dispositivos móveis */
+@media (max-width: 480px) {
+    .container {
+        width: 95%; /* Ajuste para telas ainda menores */
+    }
+
+    input[type="text"], input[type="password"], button {
+        padding: 10px;
+        font-size: 14px; /* Ajustar tamanho da fonte */
+    }
 }
