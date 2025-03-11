@@ -17,24 +17,44 @@
             justify-content: center;
             align-items: center;
             color: #fff;
+            overflow: hidden;
         }
+
+        .wrapper {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            height: 100%;
+            align-items: center;
+            padding: 20px;
+        }
+
         .container {
             background: rgba(255, 255, 255, 0.9);
             padding: 40px;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
             text-align: center;
-            width: 450px;
+            width: 45%;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-        h1 {
+
+        .descricao-container {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            text-align: left;
+            width: 45%;
+            margin-left: 20px;
+            color: #000; /* Cor preta para o texto da descrição */
+        }
+
+        h1, h2 {
             color: #000000;
         }
-        h2 {
-            color: black; /* Defina a cor que desejar */
-        }   
 
         input[type="text"], input[type="password"] {
             width: 100%;
@@ -43,6 +63,7 @@
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+
         button {
             padding: 15px;
             background-color: #FF5A00;
@@ -53,20 +74,25 @@
             width: 100%;
             margin-top: 10px;
         }
+
         button:hover {
             background-color: #D94500;
         }
+
         .btn-comprar {
             background-color: #28a745;
         }
+
         .btn-comprar:hover {
             background-color: #218838;
         }
+
         .tabela {
             margin-top: 30px;
             width: 100%;
             border-collapse: collapse;
         }
+
         .tabela th, .tabela td {
             border: 1px solid #850000;
             padding: 12px;
@@ -74,12 +100,15 @@
             font-size: 14px;
             color: #000000;
         }
+
         .tabela th {
             background-color: #9e0000;
         }
+
         .tabela tr:nth-child(even) {
             background-color: #960000;
         }
+
         .fechar {
             background: red;
             color: white;
@@ -89,43 +118,70 @@
             cursor: pointer;
             margin-top: 10px;
         }
+
         .mensagem {
             font-size: 18px;
             color: #FF0000;
             margin-bottom: 20px;
             font-weight: bold;
         }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
 
-    <div class="container" id="loginContainer">
-        <h1>Login</h1>
-        <form id="loginForm">
-            <input type="text" id="login" placeholder="Usuário" required>
-            <input type="password" id="senha" placeholder="Senha" required>
-            <button type="submit">Entrar</button>
-        </form>
+    <div class="wrapper">
+        <!-- Painel de Login -->
+        <div class="container" id="loginContainer">
+            <h1>Login</h1>
+            <form id="loginForm">
+                <input type="text" id="login" placeholder="Usuário" required>
+                <input type="password" id="senha" placeholder="Senha" required>
+                <button type="submit">Entrar</button>
+            </form>
 
-        <button class="btn-comprar" id="btnCompra">Comprar por R$5</button>
+            <button class="btn-comprar" id="btnCompra">Comprar por R$5</button>
 
-        <div class="mensagem" id="mensagemPagamento">
-            <p>Faça o pagamento para que os logins e senhas abaixo funcionem corretamente.</p>
+            <div class="mensagem" id="mensagemPagamento">
+                <p>Faça o pagamento para que os logins e senhas abaixo funcionem corretamente.</p>
+            </div>
+
+            <div class="tabela-container">
+                <h2>Tabela de Logins e Senhas</h2>
+                <table class="tabela">
+                    <thead>
+                        <tr>
+                            <th>Login</th>
+                            <th>Senha</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaLogins">
+                        <!-- Logins e senhas gerados dinamicamente -->
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        <div class="tabela-container">
-            <h2>Tabela de Logins e Senhas</h2>
-            <table class="tabela">
-                <thead>
-                    <tr>
-                        <th>Login</th>
-                        <th>Senha</th>
-                    </tr>
-                </thead>
-                <tbody id="tabelaLogins">
-                    <!-- Logins e senhas gerados dinamicamente -->
-                </tbody>
-            </table>
+        <!-- Painel de Descrição -->
+        <div class="descricao-container">
+            <h2>Bem-vindo ao nosso painel de ferramentas exclusivas para te Ajudar no Free Fire!</h2>
+            <p>Aqui você encontra:</p>
+            <ul>
+                <li>🔧 Sensibilidade Personalizada</li>
+                <li>💡 Dicas de Otimização para melhorar seu desempenho</li>
+                <li>🎮 Vídeos de Huds Personalizados para aprimorar sua jogabilidade</li>
+                <li>🆔 Gerador de Nicks para criar nomes únicos</li>
+                <li>📝 Gerador de Bios Personalizadas para seu perfil</li>
+            </ul>
+            <p>Aproveite essas ferramentas incríveis e eleve sua experiência no Free Fire!</p>
         </div>
     </div>
 
@@ -209,16 +265,13 @@
             setInterval(function() {
                 // Aqui você pode substituir por uma função que pegue os logins e senhas de uma fonte externa ou faça qualquer atualização necessária
                 usuarios.push({ login: `user${usuarios.length + 1}`, senha: `senha${usuarios.length + 1}` });
-                gerarTabela();
-            }, 24 * 60 * 60 * 1000); // Atualiza a cada 24 horas
+                gerarTabela(); // Atualiza a tabela
+            }, 86400000); // Atualiza a cada 24 horas
         }
 
-        // Chama a função para gerar a tabela de logins
+        // Inicializa a tabela de logins
         gerarTabela();
-
-        // Inicia a atualização diária da tabela
         atualizarTabelaDiariamente();
     </script>
-
 </body>
 </html>
