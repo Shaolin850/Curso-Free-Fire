@@ -154,6 +154,11 @@
             return localStorage.getItem("pagamentoConfirmado") === "true";
         }
     
+        // Função para marcar o pagamento como confirmado
+        function marcarPagamentoConfirmado() {
+            localStorage.setItem("pagamentoConfirmado", "true");
+        }
+    
         // Função para redirecionar o usuário para a página de pagamento, se necessário
         function redirecionarParaPagamento() {
             if (!verificarPagamento()) {
@@ -161,9 +166,12 @@
             }
         }
     
-        // Se o usuário acessar uma página protegida, verifica o pagamento
-        if (paginasProtegidas.some(page => window.location.pathname.includes(page))) {
-            redirecionarParaPagamento();
+        // Verifica se o pagamento foi confirmado e não redireciona novamente
+        if (!verificarPagamento()) {
+            // Se o usuário acessar uma página protegida, verifica o pagamento
+            if (paginasProtegidas.some(page => window.location.pathname.includes(page))) {
+                redirecionarParaPagamento();
+            }
         }
     
         // Função para gerar valores aleatórios dentro de um intervalo
@@ -253,6 +261,6 @@
     
         // Chama a função ao carregar a página para gerar as configurações e iniciar o contador
         window.onload = generateConfigurations;
-    </script>
+    </script>    
 </body>
 </html>
