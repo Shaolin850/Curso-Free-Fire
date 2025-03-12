@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const linkPagamento = "https://pay.kiwify.com.br/h0P93Ba"; // Substitua pelo seu HotLink do Kiwify
+    const linkPagamento = "https://pay.kiwify.com.br/Vk5yvhO"; // Substitua pelo seu HotLink do Kiwify
     const paginaAposPagamento = "https://free-fire-booster.netlify.app/sensibilidade"; // Página de login após pagamento
     const paginaOtimizacao = "https://free-fire-booster.netlify.app/otimizacao"; // Página de otimização
     const paginaVideos = "https://free-fire-booster.netlify.app/videos"; // Página de vídeos
