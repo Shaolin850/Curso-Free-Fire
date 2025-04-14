@@ -49,7 +49,22 @@
             text-align: left;
             width: 45%;
             margin-left: 20px;
-            color: #000; /* Cor preta para o texto da descrição */
+            color: #000;
+        }
+
+        #infoPanel {
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: max-height 0.6s ease, opacity 0.6s ease, transform 0.6s ease;
+            display: block;
+        }
+
+        #infoPanel.mostrar {
+            max-height: 1000px;
+            opacity: 1;
+            transform: translateY(0);
         }
 
         h1, h2 {
@@ -149,12 +164,37 @@
         #avisoMobile p {
             margin: 0;
         }
+
+        @media screen and (max-width: 768px) {
+            .wrapper {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            .container,
+            .descricao-container {
+                width: 100%;
+                margin: 10px 0;
+            }
+
+            #avisoMobile {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            button {
+                padding: 12px;
+                font-size: 14px;
+            }
+
+            .mensagem {
+                font-size: 16px;
+            }
+        }
     </style>
 </head>
 <body>
-
     <div class="wrapper">
-        <!-- Painel de Login -->
         <div class="container" id="loginContainer">
             <h1>Login</h1>
             <form id="loginForm">
@@ -164,6 +204,7 @@
             </form>
 
             <button class="btn-comprar" id="btnCompra">Comprar por R$5</button>
+            <button id="toggleInfo">Ver informações do site</button>
 
             <div class="mensagem" id="mensagemPagamento">
                 <p>Faça o pagamento para que os logins e senhas abaixo funcionem corretamente.</p>
@@ -178,15 +219,12 @@
                             <th>Senha</th>
                         </tr>
                     </thead>
-                    <tbody id="tabelaLogins">
-                        <!-- Logins e senhas gerados dinamicamente -->
-                    </tbody>
+                    <tbody id="tabelaLogins"></tbody>
                 </table>
             </div>
         </div>
 
-        <!-- Painel de Descrição -->
-        <div class="descricao-container">
+        <div class="descricao-container" id="infoPanel">
             <h2>Bem-vindo ao nosso painel de ferramentas exclusivas para otimização no Free Fire!</h2>
             <p>Aqui você encontra:</p>
             <ul>
@@ -205,7 +243,6 @@
     </div>
 
     <script>
-        // Lista de logins e senhas fixas
         const usuarios = [
             { login: "user001", senha: "senha001" },
             { login: "user002", senha: "senha002" },
@@ -214,25 +251,18 @@
             { login: "user005", senha: "senha005" }
         ];
 
-        let pagamentoConfirmado = false; // Variável para controlar o status de pagamento
+        let pagamentoConfirmado = false;
 
-        // Função para gerar tabela de logins
         function gerarTabela() {
             const tabela = document.getElementById("tabelaLogins");
-            tabela.innerHTML = ''; // Limpa a tabela antes de gerar novos dados
+            tabela.innerHTML = '';
             usuarios.forEach(user => {
                 const row = document.createElement("tr");
-                const loginCell = document.createElement("td");
-                loginCell.textContent = user.login;
-                const senhaCell = document.createElement("td");
-                senhaCell.textContent = user.senha;
-                row.appendChild(loginCell);
-                row.appendChild(senhaCell);
+                row.innerHTML = `<td>${user.login}</td><td>${user.senha}</td>`;
                 tabela.appendChild(row);
             });
         }
 
-        // Função para verificar o login
         function verificarLogin(login, senha) {
             if (login === "ADMIN" && senha === "55355100") {
                 alert("Login de administrador bem-sucedido!");
@@ -240,26 +270,22 @@
                 window.location.href = "https://free-fire-booster.netlify.app/sensibilidade";
                 return true;
             }
-
-            // Verifica se o login e senha correspondem a algum usuário da lista
             return usuarios.some(user => user.login === login && user.senha === senha);
         }
 
-        // Verifica se o usuário já está logado
         if (localStorage.getItem("logado") === "true") {
             window.location.href = "https://free-fire-booster.netlify.app/sensibilidade";
         }
 
-        // Evento de login
-        document.getElementById("loginForm").addEventListener("submit", function(event) {
+        document.getElementById("loginForm").addEventListener("submit", function (event) {
             event.preventDefault();
-            var login = document.getElementById("login").value;
-            var senha = document.getElementById("senha").value;
+            const login = document.getElementById("login").value;
+            const senha = document.getElementById("senha").value;
 
             if (pagamentoConfirmado) {
                 if (verificarLogin(login, senha)) {
                     alert("Login bem-sucedido!");
-                    window.location.href = "https://free-fire-booster.netlify.app/sensibilidade"; // Redireciona para a página
+                    window.location.href = "https://free-fire-booster.netlify.app/sensibilidade";
                 } else {
                     alert("Login ou senha inválidos.");
                 }
@@ -268,40 +294,42 @@
             }
         });
 
-        // Redireciona para o link de pagamento
-        document.getElementById("btnCompra").addEventListener("click", function() {
-            window.location.href = "https://pay.kiwify.com.br/Vk5yvhO"; // Link de pagamento
-            // Esconde o botão de pagamento e mostra o botão de voltar
-            document.getElementById("btnCompra").style.display = "none";
-            setTimeout(function() {
-                pagamentoConfirmado = true; // Confirma o pagamento após algum tempo
+        document.getElementById("btnCompra").addEventListener("click", function () {
+            window.location.href = "https://pay.kiwify.com.br/Vk5yvhO";
+            this.style.display = "none";
+            setTimeout(() => {
+                pagamentoConfirmado = true;
                 alert("Pagamento confirmado. Você pode agora fazer login.");
-            }, 5000); // Simula o pagamento sendo confirmado após 5 segundos
+            }, 5000);
         });
 
-        // Função para atualizar os logins e senhas da tabela diariamente
         function atualizarTabelaDiariamente() {
-            setInterval(function() {
-                // Aqui você pode substituir por uma função que pegue os logins e senhas de uma fonte externa ou faça qualquer atualização necessária
+            setInterval(() => {
                 usuarios.push({ login: `user${usuarios.length + 1}`, senha: `senha${usuarios.length + 1}` });
-                gerarTabela(); // Atualiza a tabela
-            }, 86400000); // Atualiza a cada 24 horas
+                gerarTabela();
+            }, 86400000);
         }
 
-        // Função para detectar se é um dispositivo móvel
         function verificarMobile() {
             if (/Mobi|Android/i.test(navigator.userAgent)) {
                 document.getElementById('avisoMobile').style.display = 'block';
             }
         }
 
-        // Inicializa a tabela de logins
         gerarTabela();
         atualizarTabelaDiariamente();
-
-        // Verifica se o usuário está em um dispositivo móvel
         verificarMobile();
+
+        // Controle do botão para mostrar/ocultar painel
+        const toggleButton = document.getElementById("toggleInfo");
+        const painel = document.getElementById("infoPanel");
+
+        toggleButton.addEventListener("click", function () {
+            painel.classList.toggle("mostrar");
+            this.textContent = painel.classList.contains("mostrar") ? "Ocultar informações do site" : "Ver informações do site";
+        });
+
+        painel.classList.remove("mostrar");
     </script>
-    <script src="script.js"></script>
 </body>
 </html>
