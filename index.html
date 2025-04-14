@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Painel de Login e Pagamento</title>
     <style>
         body {
@@ -12,7 +12,7 @@
             background-image: url('https://i0.wp.com/www.salvandonerd.blog.br/wp-content/uploads/2022/06/Freefa.jpg?fit=1920%2C1080&ssl=1');
             background-size: cover;
             background-position: center;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -22,53 +22,46 @@
 
         .wrapper {
             display: flex;
-            justify-content: space-between;
-            width: 100%;
-            height: 100%;
-            align-items: center;
-            padding: 20px;
+            justify-content: center;
+            align-items: flex-start;
+            width: 90%;
+            max-width: 1200px;
+            gap: 20px;
+            flex-wrap: wrap;
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             padding: 40px;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
             text-align: center;
-            width: 45%;
+            width: 400px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            z-index: 2;
         }
 
         .descricao-container {
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.85);
             padding: 40px;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
             text-align: left;
-            width: 45%;
-            margin-left: 20px;
             color: #000;
-        }
-
-        #infoPanel {
-            overflow: hidden;
+            width: 400px;
             max-height: 0;
+            overflow: hidden;
             opacity: 0;
             transform: translateY(-20px);
             transition: max-height 0.6s ease, opacity 0.6s ease, transform 0.6s ease;
-            display: block;
         }
 
-        #infoPanel.mostrar {
+        .descricao-container.mostrar {
             max-height: 1000px;
             opacity: 1;
             transform: translateY(0);
-        }
-
-        h1, h2 {
-            color: #000000;
         }
 
         input[type="text"], input[type="password"] {
@@ -88,6 +81,8 @@
             cursor: pointer;
             width: 100%;
             margin-top: 10px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
         }
 
         button:hover {
@@ -95,106 +90,71 @@
         }
 
         .btn-comprar {
-            background-color: #28a745;
+            background: linear-gradient(45deg, #28a745, #218838);
+            border: none;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
         .btn-comprar:hover {
-            background-color: #218838;
+            background: linear-gradient(45deg, #218838, #1c6d31);
+        }
+
+        .btn-toggle-info {
+            background-color: #0057D8;
+            color: #fff;
+            margin-top: 15px;
+        }
+
+        .btn-toggle-info:hover {
+            background-color: #0043A8;
+        }
+
+        .mensagem {
+            font-size: 16px;
+            color: #D8000C;
+            margin: 15px 0;
+            font-weight: bold;
         }
 
         .tabela {
-            margin-top: 30px;
+            margin-top: 20px;
             width: 100%;
             border-collapse: collapse;
         }
 
         .tabela th, .tabela td {
             border: 1px solid #850000;
-            padding: 12px;
+            padding: 10px;
             text-align: center;
             font-size: 14px;
-            color: #000000;
+            color: #000;
         }
 
         .tabela th {
             background-color: #9e0000;
+            color: white;
         }
 
         .tabela tr:nth-child(even) {
-            background-color: #960000;
+            background-color: #f9f9f9;
         }
 
-        .fechar {
-            background: red;
-            color: white;
-            padding: 8px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .mensagem {
-            font-size: 18px;
-            color: #FF0000;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        li {
-            margin: 10px 0;
-        }
-
-        #avisoMobile {
-            display: none;
-            background-color: #FFEB3B;
-            color: #000;
-            padding: 15px;
-            margin: 20px 0;
-            text-align: center;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-
-        #avisoMobile p {
-            margin: 0;
-        }
-
-        @media screen and (max-width: 768px) {
+        @media screen and (max-width: 850px) {
             .wrapper {
                 flex-direction: column;
-                padding: 10px;
+                align-items: center;
             }
 
-            .container,
-            .descricao-container {
-                width: 100%;
-                margin: 10px 0;
-            }
-
-            #avisoMobile {
-                font-size: 14px;
-                padding: 10px;
-            }
-
-            button {
-                padding: 12px;
-                font-size: 14px;
-            }
-
-            .mensagem {
-                font-size: 16px;
+            .container, .descricao-container {
+                width: 90%;
             }
         }
     </style>
 </head>
 <body>
     <div class="wrapper">
+        <!-- Painel de Login -->
         <div class="container" id="loginContainer">
             <h1>Login</h1>
             <form id="loginForm">
@@ -203,11 +163,10 @@
                 <button type="submit">Entrar</button>
             </form>
 
-            <button class="btn-comprar" id="btnCompra">Comprar por R$5</button>
-            <button id="toggleInfo">Ver informações do site</button>
+            <button class="btn-comprar" id="btnCompra">Comprar por R$ 5 via Kiwify</button>
 
             <div class="mensagem" id="mensagemPagamento">
-                <p>Faça o pagamento para que os logins e senhas abaixo funcionem corretamente.</p>
+                Faça o pagamento para que os logins e senhas abaixo funcionem corretamente.
             </div>
 
             <div class="tabela-container">
@@ -222,24 +181,23 @@
                     <tbody id="tabelaLogins"></tbody>
                 </table>
             </div>
+
+            <button class="btn-toggle-info" id="toggleInfo">Ver informações do site</button>
         </div>
 
+        <!-- Painel de Informações -->
         <div class="descricao-container" id="infoPanel">
-            <h2>Bem-vindo ao nosso painel de ferramentas exclusivas para otimização no Free Fire!</h2>
-            <p>Aqui você encontra:</p>
+            <h2>Ferramentas para otimizar sua jogabilidade no Free Fire!</h2>
+            <p>Você terá acesso a:</p>
             <ul>
                 <li>🔧 Sensibilidade Personalizada</li>
                 <li>💡 Dicas de Otimização para melhorar seu desempenho</li>
-                <li>🎮 Vídeos de Huds Personalizados para aprimorar sua jogabilidade</li>
-                <li>🆔 Gerador de Nicks para criar nomes únicos</li>
-                <li>📝 Gerador de Bios Personalizadas para seu perfil</li>
+                <li>🎮 Vídeos de Huds Personalizados</li>
+                <li>🆔 Gerador de Nicks únicos</li>
+                <li>📝 Gerador de Bios personalizadas</li>
             </ul>
-            <p>Aproveite essas ferramentas incríveis e eleve sua experiência no Free Fire!</p>
+            <p>Aproveite e tenha uma experiência completa!</p>
         </div>
-    </div>
-
-    <div id="avisoMobile">
-        <p>🚨 Para uma melhor experiência, ative a opção "Versão para computador" no seu navegador.</p>
     </div>
 
     <script>
@@ -273,11 +231,7 @@
             return usuarios.some(user => user.login === login && user.senha === senha);
         }
 
-        if (localStorage.getItem("logado") === "true") {
-            window.location.href = "https://free-fire-booster.netlify.app/sensibilidade";
-        }
-
-        document.getElementById("loginForm").addEventListener("submit", function (event) {
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
             event.preventDefault();
             const login = document.getElementById("login").value;
             const senha = document.getElementById("senha").value;
@@ -294,42 +248,26 @@
             }
         });
 
-        document.getElementById("btnCompra").addEventListener("click", function () {
-            window.location.href = "https://pay.kiwify.com.br/Vk5yvhO";
-            this.style.display = "none";
-            setTimeout(() => {
+        document.getElementById("btnCompra").addEventListener("click", function() {
+            window.open("https://pay.kiwify.com.br/Vk5yvhO", "_blank");
+            this.disabled = true;
+            this.textContent = "Aguardando confirmação...";
+            setTimeout(function () {
                 pagamentoConfirmado = true;
-                alert("Pagamento confirmado. Você pode agora fazer login.");
+                document.getElementById("btnCompra").textContent = "Pagamento Confirmado ✅";
+                alert("Pagamento confirmado! Agora você pode fazer login.");
             }, 5000);
         });
 
-        function atualizarTabelaDiariamente() {
-            setInterval(() => {
-                usuarios.push({ login: `user${usuarios.length + 1}`, senha: `senha${usuarios.length + 1}` });
-                gerarTabela();
-            }, 86400000);
-        }
-
-        function verificarMobile() {
-            if (/Mobi|Android/i.test(navigator.userAgent)) {
-                document.getElementById('avisoMobile').style.display = 'block';
-            }
-        }
-
-        gerarTabela();
-        atualizarTabelaDiariamente();
-        verificarMobile();
-
-        // Controle do botão para mostrar/ocultar painel
-        const toggleButton = document.getElementById("toggleInfo");
-        const painel = document.getElementById("infoPanel");
-
-        toggleButton.addEventListener("click", function () {
+        document.getElementById("toggleInfo").addEventListener("click", function () {
+            const painel = document.getElementById("infoPanel");
             painel.classList.toggle("mostrar");
-            this.textContent = painel.classList.contains("mostrar") ? "Ocultar informações do site" : "Ver informações do site";
+            this.textContent = painel.classList.contains("mostrar")
+                ? "Ocultar informações do site"
+                : "Ver informações do site";
         });
 
-        painel.classList.remove("mostrar");
+        gerarTabela();
     </script>
 </body>
 </html>
