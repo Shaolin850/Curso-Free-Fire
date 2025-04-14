@@ -1,18 +1,16 @@
+<!--
+  Este código HTML é um painel de login e pagamento para um serviço relacionado ao jogo Free Fire. 
+  Ele inclui funcionalidades como login, exibição de logins ativos, compra de acesso premium e 
+  informações sobre o serviço. O design é responsivo e otimizado para dispositivos móveis.-->
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Painel de Login e Pagamento</title>
-
-  <!-- Font Awesome para ícones -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -30,47 +28,37 @@
 
     .wrapper {
       display: flex;
-      flex-direction: row;
       justify-content: center;
       align-items: flex-start;
-      gap: 30px;
-      padding: 20px;
+      width: 90%;
+      max-width: 1200px;
+      height: auto;
+      margin-top: 20px;
+      gap: 20px;
     }
 
     .container {
       background: rgba(255, 255, 255, 0.95);
       padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 0 18px rgba(0, 0, 0, 0.4);
-      text-align: center;
-      max-width: 450px;
-      width: 100%;
-    }
-
-    .descricao-container {
-      background: rgba(255, 255, 255, 0.92);
-      padding: 30px;
-      border-radius: 12px;
+      border-radius: 10px;
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-      max-width: 450px;
-      width: 100%;
-      animation: fadeIn 1s ease-in-out;
+      text-align: center;
+      width: 400px;
       color: #000;
     }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateX(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
+    .descricao-container {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      color: #000;
+      width: 100%;
+      max-width: 500px;
+      transition: all 0.4s ease;
     }
 
-    input[type="text"],
-    input[type="password"] {
+    input[type="text"], input[type="password"] {
       width: 100%;
       padding: 12px;
       margin: 10px 0;
@@ -87,6 +75,8 @@
       cursor: pointer;
       width: 100%;
       margin-top: 10px;
+      font-size: 16px;
+      font-weight: bold;
     }
 
     button:hover {
@@ -94,21 +84,21 @@
     }
 
     .btn-comprar {
-      background: linear-gradient(45deg, #28a745, #218838);
-      font-weight: bold;
+      background: linear-gradient(to right, #28a745, #218838);
       font-size: 16px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-      transition: all 0.3s ease-in-out;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+      font-weight: bold;
+      transition: 0.3s ease;
     }
 
     .btn-comprar:hover {
-      background: linear-gradient(45deg, #1c6d31, #186029);
-      transform: scale(1.02);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+      background: linear-gradient(to right, #1e7e34, #1c7430);
+    }
+
+    .mensagem {
+      font-size: 16px;
+      color: #D80000;
+      margin-top: 15px;
+      font-weight: bold;
     }
 
     .tabela {
@@ -117,79 +107,84 @@
       border-collapse: collapse;
     }
 
-    .tabela th,
-    .tabela td {
+    .tabela th, .tabela td {
       border: 1px solid #850000;
       padding: 10px;
       text-align: center;
-      color: #000;
+      font-size: 14px;
+      color: #000000;
     }
 
     .tabela th {
       background-color: #9e0000;
+      color: #fff;
     }
 
-    .mensagem {
-      font-size: 16px;
-      color: #FF0000;
-      margin-top: 20px;
-      font-weight: bold;
+    .tabela tr:nth-child(even) {
+      background-color: #ffe5e5;
     }
 
     #avisoMobile {
       display: none;
-      position: absolute;
-      bottom: 10px;
-      left: 10px;
-      right: 10px;
-      background-color: #ffeb3b;
+      background-color: #FFEB3B;
       color: #000;
-      padding: 12px;
+      padding: 15px;
+      margin-top: 15px;
       text-align: center;
-      border-radius: 6px;
+      border-radius: 5px;
       font-weight: bold;
-      z-index: 1000;
+      width: 90%;
     }
 
-    @media (max-width: 768px) {
-      .wrapper {
-        flex-direction: column;
-        align-items: center;
-        padding: 10px;
-      }
+    #conteudoDescricao {
+      transition: all 0.4s ease;
+    }
 
-      .container,
-      .descricao-container {
-        width: 90%;
-      }
+    #conteudoDescricao.oculto {
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      transform: scaleY(0.95);
+    }
 
-      #avisoMobile {
-        display: block;
-      }
+    #iconeToggle {
+      transition: transform 0.3s ease;
+    }
+
+    .rotacionado {
+      transform: rotate(180deg);
+    }
+
+    ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    li {
+      margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
+
   <div class="wrapper">
     <!-- Painel de Login -->
     <div class="container" id="loginContainer">
       <h1>Login</h1>
       <form id="loginForm">
-        <input type="text" id="login" placeholder="Usuário" required />
-        <input type="password" id="senha" placeholder="Senha" required />
+        <input type="text" id="login" placeholder="Usuário" required>
+        <input type="password" id="senha" placeholder="Senha" required>
         <button type="submit">Entrar</button>
       </form>
 
-      <button class="btn-comprar" id="btnCompra">
-        <i class="fas fa-shopping-cart"></i> Comprar por R$5 via Kiwify
-      </button>
+      <button class="btn-comprar" id="btnCompra">💳 Comprar acesso premium - R$5</button>
 
       <div class="mensagem" id="mensagemPagamento">
-        Faça o pagamento para que os logins e senhas abaixo funcionem corretamente.
+        Faça o pagamento para ativar os logins e senhas abaixo.
       </div>
 
       <div class="tabela-container">
-        <h2>Tabela de Logins e Senhas</h2>
+        <h2>Logins Ativos</h2>
         <table class="tabela">
           <thead>
             <tr>
@@ -203,22 +198,30 @@
     </div>
 
     <!-- Painel de Descrição -->
-    <div class="descricao-container">
-      <h2>Ferramentas Exclusivas para Free Fire</h2>
-      <p>Aqui você encontra:</p>
-      <ul>
-        <li>🔧 Sensibilidade Personalizada</li>
-        <li>💡 Dicas de Otimização</li>
-        <li>🎮 HUDs Personalizados</li>
-        <li>🆔 Gerador de Nicks</li>
-        <li>📝 Gerador de Bios Personalizadas</li>
-      </ul>
-      <p>Eleve sua jogabilidade com nossas ferramentas exclusivas!</p>
+    <div class="descricao-container" id="descricaoContainer">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2 style="margin: 0;">Informações do Site</h2>
+        <button id="toggleDescricao" style="background: none; border: none; font-size: 20px; cursor: pointer;" title="Mostrar/Ocultar informações">
+          <i class="fas fa-chevron-down" id="iconeToggle"></i>
+        </button>
+      </div>
+      <div id="conteudoDescricao" style="margin-top: 15px;">
+        <p>🔥 Torne-se um jogador de elite no Free Fire com acesso exclusivo ao nosso painel de ferramentas premium:</p>
+        <ul>
+          <li>🎯 <strong>Ajuste Automático de Sensibilidade</strong> — mira perfeita em qualquer dispositivo.</li>
+          <li>🚀 <strong>HUDs Estratégicos</strong> — jogabilidade ágil e personalizada.</li>
+          <li>🧠 <strong>Dicas Profissionais</strong> — táticas de jogadores de alto nível.</li>
+          <li>🎨 <strong>Gerador de Nicks e Bios</strong> — destaque seu perfil no jogo.</li>
+          <li>📈 <strong>Otimização de Desempenho</strong> — mais FPS, menos travamentos.</li>
+        </ul>
+        <p>💡 Invista apenas <strong>R$ 5</strong> e transforme sua performance no Free Fire!</p>
+        <p>📱 Para visualizar corretamente no celular, ative "Versão para Computador" no navegador.</p>
+      </div>
     </div>
   </div>
 
   <div id="avisoMobile">
-    🚨 Ative a opção "Versão para computador" no navegador para visualizar corretamente este site.
+    🚨 Para uma melhor experiência, ative a opção "Versão para computador" no seu navegador.
   </div>
 
   <script>
@@ -234,7 +237,7 @@
 
     function gerarTabela() {
       const tabela = document.getElementById("tabelaLogins");
-      tabela.innerHTML = "";
+      tabela.innerHTML = '';
       usuarios.forEach(user => {
         const row = document.createElement("tr");
         row.innerHTML = `<td>${user.login}</td><td>${user.senha}</td>`;
@@ -256,7 +259,7 @@
       window.location.href = "https://free-fire-booster.netlify.app/sensibilidade";
     }
 
-    document.getElementById("loginForm").addEventListener("submit", function (event) {
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
       event.preventDefault();
       const login = document.getElementById("login").value;
       const senha = document.getElementById("senha").value;
@@ -273,9 +276,9 @@
       }
     });
 
-    document.getElementById("btnCompra").addEventListener("click", function () {
+    document.getElementById("btnCompra").addEventListener("click", function() {
       window.location.href = "https://pay.kiwify.com.br/Vk5yvhO";
-      document.getElementById("btnCompra").style.display = "none";
+      this.disabled = true;
       setTimeout(() => {
         pagamentoConfirmado = true;
         alert("Pagamento confirmado. Você pode agora fazer login.");
@@ -291,9 +294,17 @@
 
     function verificarMobile() {
       if (/Mobi|Android/i.test(navigator.userAgent)) {
-        document.getElementById("avisoMobile").style.display = "block";
+        document.getElementById('avisoMobile').style.display = 'block';
       }
     }
+
+    document.getElementById("toggleDescricao").addEventListener("click", function () {
+      const conteudo = document.getElementById("conteudoDescricao");
+      const icone = document.getElementById("iconeToggle");
+
+      conteudo.classList.toggle("oculto");
+      icone.classList.toggle("rotacionado");
+    });
 
     gerarTabela();
     atualizarTabelaDiariamente();
