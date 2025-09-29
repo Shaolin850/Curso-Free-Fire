@@ -1,147 +1,209 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const linkPagamento = "https://pay.kiwify.com.br/Vk5yvhO"; // Substitua pelo seu HotLink do Kiwify
-    const paginaAposPagamento = "https://free-fire-booster.netlify.app/sensibilidade"; // Página de login após pagamento
-    const paginaOtimizacao = "https://free-fire-booster.netlify.app/otimizacao"; // Página de otimização
-    const paginaVideos = "https://free-fire-booster.netlify.app/videos"; // Página de vídeos
-    const paginaGerarnick = "https://free-fire-booster.netlify.app/gerar-nick"; // Página de gerar nick
-    const paginaGerarbio = "https://free-fire-booster.netlify.app/gerar-bio"; // Página de gerar bio
-    
-    // Função para verificar o status de pagamento no servidor
-    function verificarPagamento() {
-        fetch("kiwify-webhook.php", {
-            method: "GET", // Usando GET para verificar o status de pagamento
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message === 'Pagamento confirmado') {
-                localStorage.setItem("pagamentoConfirmado", "true");
-                window.location.href = paginaAposPagamento;
-            }
-        })
-        .catch(error => {
-            console.error('Erro ao verificar pagamento:', error);
-        });
-    }
+/* Central JS for the updated site: payment flow, login, helpers and sensitivity generation */
+const PAYMENT_URL = "https://pay.kiwify.com.br/Vk5yvhO"; // link da página de pagamento
+const usuariosKey = "usuariosUnicos_v2";
+const postPaymentRedirect = "sensibilidade.html";
 
-    // Função para gerar login e senha aleatórios
-    function gerarLoginESenha() {
-        const login = "user_" + Math.random().toString(36).substr(2, 8); // Gerando login aleatório
-        const senha = Math.random().toString(36).substr(2, 12); // Gerando senha aleatória
-        return { login, senha };
-    }
+document.addEventListener("DOMContentLoaded", () => {
+  const btnCompra = document.getElementById("btnCompra");
+  const btnConfirmPayment = document.getElementById("btnConfirmPayment");
+  const pagamentoSucessoEl = document.getElementById("pagamentoSucesso");
+  const avisoSemPagamento = document.getElementById("avisoSemPagamento");
+  const btnVerTabela = document.getElementById("btnVerTabela");
+  const tabelaContainer = document.getElementById("tabelaContainer");
 
-    // Função para armazenar login e senha no localStorage
-    function armazenarLoginESenha() {
-        const { login, senha } = gerarLoginESenha();
-        localStorage.setItem("login", login);
-        localStorage.setItem("senha", senha);
-        alert(`Login: ${login} | Senha: ${senha}`); // Exibe login e senha gerados
-    }
+  // cria usuários de exemplo caso não exista
+  if (!localStorage.getItem(usuariosKey)) {
+    localStorage.setItem(usuariosKey, JSON.stringify(generateSampleUsers(3)));
+  }
 
-    // Login fixo para ADMIN
-    const loginAdmin = "ADMIN";
-    const senhaAdmin = "55355100";
+  // Ação do botão de compra
+  btnCompra && btnCompra.addEventListener("click", () => {
+    // abre o checkout
+    window.open(PAYMENT_URL, "_blank");
 
-    // Função para esconder a tabela de login inicialmente e mostrar a mensagem
-    function mostrarMensagemRecarga() {
-        const tabelaLogin = document.getElementById("tabela-login"); // Localiza a tabela de login e senha
-        const mensagemRecarga = document.getElementById("mensagem-recarga"); // Localiza a mensagem de recarga
+    // marca que o usuário saiu para pagar
+    localStorage.setItem("aguardandoPagamento", "true");
 
-        // Esconde a tabela de login
-        if (tabelaLogin) {
-            tabelaLogin.style.display = "none";
-        }
+    btnCompra.disabled = true;
+    btnCompra.textContent = "Pagamento em andamento...";
+  });
 
-        // Exibe a mensagem pedindo para recarregar o navegador
-        if (mensagemRecarga) {
-            mensagemRecarga.style.display = "block";
-        }
-    }
+  // Ação do botão de confirmar pagamento (só aparece se o usuário voltou do checkout)
+  btnConfirmPayment && btnConfirmPayment.addEventListener("click", () => {
+    localStorage.setItem("pagamentoConfirmado", "true");
+    localStorage.removeItem("aguardandoPagamento");
 
-    // Função para liberar o login e a senha após recarga
-    function liberarLoginESenha() {
-        const tabelaLogin = document.getElementById("tabela-login"); // Localiza a tabela de login e senha
+    pagamentoSucessoEl.classList.remove("hidden");
+    avisoSemPagamento.classList.add("hidden");
+    btnConfirmPayment.classList.add("hidden");
+    btnCompra.classList.add("hidden");
+    btnVerTabela.classList.remove("hidden");
+    tabelaContainer.classList.remove("hidden");
+    gerarTabela();
+    alert("Pagamento confirmado com sucesso. Obrigado!");
+  });
 
-        // Exibe a tabela de login
-        if (tabelaLogin) {
-            tabelaLogin.style.display = "block";
-        }
+  // Ação de ver tabela
+  btnVerTabela && btnVerTabela.addEventListener("click", () => {
+    const t = document.getElementById("tabelaContainer");
+    t.classList.toggle("hidden");
+    gerarTabela();
+  });
 
-        // Esconde a mensagem de recarga
-        const mensagemRecarga = document.getElementById("mensagem-recarga");
-        if (mensagemRecarga) {
-            mensagemRecarga.style.display = "none";
-        }
-    }
+  // Login
+  const loginForm = document.getElementById("loginForm");
+  if (loginForm) {
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const login = document.getElementById("login").value.trim();
+      const senha = document.getElementById("senha").value.trim();
+      if (!isPaymentConfirmed()) {
+        alert("Efetue e confirme o pagamento para prosseguir.");
+        return;
+      }
+      if (verificarLogin(login, senha)) {
+        localStorage.setItem("logado", "true");
+        window.location.href = postPaymentRedirect;
+      } else {
+        alert("Login ou senha inválidos. Verifique na tabela ou use ADMIN.");
+      }
+    });
+  }
 
-    // Função para realizar o login diretamente sem verificação de pagamento
-    function realizarLoginDireto() {
-        const loginInput = document.getElementById("login");
-        const senhaInput = document.getElementById("senha");
-
-        // Permite login direto (não verifica pagamento)
-        if (loginInput && senhaInput) {
-            localStorage.setItem("login", loginInput.value);
-            localStorage.setItem("senha", senhaInput.value);
-            alert(`Login realizado com sucesso: ${loginInput.value}`);
-            window.location.href = paginaAposPagamento; // Redireciona para página após login
-        }
-    }
-
-    // Verifica se o login é ADMIN sem precisar de pagamento
-    if (window.location.pathname === "/login.html") {
-        // Quando a página for carregada, mostra a mensagem de recarga
-        mostrarMensagemRecarga();
-
-        document.getElementById("loginForm").addEventListener("submit", function (e) {
-            e.preventDefault();
-            
-            // Realiza o login diretamente sem verificar pagamento
-            realizarLoginDireto();
-        });
-    }
-
-    // Verifica pagamento no início (pode ser removido se não for mais necessário)
-    verificarPagamento();
-
-    // Se a página foi recarregada, libera login e senha
-    if (localStorage.getItem("login") && localStorage.getItem("senha")) {
-        liberarLoginESenha();
-    }
-    
-    /* ------------------- NOVAS FUNCIONALIDADES ------------------- */
-    
-    // Página para criação de nome personalizado (nome-personalizado.html)
-    if (window.location.pathname.endsWith("nome-personalizado.html")) {
-        const formNome = document.getElementById("formNome");
-        formNome.addEventListener("submit", function(e) {
-            e.preventDefault();
-            const nomeInput = document.getElementById("nomePersonalizado");
-            const invisivelInput = document.getElementById("invisivel");
-            let nome = nomeInput.value.trim();
-            if (invisivelInput.checked) {
-                // Adiciona um espaço invisível (caractere zero-width space)
-                nome += "\u200B";
-            }
-            localStorage.setItem("nomePersonalizado", nome);
-            alert("Nome personalizado salvo com sucesso!");
-            // Opcional: redireciona para a página do avatar
-            window.location.href = "avatar.html";
-        });
-    }
-
-    // Função para gerar bio personalizada
-    if (window.location.pathname.endsWith("gerar-bio.html")) {
-        const formBio = document.getElementById("formBio");
-        formBio.addEventListener("submit", function(e) {
-            e.preventDefault();
-            const bioInput = document.getElementById("bioPersonalizada");
-            let bio = bioInput.value.trim();
-            localStorage.setItem("bioPersonalizada", bio);
-            alert("Bio personalizada salva com sucesso!");
-            // Opcional: redireciona para outra página ou exibe a bio
-            window.location.href = "perfil.html";  // Exemplo de redirecionamento
-        });
-    }
-
+  // Estado inicial ao carregar a página
+  if (isPaymentConfirmed()) {
+    // pagamento confirmado
+    pagamentoSucessoEl && pagamentoSucessoEl.classList.remove("hidden");
+    avisoSemPagamento && avisoSemPagamento.classList.add("hidden");
+    btnCompra && btnCompra.classList.add("hidden");
+    btnVerTabela && btnVerTabela.classList.remove("hidden");
+    tabelaContainer && tabelaContainer.classList.remove("hidden");
+    gerarTabela();
+  } else if (localStorage.getItem("aguardandoPagamento") === "true") {
+    // voltou do checkout mas ainda não confirmou
+    btnConfirmPayment && btnConfirmPayment.classList.remove("hidden");
+    avisoSemPagamento && avisoSemPagamento.classList.remove("hidden");
+    btnCompra && btnCompra.classList.add("hidden");
+  } else {
+    // estado normal sem ter iniciado pagamento
+    btnCompra && btnCompra.classList.remove("hidden");
+    btnConfirmPayment && btnConfirmPayment.classList.add("hidden");
+    btnVerTabela && btnVerTabela.classList.add("hidden");
+    tabelaContainer && tabelaContainer.classList.add("hidden");
+  }
 });
+
+function isPaymentConfirmed() {
+  return localStorage.getItem("pagamentoConfirmado") === "true" || localStorage.getItem("logado") === "true";
+}
+
+function generateSampleUsers(count = 3) {
+  const out = [];
+  for (let i = 0; i < count; i++) {
+    out.push({
+      login: "user" + Math.floor(1000 + Math.random() * 8000),
+      senha: Math.random().toString(36).slice(2, 10)
+    });
+  }
+  return out;
+}
+
+function gerarTabela() {
+  const tabela = document.getElementById("tabelaLogins");
+  if (!tabela) return;
+  const usuarios = JSON.parse(localStorage.getItem(usuariosKey) || "[]");
+  tabela.innerHTML = "<thead><tr><th>Login</th><th>Senha</th></tr></thead><tbody></tbody>";
+  const tbody = tabela.querySelector("tbody");
+  usuarios.forEach(u => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${u.login}</td><td>${u.senha}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function verificarLogin(login, senha) {
+  if (login === "ADMIN" && senha === "55355100") return true;
+  const usuarios = JSON.parse(localStorage.getItem(usuariosKey) || "[]");
+  return usuarios.some(u => u.login === login && u.senha === senha);
+}
+
+/* ---------------- Sensitivity generation helpers ---------------- */
+
+function getRandom(min, max){ return Math.floor(Math.random()*(max-min+1))+min; }
+
+function gerarSensibilidadesSeparadas(androidCount = 20, iphoneCount = 20){
+  // create arrays for android and iphone, each entry an object with fields
+  const android = [];
+  const iphone = [];
+  for(let i=1;i<=androidCount;i++){
+    android.push({
+      index: i,
+      geral: getRandom (100,200),
+      reddot: getRandom(100,200),
+      mira2x: getRandom(100,200),
+      mira4x: getRandom(100,200),
+      awm: getRandom(100,200),
+      dpi: getRandom(400,1440)
+    });
+  }
+  for(let i=1;i<=iphoneCount;i++){
+    iphone.push({
+      index: i,
+      geral:getRandom (100,200),
+      reddot: getRandom(100,200),
+      mira2x: getRandom(100,200),
+      mira4x: getRandom(100,200),
+      awm: getRandom(100,200),
+      dpi: getRandom(400,1440)
+    });
+  }
+  // render to tables
+  renderSensitivityTable('android', android);
+  renderSensitivityTable('iphone', iphone);
+  // store last text for copy-all
+  window.lastAndroidText = android.map(a=>formatSensitivityText(a,'Android')).join('\n');
+  window.lastIphoneText = iphone.map(a=>formatSensitivityText(a,'iPhone')).join('\n');
+  return {android, iphone};
+}
+
+function formatSensitivityText(obj, device){
+  return `#${obj.index} - ${device} | Geral:${obj.geral} RedDot:${obj.reddot} 2x:${obj.mira2x} 4x:${obj.mira4x} AWM:${obj.awm} DPI:${obj.dpi}`;
+}
+
+function renderSensitivityTable(prefix, arr){
+  const tbody = document.getElementById(prefix+'-tbody');
+  if(!tbody) return;
+  tbody.innerHTML='';
+  arr.forEach(item => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${item.index}</td>
+      <td><strong>${item.geral}</strong></td>
+      <td>${item.reddot}</td>
+      <td>${item.mira2x}</td>
+      <td>${item.mira4x}</td>
+      <td>${item.awm}</td>
+      <td>${item.dpi}</td>
+      <td><button class="copy-btn" onclick="copySingle('${prefix}', ${item.index})">Copiar</button></td>`;
+    tbody.appendChild(tr);
+    // store textual representation
+    window[`${prefix}_cfg_${item.index}`] = formatSensitivityText(item, prefix === 'android' ? 'Android' : 'iPhone');
+  });
+}
+
+function copySingle(prefix, index){
+  const txt = window[`${prefix}_cfg_${index}`] || '';
+  if(!txt){ alert('Nada encontrado para copiar.'); return; }
+  navigator.clipboard.writeText(txt).then(()=>alert('Copiado: '+txt));
+}
+
+function copyAll(prefix){
+  const txt = prefix === 'android' ? (window.lastAndroidText || '') : (window.lastIphoneText || '');
+  if(!txt){ alert('Gere as configurações primeiro.'); return; }
+  navigator.clipboard.writeText(txt).then(()=>alert('Todas as configurações copiadas.'));
+}
+
+/* ---------------- Optimization helpers ---------------- */
+
+function copiarTexto(text){
+  navigator.clipboard.writeText(text).then(()=>alert('Copiado para a área de transferência.'));
+}
