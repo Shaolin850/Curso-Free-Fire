@@ -1,268 +1,56 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Painel de Login e Pagamento</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhIQlMbl5XnSF5m8wGBLVezqloITH4lUmMxlhgDZPOhKmCNP-BTILYvkO3jo2uqHjeK8ChnfdmkQR2q0aLnR_xzBUzCAFq2aAGHNV0MTAxMQd6BPV7zaEiIg_nif_jgwgVHFAQ-mE2KnJBY-Zua2tz3f096hHSN54ekGXA6YZMcn1rc97BetmVLwbhlcQZw/w1684-h1069-p-k-no-nu/Imagem%20do%20WhatsApp%20de%202025-03-11%20%C3%A0(s)%2019.18.50_702b53fa.jpg');
-      background-size: cover;
-      background-position: center;
-      font-family: Arial, sans-serif;
-      color: #000;
-      overflow-x: hidden;
-    }
-
-    .wrapper {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-      position: relative;
-    }
-
-    .container {
-      background: rgba(255, 255, 255, 0.95);
-      padding: 30px;
-      border-radius: 10px;
-      width: 100%;
-      max-width: 420px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
-      text-align: center;
-      z-index: 10;
-    }
-
-    input[type="text"], input[type="password"] {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-
-    button {
-      padding: 15px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      width: 100%;
-      font-weight: bold;
-      margin-top: 10px;
-      font-size: 16px;
-      transition: background 0.3s;
-    }
-
-    #btnCompra {
-      background-color: #28a745;
-      color: white;
-    }
-
-    #btnCompra:hover {
-      background-color: #218838;
-    }
-
-    #btnVerTabela, #btnToggleInfo {
-      background-color: #007bff;
-      color: white;
-    }
-
-    #btnVerTabela:hover, #btnToggleInfo:hover {
-      background-color: #0056b3;
-    }
-
-    .descricao-flutuante {
-      position: absolute;
-      top: 30px;
-      right: 30px;
-      width: 350px;
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
-      z-index: 5;
-      display: none;
-      animation: fadeIn 0.6s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(-20px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
-
-    .descricao-flutuante h3 {
-      margin-top: 0;
-    }
-
-    .mensagem {
-      font-size: 16px;
-      color: #28a745;
-      font-weight: bold;
-      margin-top: 10px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-    }
-
-    th, td {
-      border: 1px solid #ccc;
-      padding: 10px;
-      text-align: center;
-      background: #f8f8f8;
-    }
-
-    th {
-      background-color: #ffc107;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    #avisoMobile {
-      display: none;
-      background-color: #FFEB3B;
-      color: #000;
-      padding: 10px;
-      text-align: center;
-      font-weight: bold;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      z-index: 1000;
-    }
-  </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sensibilidade — Free Fire Booster</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div id="avisoMobile">
-    🚨 Para uma melhor experiência, ative a opção "Versão para computador" no seu navegador.
-  </div>
+  <header class="header" style="margin-bottom:12px">
+    <div class="brand"><div class="logo">FFB</div><div><h1>Sensibilidade</h1><div class="small">20 configs Android / 20 configs iPhone</div></div></div>
+    <nav class="nav"><a href="index.html">Início</a><a href="otimizacao.html">Otimização</a><a href="videos.html">Vídeos</a><a href="gerar-nick.html">Gerar Nick</a><a href="gerar-bio.html">Gerar Bio</a></nav>
+  </header>
 
-  <div class="wrapper">
-    <div class="container">
-      <h2>Login</h2>
-      <form id="loginForm">
-        <input type="text" id="login" placeholder="Usuário" required />
-        <input type="password" id="senha" placeholder="Senha" required />
-        <button type="submit">Entrar</button>
-      </form>
-
-      <button id="btnCompra"><i class="fas fa-shopping-cart"></i> Comprar por R$5</button>
-      <div id="pagamentoSucesso" class="mensagem hidden"><i class="fas fa-check-circle"></i> Pagamento confirmado!</div>
-
-      <button id="btnToggleInfo" class="hidden">Ver Informações do Site</button>
-      <button id="btnVerTabela" class="hidden">Ver Tabela de Logins</button>
-
-      <div id="tabelaContainer" class="hidden">
-        <h3>Logins e Senhas Disponíveis</h3>
-        <table>
-          <thead><tr><th>Login</th><th>Senha</th></tr></thead>
-          <tbody id="tabelaLogins"></tbody>
-        </table>
+  <main style="max-width:1200px;margin:0 auto;padding:0 12px">
+    <section class="card">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <button class="btn" id="btnGerarAll">Gerar 20 Android + 20 iPhone</button>
+        <button class="btn secondary" id="btnCopiarAndroid">Copiar todas - Android</button>
+        <button class="btn secondary" id="btnCopiarIphone">Copiar todas - iPhone</button>
       </div>
-    </div>
 
-    <div class="descricao-flutuante" id="descricaoInfo">
-      <h3>🎯 Ferramentas Exclusivas</h3>
-      <ul>
-        <li>🔧 Sensibilidade Profissional para Free Fire</li>
-        <li>💡 Otimização avançada de desempenho</li>
-        <li>🎮 HUDs e configs exclusivas para Pro Players</li>
-        <li>🆔 Gerador de Nicks e Bios</li>
-        <li>📈 Atualizações e suporte vitalício</li>
-      </ul>
-      <p>Transforme seu jogo com nossa tecnologia de aprimoramento profissional!</p>
-    </div>
-  </div>
+      <div style="margin-top:14px">
+        <div class="table-wrapper">
+          <table class="table" aria-label="Tabela de Sensibilidades Android">
+            <caption>Android — 20 configurações</caption>
+            <thead><tr><th>#</th><th>Geral</th><th>Red Dot</th><th>2x</th><th>4x</th><th>AWM</th><th>DPI</th><th>Ação</th></tr></thead>
+            <tbody id="android-tbody"></tbody>
+          </table>
+        </div>
 
+        <div class="table-wrapper" style="margin-top:12px">
+          <table class="table" aria-label="Tabela de Sensibilidades iPhone">
+            <caption>iPhone — 20 configurações</caption>
+            <thead><tr><th>#</th><th>Geral</th><th>Red Dot</th><th>2x</th><th>4x</th><th>AWM</th><th>DPI</th><th>Ação</th></tr></thead>
+            <tbody id="iphone-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">© 2025 — Free Fire Booster</footer>
+
+  <script src="script.js"></script>
   <script>
-    const usuariosKey = 'usuariosUnicos';
-
-    function gerarUsuariosUnicos() {
-      const gerados = [];
-      for (let i = 1; i <= 3; i++) {
-        gerados.push({
-          login: 'user' + Math.floor(Math.random() * 900 + 100),
-          senha: 'senha' + Math.floor(Math.random() * 900 + 100)
-        });
-      }
-      localStorage.setItem(usuariosKey, JSON.stringify(gerados));
-      return gerados;
-    }
-
-    const usuarios = JSON.parse(localStorage.getItem(usuariosKey)) || gerarUsuariosUnicos();
-
-    function gerarTabela() {
-      const tabela = document.getElementById('tabelaLogins');
-      tabela.innerHTML = '';
-      usuarios.forEach(user => {
-        const row = document.createElement('tr');
-        row.innerHTML = `<td>${user.login}</td><td>${user.senha}</td>`;
-        tabela.appendChild(row);
-      });
-    }
-
-    function verificarLogin(login, senha) {
-      if (login === "ADMIN" && senha === "55355100") return true;
-      return usuarios.some(user => user.login === login && user.senha === senha);
-    }
-
-    if (localStorage.getItem("logado") === "true") {
-      window.location.href = "https://free-fire-booster.netlify.app/sensibilidade";
-    }
-
-    let pagamentoConfirmado = false;
-
-    document.getElementById("btnCompra").addEventListener("click", function () {
-      window.open("https://pay.kiwify.com.br/Vk5yvhO", "_blank");
-      this.disabled = true;
-      setTimeout(() => {
-        pagamentoConfirmado = true;
-        document.getElementById('pagamentoSucesso').classList.remove('hidden');
-        document.getElementById('btnToggleInfo').classList.remove('hidden');
-        document.getElementById('btnVerTabela').classList.remove('hidden');
-        alert("Pagamento confirmado. Você pode agora fazer login.");
-      }, 5000);
+    document.getElementById('btnGerarAll').addEventListener('click', ()=>{
+      gerarSensibilidadesSeparadas(20,20);
+      alert('Geradas 20 Android e 20 iPhone. Use os botões "Copiar" nas linhas ou "Copiar todas" para cada dispositivo.');
     });
 
-    document.getElementById('loginForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const login = document.getElementById("login").value;
-      const senha = document.getElementById("senha").value;
-
-      if (!pagamentoConfirmado) {
-        alert("Efetue o pagamento para prosseguir.");
-        return;
-      }
-
-      if (verificarLogin(login, senha)) {
-        localStorage.setItem("logado", "true");
-        window.location.href = "https://free-fire-booster.netlify.app/sensibilidade";
-      } else {
-        alert("Login ou senha inválidos.");
-      }
-    });
-
-    document.getElementById('btnToggleInfo').addEventListener('click', () => {
-      const info = document.getElementById('descricaoInfo');
-      info.style.display = info.style.display === 'none' || info.style.display === '' ? 'block' : 'none';
-    });
-
-    document.getElementById('btnVerTabela').addEventListener('click', () => {
-      document.getElementById('tabelaContainer').classList.toggle('hidden');
-      gerarTabela();
-    });
-
-    if (/Mobi|Android/i.test(navigator.userAgent)) {
-      document.getElementById('avisoMobile').style.display = 'block';
-    }
+    document.getElementById('btnCopiarAndroid').addEventListener('click', ()=> copyAll('android'));
+    document.getElementById('btnCopiarIphone').addEventListener('click', ()=> copyAll('iphone'));
   </script>
 </body>
 </html>
