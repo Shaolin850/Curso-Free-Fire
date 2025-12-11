@@ -7,6 +7,106 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>">
+  <style>
+    /* Estilos CSS adicionais para o menu mobile */
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+      z-index: 1001;
+    }
+
+    .menu-toggle:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .nav {
+      display: flex;
+      gap: 2px;
+      flex-wrap: wrap;
+    }
+
+    /* Responsividade para mobile */
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+      
+      .nav {
+        position: fixed;
+        top: 0;
+        right: -300px;
+        width: 280px;
+        height: 100vh;
+        background: rgba(10, 15, 25, 0.98);
+        backdrop-filter: blur(10px);
+        flex-direction: column;
+        padding: 80px 20px 20px;
+        gap: 10px;
+        transition: right 0.3s ease;
+        z-index: 1000;
+        overflow-y: auto;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+        border-left: 1px solid rgba(0, 217, 255, 0.2);
+      }
+      
+      .nav.active {
+        right: 0;
+      }
+      
+      .nav a {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        border-left: 3px solid transparent;
+        transition: all 0.3s ease;
+      }
+      
+      .nav a:hover,
+      .nav a.active {
+        background: rgba(0, 217, 255, 0.1);
+        border-left-color: #00d9ff;
+        transform: translateX(5px);
+      }
+      
+      .nav a i {
+        width: 20px;
+        text-align: center;
+      }
+      
+      /* Overlay quando menu está aberto */
+      .nav.active::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: -1;
+      }
+    }
+
+    /* Para telas muito pequenas */
+    @media (max-width: 480px) {
+      .nav {
+        width: 250px;
+      }
+      
+      .brand-text h1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="animated-bg"></div>
@@ -21,7 +121,7 @@
         </div>
       </div>
       
-      <button class="menu-toggle" id="menuToggle">
+      <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu de navegação">
         <i class="fas fa-bars"></i>
       </button>
       
@@ -186,7 +286,7 @@
         </div>
         
         <div style="text-align: center;">
-          <div style="font-size: 2.5rem; font-weight: 800; color: #00d9ff;">26</div>
+          <div style="font-size: 2.5rem; font-weight: 800; color: #00d9ff;">24</div>
           <div style="color: var(--muted);">HUDs Diferentes</div>
         </div>
         
@@ -219,7 +319,7 @@
       </div>
       
       <div style="margin-top: 24px; color: rgba(255,255,255,0.4); font-size: 13px;">
-        © 2024 Free Fire Booster. Melhore sua jogabilidade.
+        © 2024 Free Fire Booster. Todos os direitos reservados.
         <br>Desenvolvido para a comunidade Free Fire.
       </div>
     </div>
@@ -227,10 +327,98 @@
 
   <script src="script.js"></script>
   <script>
-    // Menu mobile toggle
-    document.getElementById('menuToggle').addEventListener('click', function() {
-      document.getElementById('mainNav').classList.toggle('active');
-    });
+    // Menu mobile toggle - Código principal
+    document.addEventListener('DOMContentLoaded', function() {
+      // Elementos do menu
+      const menuToggle = document.getElementById('menuToggle');
+      const mainNav = document.getElementById('mainNav');
+      
+      // Se os elementos existirem, configurar o menu mobile
+      if (menuToggle && mainNav) {
+        // Toggle do menu
+        menuToggle.addEventListener('click', function(e) {
+          e.stopPropagation(); // Evita que o clique se propague
+          mainNav.classList.toggle('active');
+          menuToggle.classList.toggle('active');
+          
+          // Alterar ícone do botão
+          const icon = menuToggle.querySelector('i');
+          if (mainNav.classList.contains('active')) {
+            icon.classList.remove('fa-bars');
+            icon.classList.add('fa-times');
+          } else {
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+          }
+        });
+        
+        // Fechar menu ao clicar em um link
+        const navLinks = mainNav.querySelectorAll('a');
+        navLinks.forEach(link => {
+          link.addEventListener('click', function() {
+            mainNav.classList.remove('active');
+            menuToggle.classList.remove('active');
+            const icon = menuToggle.querySelector('i');
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+          });
+        });
+        
+        // Fechar menu ao clicar fora dele
+        document.addEventListener('click', function(e) {
+          if (mainNav.classList.contains('active') && 
+              !mainNav.contains(e.target) && 
+              !menuToggle.contains(e.target)) {
+            mainNav.classList.remove('active');
+            menuToggle.classList.remove('active');
+            const icon = menuToggle.querySelector('i');
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+          }
+        });
+        
+        // Prevenir fechamento ao clicar dentro do menu
+        mainNav.addEventListener('click', function(e) {
+          e.stopPropagation();
+        });
+      }
+      
+      // Fechar menu ao redimensionar a janela (se voltar para desktop)
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 768 && mainNav && mainNav.classList.contains('active')) {
+          mainNav.classList.remove('active');
+          if (menuToggle) {
+            menuToggle.classList.remove('active');
+            const icon = menuToggle.querySelector('i');
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+          }
+        }
+      });
+
+      // View toggle buttons (se existirem)
+      const viewPlayerBtn = document.getElementById('viewPlayerBtn');
+      const viewGridBtn = document.getElementById('viewGridBtn');
+      
+      if (viewPlayerBtn) {
+        viewPlayerBtn.addEventListener('click', function() {
+          setView('player');
+        });
+      }
+      
+      if (viewGridBtn) {
+        viewGridBtn.addEventListener('click', function() {
+          setView('grid');
+        });
+      }
+
+      // Category buttons (se existirem)
+      document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const category = this.getAttribute('data-category');
+          setCategory(category);
+        });
+      });
     
     // Quick tip generator
     const tips = [
@@ -266,13 +454,54 @@
       const nick = `${symbol1}${name}${symbol2}`;
       
       // Copy to clipboard
-      navigator.clipboard.writeText(nick).then(() => {
-        alert(`Nick "${nick}" copiado para a área de transferência!`);
-      });
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(nick).then(() => {
+          alert(`Nick "${nick}" copiado para a área de transferência!`);
+        }).catch(err => {
+          console.error('Erro ao copiar para área de transferência: ', err);
+          // Fallback para navegadores mais antigos
+          const textArea = document.createElement('textarea');
+          textArea.value = nick;
+          document.body.appendChild(textArea);
+          textArea.select();
+          try {
+            document.execCommand('copy');
+            alert(`Nick "${nick}" copiado para a área de transferência!`);
+          } catch (err2) {
+            alert(`Nick gerado: ${nick}\nCopie manualmente.`);
+          }
+          document.body.removeChild(textArea);
+        });
+      } else {
+        // Fallback para navegadores sem suporte a clipboard API
+        const textArea = document.createElement('textarea');
+        textArea.value = nick;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+          document.execCommand('copy');
+          alert(`Nick "${nick}" copiado para a área de transferência!`);
+        } catch (err) {
+          alert(`Nick gerado: ${nick}\nCopie manualmente.`);
+        }
+        document.body.removeChild(textArea);
+      }
     }
     
     // Show initial tip
     showRandomTip();
+    });
+
+    // Funções auxiliares (se não estiverem em script.js)
+    function setView(viewType) {
+      console.log('Alternando para view:', viewType);
+      // Implemente sua lógica de alternância de visualização aqui
+    }
+    
+    function setCategory(category) {
+      console.log('Categoria selecionada:', category);
+      // Implemente sua lógica de filtragem por categoria aqui
+    }
   </script>
 </body>
 </html>
