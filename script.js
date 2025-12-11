@@ -6,7 +6,13 @@
 // ============================================
 
 document.addEventListener('DOMContentLoaded', function() {
+  // Inicializações de mobile primeiro
   initializeMobileMenu();
+  initializeTouchEvents();
+  fixViewportHeight();
+  preventPullToRefresh();
+  
+  // Demais inicializações
   initializeTooltips();
   initializeCopyButtons();
   initializeNotifications();
@@ -46,66 +52,257 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Initialize analytics
   initializeAnalytics();
+  
+  // Verificar se é dispositivo móvel
+  if (/Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    console.log('Dispositivo móvel detectado - Otimizações aplicadas');
+    document.documentElement.classList.add('is-mobile');
+  }
 });
 
 // ============================================
-// CORE FUNCTIONS
+// MOBILE OPTIMIZATION FUNCTIONS
 // ============================================
 
 function initializeMobileMenu() {
   const menuToggle = document.getElementById('menuToggle');
   const mainNav = document.getElementById('mainNav');
+  const body = document.body;
   
   if (menuToggle && mainNav) {
+    // Abrir/fechar menu
     menuToggle.addEventListener('click', function(e) {
       e.stopPropagation();
       mainNav.classList.toggle('active');
       this.classList.toggle('active');
+      body.classList.toggle('menu-open'); // Adiciona classe ao body
     });
     
-    // Close menu when clicking outside
+    // Fechar menu ao clicar fora
     document.addEventListener('click', function(e) {
-      if (!mainNav.contains(e.target) && !menuToggle.contains(e.target)) {
-        mainNav.classList.remove('active');
-        menuToggle.classList.remove('active');
+      if (mainNav.classList.contains('active') && 
+          !mainNav.contains(e.target) && 
+          !menuToggle.contains(e.target)) {
+        closeMobileMenu();
       }
     });
     
-    // Close menu when clicking a link (mobile)
+    // Fechar menu ao clicar em um link (mobile)
     mainNav.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', function() {
-        mainNav.classList.remove('active');
-        menuToggle.classList.remove('active');
+        closeMobileMenu();
       });
     });
+    
+    // Fechar menu ao pressionar ESC
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && mainNav.classList.contains('active')) {
+        closeMobileMenu();
+      }
+    });
+    
+    // Fechar menu ao arrastar para a direita (gesto)
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    document.addEventListener('touchstart', function(e) {
+      if (mainNav.classList.contains('active')) {
+        touchStartX = e.changedTouches[0].screenX;
+      }
+    }, { passive: true });
+    
+    document.addEventListener('touchend', function(e) {
+      if (mainNav.classList.contains('active')) {
+        touchEndX = e.changedTouches[0].screenX;
+        const swipeDistance = touchStartX - touchEndX;
+        
+        // Se arrastar mais de 50px para a direita, fecha o menu
+        if (swipeDistance < -50) {
+          closeMobileMenu();
+        }
+      }
+    }, { passive: true });
+    
+    // Função para fechar menu
+    function closeMobileMenu() {
+      mainNav.classList.remove('active');
+      menuToggle.classList.remove('active');
+      body.classList.remove('menu-open');
+    }
+    
+    // Garantir que o menu está fechado ao redimensionar para desktop
+    window.addEventListener('resize', debounce(function() {
+      if (window.innerWidth > 768 && mainNav.classList.contains('active')) {
+        closeMobileMenu();
+      }
+    }, 250));
   }
 }
 
+function initializeTouchEvents() {
+  // Prevenir zoom em inputs no iOS
+  document.addEventListener('touchstart', function(e) {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+      // Forçar tamanho de fonte para prevenir zoom
+      e.target.style.fontSize = '16px';
+    }
+  }, { passive: true });
+  
+  // Restaurar tamanho da fonte depois
+  document.addEventListener('touchend', function(e) {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+      setTimeout(() => {
+        e.target.style.fontSize = '';
+      }, 1000);
+    }
+  }, { passive: true });
+  
+  // Adicionar classe touch para estilos específicos
+  if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+    document.documentElement.classList.add('touch-device');
+  }
+  
+  // Melhorar feedback visual em toques
+  document.addEventListener('touchstart', function() {
+    // Adiciona feedback tátil se suportado
+    if (window.navigator.vibrate) {
+      window.navigator.vibrate(10);
+    }
+  }, { passive: true });
+}
+
+function fixViewportHeight() {
+  // Corrigir altura da viewport em mobile (problema da barra de endereço)
+  function setVh() {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  }
+  
+  // Inicializar
+  setVh();
+  
+  // Atualizar em eventos
+  window.addEventListener('resize', debounce(setVh, 150));
+  window.addEventListener('orientationchange', function() {
+    setTimeout(setVh, 300);
+  });
+  
+  // Atualizar quando a barra de endereço esconde/mostra
+  window.addEventListener('scroll', debounce(setVh, 150));
+}
+
+function preventPullToRefresh() {
+  // Prevenir pull-to-refresh em mobile (especialmente Chrome Android)
+  let lastTouchY = 0;
+  let isScrolling = false;
+  
+  document.addEventListener('touchstart', function(e) {
+    if (e.touches.length !== 1) return;
+    lastTouchY = e.touches[0].clientY;
+    
+    // Resetar estado de scroll
+    isScrolling = false;
+  }, { passive: true });
+  
+  document.addEventListener('touchmove', function(e) {
+    if (e.touches.length !== 1) return;
+    
+    const touchY = e.touches[0].clientY;
+    const touchYDelta = touchY - lastTouchY;
+    lastTouchY = touchY;
+    
+    // Se o usuário estiver rolando para baixo do topo
+    if (window.scrollY === 0 && touchYDelta > 0 && !isScrolling) {
+      // Permitir um pequeno movimento antes de prevenir
+      if (touchYDelta > 10) {
+        e.preventDefault();
+        return false;
+      }
+    } else {
+      isScrolling = true;
+    }
+  }, { passive: false });
+}
+
+// ============================================
+// CORE FUNCTIONS
+// ============================================
+
 function initializeTooltips() {
-  // Create tooltip container
+  // Criar container para tooltips
   const tooltipContainer = document.createElement('div');
   tooltipContainer.id = 'tooltip-container';
   tooltipContainer.style.cssText = `
     position: fixed;
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.95);
     color: white;
-    padding: 8px 12px;
-    border-radius: 6px;
-    font-size: 12px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
     z-index: 9999;
     pointer-events: none;
     opacity: 0;
-    transition: opacity 0.2s;
-    max-width: 250px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: opacity 0.2s, transform 0.2s;
+    max-width: 280px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
+    word-wrap: break-word;
+    line-height: 1.4;
   `;
   document.body.appendChild(tooltipContainer);
   
-  // Add tooltip functionality to elements
+  // Adicionar funcionalidade de tooltip aos elementos
   document.querySelectorAll('[data-tooltip]').forEach(element => {
-    element.addEventListener('mouseenter', function() {
+    element.addEventListener('mouseenter', function(e) {
       const tooltipText = this.getAttribute('data-tooltip');
+      if (!tooltipText) return;
+      
+      tooltipContainer.textContent = tooltipText;
+      tooltipContainer.style.opacity = '1';
+      
+      // Posicionar tooltip
+      const rect = this.getBoundingClientRect();
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      
+      // Verificar se há espaço acima
+      if (rect.top > 80) {
+        // Posicionar acima
+        tooltipContainer.style.left = (rect.left + (rect.width / 2)) + 'px';
+        tooltipContainer.style.top = (rect.top - 10) + 'px';
+        tooltipContainer.style.transform = 'translate(-50%, -100%)';
+      } else {
+        // Posicionar abaixo
+        tooltipContainer.style.left = (rect.left + (rect.width / 2)) + 'px';
+        tooltipContainer.style.top = (rect.bottom + 10) + 'px';
+        tooltipContainer.style.transform = 'translate(-50%, 0)';
+      }
+      
+      // Ajustar para não sair da tela em mobile
+      const tooltipRect = tooltipContainer.getBoundingClientRect();
+      if (tooltipRect.left < 10) {
+        tooltipContainer.style.left = '10px';
+        tooltipContainer.style.transform = 'translate(0, -100%)';
+      } else if (tooltipRect.right > viewportWidth - 10) {
+        tooltipContainer.style.left = 'auto';
+        tooltipContainer.style.right = '10px';
+        tooltipContainer.style.transform = 'translate(0, -100%)';
+      }
+    });
+    
+    element.addEventListener('mouseleave', function() {
+      tooltipContainer.style.opacity = '0';
+    });
+    
+    // Suporte para touch devices
+    element.addEventListener('touchstart', function(e) {
+      const tooltipText = this.getAttribute('data-tooltip');
+      if (!tooltipText) return;
+      
+      e.preventDefault();
+      e.stopPropagation();
+      
       tooltipContainer.textContent = tooltipText;
       tooltipContainer.style.opacity = '1';
       
@@ -113,22 +310,23 @@ function initializeTooltips() {
       tooltipContainer.style.left = (rect.left + (rect.width / 2)) + 'px';
       tooltipContainer.style.top = (rect.top - 10) + 'px';
       tooltipContainer.style.transform = 'translate(-50%, -100%)';
-    });
-    
-    element.addEventListener('mouseleave', function() {
-      tooltipContainer.style.opacity = '0';
-    });
+      
+      // Fechar tooltip depois de 2 segundos em touch
+      setTimeout(() => {
+        tooltipContainer.style.opacity = '0';
+      }, 2000);
+    }, { passive: false });
   });
 }
 
 function initializeCopyButtons() {
   document.addEventListener('click', function(e) {
-    // Check if clicked element or parent is a copy button
+    // Verificar se clicou em botão de cópia
     let copyButton = e.target.closest('.copy-btn, [data-copy], [onclick*="copy"]');
     
-    if (copyButton && !copyButton.closest('a')) { // Adicionado: evitar links
+    if (copyButton && !copyButton.closest('a')) {
       e.preventDefault();
-      e.stopPropagation(); // Impedir propagação do evento
+      e.stopPropagation();
       
       // Verificar se é um botão de ação específica
       const isActionButton = copyButton.hasAttribute('onclick') && 
@@ -138,7 +336,7 @@ function initializeCopyButtons() {
         return; // Deixar o evento onclick original funcionar
       }
       
-      // Get text to copy
+      // Obter texto para copiar
       let textToCopy = '';
       
       if (copyButton.hasAttribute('data-copy')) {
@@ -146,12 +344,14 @@ function initializeCopyButtons() {
       } else if (copyButton.previousElementSibling && copyButton.previousElementSibling.value) {
         textToCopy = copyButton.previousElementSibling.value;
       } else if (copyButton.previousElementSibling && copyButton.previousElementSibling.textContent) {
-        textToCopy = copyButton.previousElementSibling.textContent;
+        textToCopy = copyButton.previousElementSibling.textContent.trim();
       } else if (copyButton.parentElement.previousElementSibling) {
-        textToCopy = copyButton.parentElement.previousElementSibling.textContent;
+        textToCopy = copyButton.parentElement.previousElementSibling.textContent.trim();
+      } else if (copyButton.closest('.code-block')) {
+        textToCopy = copyButton.closest('.code-block').querySelector('code').textContent;
       }
       
-      // Clean up text if needed
+      // Limpar texto se necessário
       textToCopy = textToCopy.trim();
       
       if (textToCopy) {
@@ -162,16 +362,17 @@ function initializeCopyButtons() {
 }
 
 function copyToClipboard(text, customMessage = '') {
-  // Create temporary textarea
+  // Criar textarea temporário
   const textarea = document.createElement('textarea');
   textarea.value = text;
   textarea.style.position = 'fixed';
   textarea.style.opacity = '0';
+  textarea.style.pointerEvents = 'none';
   document.body.appendChild(textarea);
   
-  // Select and copy
+  // Selecionar e copiar
   textarea.select();
-  textarea.setSelectionRange(0, 99999); // For mobile devices
+  textarea.setSelectionRange(0, 99999); // Para dispositivos móveis
   
   try {
     const successful = document.execCommand('copy');
@@ -181,19 +382,23 @@ function copyToClipboard(text, customMessage = '') {
       showNotification('Erro ao copiar. Tente novamente.', 'error');
     }
   } catch (err) {
-    // Fallback to Clipboard API
-    navigator.clipboard.writeText(text).then(
-      () => showNotification(customMessage || 'Copiado para a área de transferência!', 'success'),
-      () => showNotification('Erro ao copiar. Tente novamente.', 'error')
-    );
+    // Fallback para Clipboard API
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(
+        () => showNotification(customMessage || 'Copiado para a área de transferência!', 'success'),
+        () => showNotification('Erro ao copiar. Tente novamente.', 'error')
+      );
+    } else {
+      showNotification('Seu navegador não suporta copiar para a área de transferência.', 'error');
+    }
   }
   
-  // Clean up
+  // Limpar
   document.body.removeChild(textarea);
 }
 
 function initializeNotifications() {
-  // Create notification container
+  // Criar container de notificações
   const notificationContainer = document.createElement('div');
   notificationContainer.id = 'notification-container';
   notificationContainer.style.cssText = `
@@ -203,38 +408,50 @@ function initializeNotifications() {
     z-index: 10000;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    max-width: 350px;
+    gap: 12px;
+    max-width: min(350px, 90vw);
+    pointer-events: none;
   `;
   document.body.appendChild(notificationContainer);
+  
+  // Garantir que está acima do menu mobile
+  setTimeout(() => {
+    notificationContainer.style.zIndex = '10001';
+  }, 100);
 }
 
 function showNotification(message, type = 'info', duration = 3000) {
   const notificationContainer = document.getElementById('notification-container');
+  if (!notificationContainer) return;
   
-  // Create notification element
+  // Criar elemento de notificação
   const notification = document.createElement('div');
   notification.className = `notification notification-${type}`;
   notification.style.cssText = `
-    background: ${type === 'success' ? 'rgba(34, 197, 94, 0.9)' : 
-                 type === 'error' ? 'rgba(239, 68, 68, 0.9)' : 
-                 type === 'warning' ? 'rgba(245, 158, 11, 0.9)' : 
-                 'rgba(59, 130, 246, 0.9)'};
+    background: ${type === 'success' ? 'rgba(34, 197, 94, 0.95)' : 
+                 type === 'error' ? 'rgba(239, 68, 68, 0.95)' : 
+                 type === 'warning' ? 'rgba(245, 158, 11, 0.95)' : 
+                 'rgba(59, 130, 246, 0.95)'};
     color: white;
-    padding: 12px 16px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    padding: 14px 18px;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     animation: slideIn 0.3s ease;
-    border-left: 4px solid ${type === 'success' ? '#22c55e' : 
+    border-left: 5px solid ${type === 'success' ? '#22c55e' : 
                          type === 'error' ? '#ef4444' : 
                          type === 'warning' ? '#f59e0b' : 
                          '#3b82f6'};
+    pointer-events: auto;
+    backdrop-filter: blur(10px);
+    min-height: 60px;
+    max-width: 100%;
+    word-wrap: break-word;
   `;
   
-  // Add icon based on type
+  // Adicionar ícone baseado no tipo
   const iconMap = {
     success: 'fa-check-circle',
     error: 'fa-exclamation-circle',
@@ -243,54 +460,93 @@ function showNotification(message, type = 'info', duration = 3000) {
   };
   
   notification.innerHTML = `
-    <i class="fas ${iconMap[type] || 'fa-info-circle'}"></i>
-    <span>${message}</span>
+    <i class="fas ${iconMap[type] || 'fa-info-circle'}" style="font-size: 1.2em; flex-shrink: 0;"></i>
+    <span style="flex: 1; font-size: 14px; line-height: 1.4;">${message}</span>
+    <button class="notification-close" style="background: none; border: none; color: white; opacity: 0.7; cursor: pointer; flex-shrink: 0; padding: 4px;">
+      <i class="fas fa-times"></i>
+    </button>
   `;
   
-  // Add to container
+  // Adicionar ao container
   notificationContainer.appendChild(notification);
   
-  // Auto remove after duration
-  setTimeout(() => {
-    notification.style.animation = 'slideOut 0.3s ease';
-    setTimeout(() => {
-      if (notification.parentNode) {
-        notification.parentNode.removeChild(notification);
-      }
-    }, 300);
+  // Fechar notificação ao clicar no botão X
+  const closeBtn = notification.querySelector('.notification-close');
+  closeBtn.addEventListener('click', function() {
+    removeNotification(notification);
+  });
+  
+  // Fechar notificação ao tocar nela (mobile)
+  notification.addEventListener('touchstart', function() {
+    removeNotification(notification);
+  }, { passive: true });
+  
+  // Auto remover após duração
+  const timeoutId = setTimeout(() => {
+    removeNotification(notification);
   }, duration);
   
-  // Add CSS animations if not already present
+  // Pausar timeout quando hover/touch
+  notification.addEventListener('mouseenter', function() {
+    clearTimeout(timeoutId);
+  });
+  
+  notification.addEventListener('mouseleave', function() {
+    setTimeout(() => {
+      removeNotification(notification);
+    }, duration);
+  });
+  
+  // Adicionar CSS animations se não existirem
   if (!document.getElementById('notification-styles')) {
     const style = document.createElement('style');
     style.id = 'notification-styles';
     style.textContent = `
       @keyframes slideIn {
-        from { transform: translateX(100%); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
+        from { transform: translateX(100%) translateY(-20px); opacity: 0; }
+        to { transform: translateX(0) translateY(0); opacity: 1; }
       }
       @keyframes slideOut {
-        from { transform: translateX(0); opacity: 1; }
-        to { transform: translateX(100%); opacity: 0; }
+        from { transform: translateX(0) translateY(0); opacity: 1; }
+        to { transform: translateX(100%) translateY(-20px); opacity: 0; }
+      }
+      .notification {
+        transition: transform 0.3s ease, opacity 0.3s ease;
       }
     `;
     document.head.appendChild(style);
   }
+  
+  function removeNotification(notificationElement) {
+    notificationElement.style.animation = 'slideOut 0.3s ease';
+    notificationElement.style.opacity = '0';
+    setTimeout(() => {
+      if (notificationElement.parentNode) {
+        notificationElement.parentNode.removeChild(notificationElement);
+      }
+    }, 300);
+  }
 }
 
 function initializeAnalytics() {
-  // Basic page view tracking
+  // Rastreamento básico de visualizações de página
   const pageName = document.title || window.location.pathname;
   console.log(`Free Fire Booster - Página visitada: ${pageName}`);
   
-  // Optional: Add Google Analytics or similar here
-  // Example:
+  // Opcional: Adicionar Google Analytics ou similar aqui
+  // Exemplo:
   // if (window.gtag) {
   //   gtag('event', 'page_view', {
   //     page_title: pageName,
-  //     page_location: window.location.href
+  //     page_location: window.location.href,
+  //     page_path: window.location.pathname
   //   });
   // }
+  
+  // Rastrear erros
+  window.addEventListener('error', function(e) {
+    console.error('Erro no Free Fire Booster:', e.error);
+  });
 }
 
 // ============================================
@@ -298,7 +554,7 @@ function initializeAnalytics() {
 // ============================================
 
 function initHomePage() {
-  // Quick tip generator
+  // Gerador de dicas rápidas
   const tips = [
     "Use fones de ouvido para ouvir passos dos inimigos",
     "Ajuste sua sensibilidade gradualmente até encontrar o ideal",
@@ -313,13 +569,20 @@ function initHomePage() {
   ];
   
   function showRandomTip() {
-    if (document.getElementById('tipDisplay')) {
+    const tipDisplay = document.getElementById('tipDisplay');
+    if (tipDisplay) {
       const randomTip = tips[Math.floor(Math.random() * tips.length)];
-      document.getElementById('tipDisplay').textContent = randomTip;
+      tipDisplay.textContent = randomTip;
+      
+      // Animação
+      tipDisplay.style.animation = 'none';
+      setTimeout(() => {
+        tipDisplay.style.animation = 'fadeIn 0.5s ease';
+      }, 10);
     }
   }
   
-  // Quick nick generator
+  // Gerador rápido de nick
   function generateQuickNick() {
     const nameInput = document.getElementById('quickNick');
     if (!nameInput) return;
@@ -337,13 +600,26 @@ function initHomePage() {
     const nick = `${symbol1}${name}${symbol2}`;
     
     copyToClipboard(nick, `Nick "${nick}" copiado!`);
+    
+    // Atualizar preview
+    const preview = document.getElementById('quickNickPreview');
+    if (preview) {
+      preview.textContent = nick;
+      preview.style.animation = 'none';
+      setTimeout(() => {
+        preview.style.animation = 'highlight 0.5s ease';
+      }, 10);
+    }
   }
   
-  // Attach event listeners
+  // Anexar event listeners
   if (document.getElementById('tipDisplay')) {
+    // Mostrar dica aleatória inicial
     showRandomTip();
+    
+    // Botão de nova dica
     document.addEventListener('click', function(e) {
-      if (e.target.closest('[onclick*="showRandomTip"]')) {
+      if (e.target.closest('[onclick*="showRandomTip"]') || e.target.closest('#newTipBtn')) {
         showRandomTip();
       }
     });
@@ -351,18 +627,29 @@ function initHomePage() {
   
   if (document.getElementById('quickNick')) {
     document.addEventListener('click', function(e) {
-      if (e.target.closest('[onclick*="generateQuickNick"]')) {
+      if (e.target.closest('[onclick*="generateQuickNick"]') || e.target.closest('#generateQuickNickBtn')) {
         generateQuickNick();
       }
     });
     
-    // Enter key support
+    // Suporte para tecla Enter
     document.getElementById('quickNick').addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {
         generateQuickNick();
       }
     });
   }
+  
+  // Inicializar tooltips para ícones de redes sociais
+  document.querySelectorAll('.social-icon').forEach(icon => {
+    if (!icon.hasAttribute('data-tooltip')) {
+      const platform = icon.querySelector('i').className.match(/fa-([a-z]+)/);
+      if (platform) {
+        const platformName = platform[1].charAt(0).toUpperCase() + platform[1].slice(1);
+        icon.setAttribute('data-tooltip', `Siga-nos no ${platformName}`);
+      }
+    }
+  });
 }
 
 function initSensitivityPage() {
@@ -372,6 +659,10 @@ function initSensitivityPage() {
   
   if (generateBtn) {
     generateBtn.addEventListener('click', generateSensitivities);
+    generateBtn.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      generateSensitivities();
+    }, { passive: false });
   }
   
   if (copyAndroidBtn) {
@@ -382,7 +673,7 @@ function initSensitivityPage() {
     copyIphoneBtn.addEventListener('click', () => copyAllSensitivities('iphone'));
   }
   
-  // Generate initial sensitivities on page load
+  // Gerar sensibilidades iniciais no carregamento da página
   setTimeout(() => {
     if (document.querySelector('#android-tbody') && 
         document.querySelector('#android-tbody').children.length === 0) {
@@ -392,7 +683,7 @@ function initSensitivityPage() {
 }
 
 function initOptimizationPage() {
-  // Device selector functionality
+  // Funcionalidade do seletor de dispositivo
   const deviceBtns = document.querySelectorAll('.device-btn');
   const deviceSections = document.querySelectorAll('.device-section');
   
@@ -401,11 +692,11 @@ function initOptimizationPage() {
       btn.addEventListener('click', function() {
         const device = this.getAttribute('data-device');
         
-        // Update active button
+        // Atualizar botão ativo
         deviceBtns.forEach(b => b.classList.remove('active'));
         this.classList.add('active');
         
-        // Show corresponding section
+        // Mostrar seção correspondente
         deviceSections.forEach(section => {
           section.classList.remove('active');
         });
@@ -413,41 +704,75 @@ function initOptimizationPage() {
         const targetSection = document.getElementById(`${device}-section`);
         if (targetSection) {
           targetSection.classList.add('active');
+          
+          // Scroll suave para a seção em mobile
+          if (window.innerWidth <= 768) {
+            setTimeout(() => {
+              targetSection.scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+              });
+            }, 100);
+          }
         }
       });
+      
+      // Suporte para touch
+      btn.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        this.click();
+      }, { passive: false });
     });
   }
   
-  // Copy optimization tips functionality
+  // Funcionalidade de copiar dicas de otimização
   document.addEventListener('click', function(e) {
     if (e.target.closest('[onclick*="copyAllOptimization"]')) {
-      const device = e.target.closest('[onclick*="copyAllOptimization"]').getAttribute('onclick').match(/'([^']+)'/)[1];
-      copyAllOptimization(device);
+      const match = e.target.closest('[onclick*="copyAllOptimization"]').getAttribute('onclick').match(/'([^']+)'/);
+      if (match && match[1]) {
+        copyAllOptimization(match[1]);
+      }
     }
   });
   
-  // Expand/collapse advanced sections
+  // Expandir/recolher seções avançadas
   document.querySelectorAll('.advanced-toggle').forEach(toggle => {
     toggle.addEventListener('click', function() {
       const targetId = this.getAttribute('data-target');
       const target = document.getElementById(targetId);
       if (target) {
         target.classList.toggle('expanded');
-        this.querySelector('i').classList.toggle('fa-chevron-down');
-        this.querySelector('i').classList.toggle('fa-chevron-up');
+        const icon = this.querySelector('i');
+        if (icon) {
+          icon.classList.toggle('fa-chevron-down');
+          icon.classList.toggle('fa-chevron-up');
+        }
       }
     });
   });
 }
 
 function initVideosPage() {
-  // Already implemented in videos.html
-  // This function is a placeholder for additional video page functionality
-  console.log('Videos page initialized');
+  // Já implementado em videos.html
+  // Esta função é um placeholder para funcionalidades adicionais da página de vídeos
+  
+  // Otimizar vídeos para mobile
+  const videoContainers = document.querySelectorAll('.video-container');
+  videoContainers.forEach(container => {
+    // Garantir que vídeos não autoplay em mobile
+    if (window.innerWidth <= 768) {
+      const iframe = container.querySelector('iframe');
+      if (iframe) {
+        iframe.setAttribute('allow', 'accelerometer; encrypted-media; gyroscope; picture-in-picture');
+      }
+    }
+  });
+  
+  console.log('Videos page initialized com otimizações mobile');
 }
 
 function initNickGeneratorPage() {
-  // Symbol library for nick generation
+  // Biblioteca de símbolos para geração de nick
   const nickSymbols = {
     normal: ['★', '☆', '⚡', '♛', '♚', '☯', '☣', '✪', '✯', '❖', '⚝', '࿐', '•', 'ᴮᴼˢˢ'],
     aggressive: ['☠', '⚔', '🛡', '💀', '🔥', 'ⓀⒾⓁⓁⒺⓇ', '†', '✞', '卐', '刀', '乃', 'ﾑ', '乇'],
@@ -467,16 +792,22 @@ function initNickGeneratorPage() {
   let currentQuantity = 20;
   let generatedNicks = [];
   
-  // Style buttons
+  // Botões de estilo
   document.querySelectorAll('.style-btn').forEach(btn => {
     btn.addEventListener('click', function() {
       document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
       this.classList.add('active');
       currentStyle = this.getAttribute('data-style');
     });
+    
+    // Suporte touch
+    btn.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      this.click();
+    }, { passive: false });
   });
   
-  // Quantity buttons
+  // Botões de quantidade
   document.querySelectorAll('.qty-btn').forEach(btn => {
     btn.addEventListener('click', function() {
       document.querySelectorAll('.qty-btn').forEach(b => b.classList.remove('active'));
@@ -485,13 +816,13 @@ function initNickGeneratorPage() {
     });
   });
   
-  // Generate nicks button
+  // Botão gerar nicks
   const generateBtn = document.getElementById('generateNicksBtn');
   if (generateBtn) {
     generateBtn.addEventListener('click', generateNicks);
   }
   
-  // Copy all nicks button
+  // Botão copiar todos os nicks
   const copyAllBtn = document.getElementById('copyAllNicksBtn');
   if (copyAllBtn) {
     copyAllBtn.addEventListener('click', function() {
@@ -505,7 +836,7 @@ function initNickGeneratorPage() {
     });
   }
   
-  // Clear nicks button
+  // Botão limpar nicks
   const clearBtn = document.getElementById('clearNicksBtn');
   if (clearBtn) {
     clearBtn.addEventListener('click', function() {
@@ -513,16 +844,20 @@ function initNickGeneratorPage() {
         return;
       }
       
+      // Usar confirmação nativa do navegador
       if (confirm('Deseja limpar todos os nicks gerados?')) {
         document.getElementById('nickResults').innerHTML = '';
-        document.getElementById('resultsSection').style.display = 'none';
+        const resultsSection = document.getElementById('resultsSection');
+        if (resultsSection) {
+          resultsSection.style.display = 'none';
+        }
         generatedNicks = [];
         showNotification('Nicks limpos com sucesso!', 'success');
       }
     });
   }
   
-  // Load more nicks button
+  // Botão carregar mais nicks
   const loadMoreBtn = document.getElementById('loadMoreNicksBtn');
   if (loadMoreBtn) {
     loadMoreBtn.addEventListener('click', function() {
@@ -536,13 +871,13 @@ function initNickGeneratorPage() {
     });
   }
   
-  // Symbol buttons
+  // Botões de símbolos
   document.querySelectorAll('.symbol-btn').forEach(btn => {
     btn.addEventListener('click', function() {
       const symbol = this.getAttribute('data-symbol');
       copyToClipboard(symbol, `Símbolo "${symbol}" copiado!`);
       
-      // Update preview
+      // Atualizar preview
       const preview = document.getElementById('symbolPreview');
       if (preview) {
         preview.textContent = symbol;
@@ -554,7 +889,7 @@ function initNickGeneratorPage() {
     });
   });
   
-  // Initialize copy buttons for examples
+  // Inicializar botões de cópia para exemplos
   document.querySelectorAll('.copy-example-btn').forEach(btn => {
     btn.addEventListener('click', function() {
       const text = this.getAttribute('data-copy');
@@ -562,7 +897,7 @@ function initNickGeneratorPage() {
     });
   });
   
-  // Enter key to generate
+  // Tecla Enter para gerar
   const nickInput = document.getElementById('nickInput');
   if (nickInput) {
     nickInput.addEventListener('keypress', function(e) {
@@ -572,15 +907,24 @@ function initNickGeneratorPage() {
     });
   }
   
-  // Animation for symbol preview
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes highlight {
-      0% { background: rgba(0, 217, 255, 0.1); }
-      100% { background: transparent; }
-    }
-  `;
-  document.head.appendChild(style);
+  // Animações para symbol preview
+  if (!document.getElementById('highlight-animation')) {
+    const style = document.createElement('style');
+    style.id = 'highlight-animation';
+    style.textContent = `
+      @keyframes highlight {
+        0% { 
+          background: rgba(0, 217, 255, 0.2);
+          transform: scale(1.05);
+        }
+        100% { 
+          background: transparent;
+          transform: scale(1);
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
   
   function generateNicks() {
     const input = document.getElementById('nickInput').value.trim();
@@ -590,17 +934,25 @@ function initNickGeneratorPage() {
     }
     
     generatedNicks = [];
-    document.getElementById('nickResults').innerHTML = '';
+    const resultsContainer = document.getElementById('nickResults');
+    if (resultsContainer) {
+      resultsContainer.innerHTML = '';
+    }
     
     generateMoreNicks(input, currentQuantity);
-    document.getElementById('resultsSection').style.display = 'block';
+    const resultsSection = document.getElementById('resultsSection');
+    if (resultsSection) {
+      resultsSection.style.display = 'block';
+    }
     
-    // Scroll to results
+    // Scroll para resultados
     setTimeout(() => {
-      document.getElementById('resultsSection').scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
-      });
+      if (resultsSection) {
+        resultsSection.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
     }, 100);
   }
   
@@ -612,36 +964,36 @@ function initNickGeneratorPage() {
       let nick = '';
       const symbols = nickSymbols[currentStyle];
       
-      // Decide pattern: prefix, suffix, or both
+      // Decidir padrão: prefixo, sufixo, ou ambos
       const pattern = Math.floor(Math.random() * 5);
       
       switch(pattern) {
-        case 0: // Prefix only
+        case 0: // Prefixo apenas
           nick = getRandomSymbol(symbols) + stylizeName(baseName);
           break;
-        case 1: // Suffix only
+        case 1: // Sufixo apenas
           nick = stylizeName(baseName) + getRandomSymbol(symbols);
           break;
-        case 2: // Both sides
+        case 2: // Ambos os lados
           nick = getRandomSymbol(symbols) + stylizeName(baseName) + getRandomSymbol(symbols);
           break;
-        case 3: // Multiple symbols
+        case 3: // Múltiplos símbolos
           nick = getRandomSymbol(symbols) + getRandomSymbol(symbols) + 
                  stylizeName(baseName) + getRandomSymbol(symbols);
           break;
-        case 4: // Special formatting
+        case 4: // Formatação especial
           nick = applySpecialFormat(baseName, currentStyle);
           break;
       }
       
-      // Sometimes add numbers
+      // Às vezes adicionar números
       if (Math.random() > 0.7) {
         nick += Math.floor(Math.random() * 999);
       }
       
       generatedNicks.push(nick);
       
-      // Create nick element
+      // Criar elemento do nick
       const nickElement = document.createElement('div');
       nickElement.className = 'nick-item';
       nickElement.innerHTML = `
@@ -654,13 +1006,13 @@ function initNickGeneratorPage() {
       container.appendChild(nickElement);
     }
     
-    // Update count
+    // Atualizar contagem
     const countElement = document.getElementById('nickCount');
     if (countElement) {
       countElement.textContent = generatedNicks.length;
     }
     
-    // Re-initialize copy buttons for new nicks
+    // Re-inicializar botões de cópia para novos nicks
     initializeCopyButtons();
   }
   
@@ -669,13 +1021,14 @@ function initNickGeneratorPage() {
   }
   
   function stylizeName(name) {
-    // Sometimes apply letter styling
+    // Às vezes aplicar estilo de letra
     if (Math.random() > 0.5) {
-      const style = Object.keys(letterStyles)[Math.floor(Math.random() * Object.keys(letterStyles).length)];
+      const styleKeys = Object.keys(letterStyles);
+      const style = styleKeys[Math.floor(Math.random() * styleKeys.length)];
       return applyLetterStyle(name.toUpperCase(), style);
     }
     
-    // Sometimes add random case
+    // Às vezes adicionar case aleatório
     if (Math.random() > 0.7) {
       return name.split('').map(c => Math.random() > 0.5 ? c.toUpperCase() : c.toLowerCase()).join('');
     }
@@ -684,7 +1037,7 @@ function initNickGeneratorPage() {
   }
   
   function applyLetterStyle(text, style) {
-    // Simple implementation
+    // Implementação simples
     if (style === 'smallCaps') {
       return text.toLowerCase();
     } else if (style === 'circled') {
@@ -710,7 +1063,7 @@ function initBioGeneratorPage() {
   let currentFormat = 'bold-color';
   let currentBio = '';
   
-  // Color picker
+  // Seletor de cor
   const colorPicker = document.getElementById('colorPicker');
   const colorCode = document.querySelector('.color-code');
   
@@ -719,10 +1072,20 @@ function initBioGeneratorPage() {
       currentColor = this.value;
       colorCode.textContent = this.value;
       colorCode.style.color = this.value;
+      colorCode.style.borderColor = this.value;
     });
+    
+    // Fallback para mobile se o input color não funcionar
+    if (window.innerWidth <= 768) {
+      colorPicker.addEventListener('touchstart', function(e) {
+        // Adicionar fallback visual
+        this.style.height = '50px';
+        this.style.width = '100%';
+      });
+    }
   }
   
-  // Format buttons
+  // Botões de formato
   document.querySelectorAll('.format-btn').forEach(btn => {
     btn.addEventListener('click', function() {
       document.querySelectorAll('.format-btn').forEach(b => b.classList.remove('active'));
@@ -731,45 +1094,53 @@ function initBioGeneratorPage() {
     });
   });
   
-  // Generate bio button
+  // Botão gerar bio
   const generateBtn = document.getElementById('generateBioBtn');
   if (generateBtn) {
     generateBtn.addEventListener('click', generateBio);
   }
   
-  // Copy bio button
+  // Botão copiar bio
   const copyBtn = document.getElementById('copyBioBtn');
   if (copyBtn) {
     copyBtn.addEventListener('click', copyBioCode);
   }
   
-  // Preview bio button
+  // Botão preview bio
   const previewBtn = document.getElementById('previewBioBtn');
   if (previewBtn) {
     previewBtn.addEventListener('click', previewBio);
   }
   
-  // Use template buttons
+  // Botões usar template
   document.querySelectorAll('.use-template-btn').forEach(btn => {
     btn.addEventListener('click', function() {
       const text = this.getAttribute('data-text');
-      document.getElementById('bioInput').value = text;
-      generateBio();
+      const bioInput = document.getElementById('bioInput');
+      if (bioInput) {
+        bioInput.value = text;
+        generateBio();
+      }
     });
   });
   
-  // Set color buttons
+  // Botões definir cor
   document.querySelectorAll('.set-color-btn').forEach(btn => {
     btn.addEventListener('click', function() {
       const color = this.getAttribute('data-color');
-      document.getElementById('colorPicker').value = color;
-      currentColor = color;
-      document.querySelector('.color-code').textContent = color;
-      document.querySelector('.color-code').style.color = color;
+      if (colorPicker) {
+        colorPicker.value = color;
+        currentColor = color;
+        if (colorCode) {
+          colorCode.textContent = color;
+          colorCode.style.color = color;
+          colorCode.style.borderColor = color;
+        }
+      }
     });
   });
   
-  // Copy example buttons
+  // Botões copiar exemplo
   document.querySelectorAll('.copy-example-btn').forEach(btn => {
     btn.addEventListener('click', function() {
       const code = this.getAttribute('data-code');
@@ -777,11 +1148,11 @@ function initBioGeneratorPage() {
     });
   });
   
-  // Enter key to generate bio
+  // Tecla Ctrl+Enter para gerar bio
   const bioInput = document.getElementById('bioInput');
   if (bioInput) {
     bioInput.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter' && e.ctrlKey) {
+      if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
         generateBio();
       }
     });
@@ -805,10 +1176,10 @@ function initBioGeneratorPage() {
       return;
     }
     
-    // Remove # from color
+    // Remover # da cor
     const cleanColor = currentColor.replace('#', '');
     
-    // Generate code based on format
+    // Gerar código baseado no formato
     let code = '';
     switch(currentFormat) {
       case 'bold':
@@ -826,23 +1197,23 @@ function initBioGeneratorPage() {
         break;
     }
     
-    // Update preview
+    // Atualizar preview
     const preview = document.getElementById('bioPreview');
     if (preview) {
       preview.innerHTML = `
-        <div class="bio-display" style="color: ${currentColor}; font-weight: ${currentFormat.includes('bold') ? 'bold' : 'normal'}; font-style: ${currentFormat === 'italic' ? 'italic' : 'normal'}; text-decoration: ${currentFormat === 'underline' ? 'underline' : 'none'};">
+        <div class="bio-display" style="color: ${currentColor}; font-weight: ${currentFormat.includes('bold') ? 'bold' : 'normal'}; font-style: ${currentFormat === 'italic' ? 'italic' : 'normal'}; text-decoration: ${currentFormat === 'underline' ? 'underline' : 'none'}; padding: 15px; border-radius: 8px; background: rgba(0,0,0,0.2); margin: 10px 0;">
           ${bioText}
         </div>
       `;
     }
     
-    // Update code
+    // Atualizar código
     const codeElement = document.getElementById('bioCode');
     if (codeElement) {
       codeElement.textContent = code;
     }
     
-    // Show preview section
+    // Mostrar seção de preview
     const previewSection = document.getElementById('previewSection');
     if (previewSection) {
       previewSection.style.display = 'block';
@@ -854,7 +1225,7 @@ function initBioGeneratorPage() {
       }, 100);
     }
     
-    // Store for copying
+    // Armazenar para cópia
     window.currentBioCode = code;
     
     showNotification('Bio gerada com sucesso!', 'success');
@@ -876,13 +1247,13 @@ function initBioGeneratorPage() {
 }
 
 function initTipsPage() {
-  // Category filters
+  // Filtros por categoria
   document.querySelectorAll('.tip-category').forEach(button => {
     button.addEventListener('click', function() {
       const category = this.getAttribute('data-category');
       filterTips(category);
       
-      // Update active button
+      // Atualizar botão ativo
       document.querySelectorAll('.tip-category').forEach(btn => {
         btn.classList.remove('active');
       });
@@ -890,23 +1261,36 @@ function initTipsPage() {
     });
   });
   
-  // Search functionality
+  // Funcionalidade de busca
   const searchInput = document.getElementById('tipSearch');
   if (searchInput) {
     searchInput.addEventListener('input', function() {
       searchTips(this.value);
     });
     
-    // Add search button functionality
+    // Adicionar funcionalidade do botão de busca
     const searchBtn = document.querySelector('[onclick*="searchTips"]');
     if (searchBtn) {
       searchBtn.addEventListener('click', function() {
         searchTips(searchInput.value);
       });
     }
+    
+    // Limpar busca
+    const clearSearchBtn = document.getElementById('clearSearchBtn');
+    if (clearSearchBtn) {
+      clearSearchBtn.addEventListener('click', function() {
+        searchInput.value = '';
+        searchTips('');
+        document.querySelectorAll('.tip-category').forEach(btn => {
+          btn.classList.remove('active');
+        });
+        document.querySelector('.tip-category[data-category="all"]')?.classList.add('active');
+      });
+    }
   }
   
-  // Save tip buttons
+  // Botões salvar dica
   document.querySelectorAll('.save-tip').forEach(button => {
     button.addEventListener('click', function() {
       const tipId = this.getAttribute('data-tip-id');
@@ -914,18 +1298,28 @@ function initTipsPage() {
     });
   });
   
-  // Load saved tips on page load
+  // Carregar dicas salvas no carregamento da página
   updateSavedTipsDisplay();
 }
 
 function initHUDConfiguratorPage() {
-  // This function is a placeholder as HUD configurator
-  // has its own extensive JavaScript in configurador.html
-  console.log('HUD Configurator page initialized');
+  // Esta função é um placeholder para o configurador HUD
+  // que tem seu próprio JavaScript extensivo em configurador.html
+  
+  // Otimizações para mobile
+  if (window.innerWidth <= 768) {
+    // Adicionar instruções touch se necessário
+    const hudContainer = document.querySelector('.hud-container');
+    if (hudContainer) {
+      hudContainer.style.touchAction = 'none'; // Prevenir scroll acidental
+    }
+  }
+  
+  console.log('HUD Configurator page initialized com otimizações mobile');
 }
 
 function initRankPage() {
-  // Rank data
+  // Dados de rank
   const rankData = [
     { id: 'bronze1', name: 'Bronze I', color: '#CD7F32', points: 0, next: 100 },
     { id: 'bronze2', name: 'Bronze II', color: '#CD7F32', points: 100, next: 200 },
@@ -951,20 +1345,20 @@ function initRankPage() {
     { id: 'challenger', name: 'Desafiante', color: '#FF0000', points: 8000, next: null }
   ];
   
-  // Generate ranks display
+  // Gerar display de ranks
   function generateRanksDisplay() {
     const ranksContainer = document.getElementById('ranksContainer');
     const rankTrack = document.querySelector('.rank-track');
     
     if (!ranksContainer || !rankTrack) return;
     
-    // Clear containers
+    // Limpar containers
     ranksContainer.innerHTML = '';
     rankTrack.innerHTML = '';
     
-    // Create rank cards
+    // Criar cards de rank
     rankData.forEach(rank => {
-      // Create rank card for grid
+      // Criar card de rank para grid
       const rankCard = document.createElement('div');
       rankCard.className = 'rank-card';
       rankCard.innerHTML = `
@@ -979,7 +1373,7 @@ function initRankPage() {
       `;
       ranksContainer.appendChild(rankCard);
       
-      // Create rank item for track
+      // Criar item de rank para track
       const rankItem = document.createElement('div');
       rankItem.className = 'rank-track-item';
       rankItem.innerHTML = `
@@ -1004,17 +1398,17 @@ function initRankPage() {
     return 'question';
   }
   
-  // Tab functionality
+  // Funcionalidade de tabs
   const tabBtns = document.querySelectorAll('.tab-btn');
   tabBtns.forEach(btn => {
     btn.addEventListener('click', function() {
       const rank = this.getAttribute('data-rank');
       
-      // Update active button
+      // Atualizar botão ativo
       tabBtns.forEach(b => b.classList.remove('active'));
       this.classList.add('active');
       
-      // Show corresponding tab
+      // Mostrar tab correspondente
       document.querySelectorAll('.tab-pane').forEach(pane => {
         pane.classList.remove('active');
       });
@@ -1025,27 +1419,32 @@ function initRankPage() {
     });
   });
   
-  // Initialize ranks display
+  // Inicializar display de ranks
   generateRanksDisplay();
   
-  // Calculate rank progress
+  // Calcular progresso de rank
   const calculateBtn = document.querySelector('[onclick*="calculateRankProgress"]');
   if (calculateBtn) {
     calculateBtn.addEventListener('click', calculateRankProgress);
   }
   
   function calculateRankProgress() {
-    const currentRankId = document.getElementById('currentRank')?.value;
-    const currentPoints = parseInt(document.getElementById('currentPoints')?.value || 0);
-    const targetRankId = document.getElementById('targetRank')?.value;
-    const avgPoints = parseInt(document.getElementById('avgPoints')?.value || 15);
+    const currentRankSelect = document.getElementById('currentRank');
+    const currentPointsInput = document.getElementById('currentPoints');
+    const targetRankSelect = document.getElementById('targetRank');
+    const avgPointsInput = document.getElementById('avgPoints');
     
-    if (!currentRankId || !targetRankId) {
+    if (!currentRankSelect || !targetRankSelect) {
       showNotification('Selecione os ranks para calcular!', 'warning');
       return;
     }
     
-    // Find rank data
+    const currentRankId = currentRankSelect.value;
+    const currentPoints = parseInt(currentPointsInput?.value || 0);
+    const targetRankId = targetRankSelect.value;
+    const avgPoints = parseInt(avgPointsInput?.value || 15);
+    
+    // Encontrar dados dos ranks
     const currentRank = rankData.find(r => r.id === currentRankId);
     const targetRank = rankData.find(r => r.id === targetRankId);
     
@@ -1054,22 +1453,22 @@ function initRankPage() {
       return;
     }
     
-    // Calculate points needed
+    // Calcular pontos necessários
     let pointsNeeded = 0;
     
     if (currentRank.points === targetRank.points) {
-      // Same rank tier
+      // Mesmo tier de rank
       if (currentPoints < currentRank.next) {
         pointsNeeded = currentRank.next - currentPoints;
       }
     } else {
-      // Different ranks
-      // Points from current rank to next
+      // Ranks diferentes
+      // Pontos do rank atual para o próximo
       if (currentPoints < currentRank.next) {
         pointsNeeded += currentRank.next - currentPoints;
       }
       
-      // Points for intermediate ranks
+      // Pontos para ranks intermediários
       const currentIndex = rankData.findIndex(r => r.id === currentRankId);
       const targetIndex = rankData.findIndex(r => r.id === targetRankId);
       
@@ -1078,16 +1477,16 @@ function initRankPage() {
         pointsNeeded += rank.next - rank.points;
       }
       
-      // Points for target rank (if not challenger)
+      // Pontos para o rank alvo (se não for challenger)
       if (targetRank.next) {
         pointsNeeded += targetRank.next - targetRank.points;
       }
     }
     
-    // Calculate matches needed
+    // Calcular partidas necessárias
     const matchesNeeded = Math.ceil(pointsNeeded / avgPoints);
     
-    // Calculate time needed (20 minutes per match)
+    // Calcular tempo necessário (20 minutos por partida)
     const timeMinutes = matchesNeeded * 20;
     const timeHours = Math.floor(timeMinutes / 60);
     const timeDays = Math.floor(timeHours / 24);
@@ -1101,7 +1500,7 @@ function initRankPage() {
       timeText = `${timeMinutes} minutos`;
     }
     
-    // Determine difficulty
+    // Determinar dificuldade
     let difficulty = 'Fácil';
     let difficultyColor = '#4ade80';
     
@@ -1116,7 +1515,7 @@ function initRankPage() {
       difficultyColor = '#eab308';
     }
     
-    // Generate tip
+    // Gerar dica
     let tip = '';
     if (matchesNeeded > 100) {
       tip = 'Considere aumentar seu K/D ratio para ganhar mais pontos por partida.';
@@ -1128,7 +1527,7 @@ function initRankPage() {
       tip = 'Você está perto! Mantenha o foco e evite riscos desnecessários.';
     }
     
-    // Update results
+    // Atualizar resultados
     const pointsNeededEl = document.getElementById('pointsNeeded');
     const matchesNeededEl = document.getElementById('matchesNeeded');
     const timeNeededEl = document.getElementById('timeNeeded');
@@ -1141,10 +1540,11 @@ function initRankPage() {
     if (difficultyEl) {
       difficultyEl.textContent = difficulty;
       difficultyEl.style.color = difficultyColor;
+      difficultyEl.style.fontWeight = 'bold';
     }
     if (resultTipEl) resultTipEl.textContent = tip;
     
-    // Show results
+    // Mostrar resultados
     const resultsSection = document.getElementById('calculatorResults');
     if (resultsSection) {
       resultsSection.style.display = 'block';
@@ -1168,15 +1568,15 @@ function generateSensitivities() {
   const androidCount = 20;
   const iphoneCount = 20;
   
-  // Generate Android sensitivities
+  // Gerar sensibilidades Android
   const androidData = generateDeviceSensitivities(androidCount, 'Android');
   renderSensitivityTable('android', androidData);
   
-  // Generate iPhone sensitivities
+  // Gerar sensibilidades iPhone
   const iphoneData = generateDeviceSensitivities(iphoneCount, 'iPhone');
   renderSensitivityTable('iphone', iphoneData);
   
-  // Store for copy all
+  // Armazenar para copiar tudo
   window.lastAndroidSensitivities = androidData;
   window.lastIphoneSensitivities = iphoneData;
   
@@ -1231,7 +1631,7 @@ function renderSensitivityTable(device, data) {
     tbody.appendChild(row);
   });
   
-  // Re-initialize copy buttons for new items
+  // Re-inicializar botões de cópia para novos itens
   initializeCopyButtons();
 }
 
@@ -1426,7 +1826,7 @@ function filterTips(category) {
     }
   });
   
-  // Add fadeIn animation if not present
+  // Adicionar animação fadeIn se não existir
   if (!document.getElementById('fadeInAnimation')) {
     const style = document.createElement('style');
     style.id = 'fadeInAnimation';
@@ -1444,39 +1844,61 @@ function searchTips(query) {
   const allTips = document.querySelectorAll('.tip-card');
   const lowercaseQuery = query.toLowerCase();
   
+  let foundCount = 0;
+  
   allTips.forEach(tip => {
     const text = tip.textContent.toLowerCase();
-    if (text.includes(lowercaseQuery)) {
+    const title = tip.querySelector('.tip-title')?.textContent.toLowerCase() || '';
+    
+    if (text.includes(lowercaseQuery) || title.includes(lowercaseQuery)) {
       tip.style.display = 'block';
       tip.style.animation = 'fadeIn 0.3s ease';
+      foundCount++;
     } else {
       tip.style.display = 'none';
     }
   });
+  
+  // Mostrar mensagem se não encontrar nada
+  const noResultsEl = document.getElementById('noResultsMessage');
+  if (noResultsEl) {
+    if (foundCount === 0 && query.trim() !== '') {
+      noResultsEl.style.display = 'block';
+      noResultsEl.innerHTML = `
+        <div style="text-align: center; padding: 30px; color: var(--muted);">
+          <i class="fas fa-search" style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;"></i>
+          <p>Nenhuma dica encontrada para "${query}"</p>
+          <p style="font-size: 0.9em; margin-top: 10px;">Tente usar palavras-chave diferentes</p>
+        </div>
+      `;
+    } else {
+      noResultsEl.style.display = 'none';
+    }
+  }
 }
 
 function saveTip(tipId) {
-  // Get saved tips from localStorage
+  // Obter dicas salvas do localStorage
   let savedTips = JSON.parse(localStorage.getItem('savedTips') || '[]');
   
-  // Check if already saved
+  // Verificar se já está salva
   if (savedTips.includes(tipId)) {
-    // Remove if already saved
+    // Remover se já salva
     savedTips = savedTips.filter(id => id !== tipId);
     showNotification('Dica removida dos favoritos');
     
-    // Update button
+    // Atualizar botão
     const button = document.querySelector(`.save-tip[data-tip-id="${tipId}"]`);
     if (button) {
       button.innerHTML = '<i class="far fa-bookmark"></i> Salvar';
       button.classList.remove('saved');
     }
   } else {
-    // Add to saved
+    // Adicionar aos salvos
     savedTips.push(tipId);
     showNotification('Dica salva nos favoritos!');
     
-    // Update button
+    // Atualizar botão
     const button = document.querySelector(`.save-tip[data-tip-id="${tipId}"]`);
     if (button) {
       button.innerHTML = '<i class="fas fa-bookmark"></i> Salvo';
@@ -1484,10 +1906,10 @@ function saveTip(tipId) {
     }
   }
   
-  // Save back to localStorage
+  // Salvar de volta no localStorage
   localStorage.setItem('savedTips', JSON.stringify(savedTips));
   
-  // Update saved tips display
+  // Atualizar display de dicas salvas
   updateSavedTipsDisplay();
 }
 
@@ -1510,16 +1932,24 @@ function updateSavedTipsDisplay() {
     return;
   }
   
-  // Get saved tip elements
+  // Obter elementos de dicas salvas
   let savedTipsHTML = '<div class="saved-tips-grid">';
   
   savedTips.forEach(tipId => {
-    // Find the tip in the page
+    // Encontrar a dica na página
     const tipElement = document.querySelector(`.tip-card [data-tip-id="${tipId}"]`);
     if (tipElement) {
       const tipCard = tipElement.closest('.tip-card');
       if (tipCard) {
-        savedTipsHTML += tipCard.outerHTML;
+        // Clonar o card sem os event listeners
+        const clonedCard = tipCard.cloneNode(true);
+        // Garantir que o botão de salvar mostra "Salvo"
+        const saveBtn = clonedCard.querySelector('.save-tip');
+        if (saveBtn) {
+          saveBtn.innerHTML = '<i class="fas fa-bookmark"></i> Salvo';
+          saveBtn.classList.add('saved');
+        }
+        savedTipsHTML += clonedCard.outerHTML;
       }
     }
   });
@@ -1527,13 +1957,19 @@ function updateSavedTipsDisplay() {
   savedTipsHTML += '</div>';
   savedTipsContainer.innerHTML = savedTipsHTML;
   
-  // Re-attach event listeners to saved tips
+  // Re-anexar event listeners às dicas salvas
   savedTipsContainer.querySelectorAll('.save-tip').forEach(button => {
     button.addEventListener('click', function() {
       const tipId = this.getAttribute('data-tip-id');
       saveTip(tipId);
     });
   });
+  
+  // Adicionar contador
+  const countElement = document.createElement('div');
+  countElement.style.cssText = 'text-align: center; padding: 10px; color: var(--muted); font-size: 0.9em;';
+  countElement.textContent = `${savedTips.length} dica${savedTips.length !== 1 ? 's' : ''} salva${savedTips.length !== 1 ? 's' : ''}`;
+  savedTipsContainer.appendChild(countElement);
 }
 
 // ============================================
@@ -1582,7 +2018,7 @@ window.searchTips = searchTips;
 window.saveTip = saveTip;
 window.updateSavedTipsDisplay = updateSavedTipsDisplay;
 
-// Make sure functions are available when page loads
+// Garantir que as funções estão disponíveis quando a página carrega
 setTimeout(() => {
   if (typeof generateSensitivities === 'function') {
     window.generateSensitivities = generateSensitivities;
