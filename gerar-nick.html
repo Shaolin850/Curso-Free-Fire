@@ -7,6 +7,106 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>">
+  <style>
+    /* Estilos CSS adicionais para o menu mobile */
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+      z-index: 1001;
+    }
+
+    .menu-toggle:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .nav {
+      display: flex;
+      gap: 2px;
+      flex-wrap: wrap;
+    }
+
+    /* Responsividade para mobile */
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+      
+      .nav {
+        position: fixed;
+        top: 0;
+        right: -300px;
+        width: 280px;
+        height: 100vh;
+        background: rgba(10, 15, 25, 0.98);
+        backdrop-filter: blur(10px);
+        flex-direction: column;
+        padding: 80px 20px 20px;
+        gap: 10px;
+        transition: right 0.3s ease;
+        z-index: 1000;
+        overflow-y: auto;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+        border-left: 1px solid rgba(0, 217, 255, 0.2);
+      }
+      
+      .nav.active {
+        right: 0;
+      }
+      
+      .nav a {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        border-left: 3px solid transparent;
+        transition: all 0.3s ease;
+      }
+      
+      .nav a:hover,
+      .nav a.active {
+        background: rgba(0, 217, 255, 0.1);
+        border-left-color: #00d9ff;
+        transform: translateX(5px);
+      }
+      
+      .nav a i {
+        width: 20px;
+        text-align: center;
+      }
+      
+      /* Overlay quando menu está aberto */
+      .nav.active::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: -1;
+      }
+    }
+
+    /* Para telas muito pequenas */
+    @media (max-width: 480px) {
+      .nav {
+        width: 250px;
+      }
+      
+      .brand-text h1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="animated-bg"></div>
@@ -350,9 +450,88 @@
 
     document.addEventListener('DOMContentLoaded', function() {
       // Mobile menu
-      document.getElementById('menuToggle').addEventListener('click', function() {
-        document.getElementById('mainNav').classList.toggle('active');
+      document.addEventListener('DOMContentLoaded', function() {
+      const menuToggle = document.getElementById('menuToggle');
+      const mainNav = document.getElementById('mainNav');
+      
+      if (!menuToggle || !mainNav) {
+        console.error('Elementos do menu não encontrados!');
+        return;
+      }
+      
+      console.log('Menu mobile carregado - pronto para usar!');
+      
+      // Função para abrir/fechar menu
+      function toggleMenu() {
+        const isActive = mainNav.classList.contains('active');
+        
+        if (isActive) {
+          // Fechar menu
+          mainNav.classList.remove('active');
+          menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+          menuToggle.setAttribute('aria-label', 'Abrir menu de navegação');
+        } else {
+          // Abrir menu
+          mainNav.classList.add('active');
+          menuToggle.innerHTML = '<i class="fas fa-times"></i>';
+          menuToggle.setAttribute('aria-label', 'Fechar menu de navegação');
+        }
+      }
+      
+      // Função para fechar menu
+      function closeMenu() {
+        mainNav.classList.remove('active');
+        menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+        menuToggle.setAttribute('aria-label', 'Abrir menu de navegação');
+      }
+      
+      // Evento do botão do menu
+      menuToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleMenu();
       });
+      
+      // Fechar menu ao clicar em um link
+      const navLinks = mainNav.querySelectorAll('a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          // Se for um link interno, fecha o menu
+          if (this.getAttribute('href').startsWith('#')) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+            if (targetElement) {
+              targetElement.scrollIntoView({ behavior: 'smooth' });
+            }
+          }
+          closeMenu();
+        });
+      });
+      
+      // Fechar menu ao clicar fora
+      document.addEventListener('click', function(e) {
+        if (mainNav.classList.contains('active') && 
+            !mainNav.contains(e.target) && 
+            !menuToggle.contains(e.target)) {
+          closeMenu();
+        }
+      });
+      
+      // Fechar menu ao pressionar ESC
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && mainNav.classList.contains('active')) {
+          closeMenu();
+        }
+      });
+      
+      // Fechar menu ao redimensionar para desktop
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 768 && mainNav.classList.contains('active')) {
+          closeMenu();
+        }
+      });
+     });
+
 
       // Style buttons
       document.querySelectorAll('.style-btn').forEach(btn => {
