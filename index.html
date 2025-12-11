@@ -89,9 +89,9 @@
         position: fixed;
         top: 0;
         left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: rgba(0, 0, 0, 0.5);
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
         z-index: -1;
       }
     }
@@ -325,102 +325,9 @@
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <!-- Removendo o script.js antigo e colocando tudo em um único script -->
   <script>
-    // Menu mobile toggle - Código principal
-    document.addEventListener('DOMContentLoaded', function() {
-      // Elementos do menu
-      const menuToggle = document.getElementById('menuToggle');
-      const mainNav = document.getElementById('mainNav');
-      
-      // Se os elementos existirem, configurar o menu mobile
-      if (menuToggle && mainNav) {
-        // Toggle do menu
-        menuToggle.addEventListener('click', function(e) {
-          e.stopPropagation(); // Evita que o clique se propague
-          mainNav.classList.toggle('active');
-          menuToggle.classList.toggle('active');
-          
-          // Alterar ícone do botão
-          const icon = menuToggle.querySelector('i');
-          if (mainNav.classList.contains('active')) {
-            icon.classList.remove('fa-bars');
-            icon.classList.add('fa-times');
-          } else {
-            icon.classList.remove('fa-times');
-            icon.classList.add('fa-bars');
-          }
-        });
-        
-        // Fechar menu ao clicar em um link
-        const navLinks = mainNav.querySelectorAll('a');
-        navLinks.forEach(link => {
-          link.addEventListener('click', function() {
-            mainNav.classList.remove('active');
-            menuToggle.classList.remove('active');
-            const icon = menuToggle.querySelector('i');
-            icon.classList.remove('fa-times');
-            icon.classList.add('fa-bars');
-          });
-        });
-        
-        // Fechar menu ao clicar fora dele
-        document.addEventListener('click', function(e) {
-          if (mainNav.classList.contains('active') && 
-              !mainNav.contains(e.target) && 
-              !menuToggle.contains(e.target)) {
-            mainNav.classList.remove('active');
-            menuToggle.classList.remove('active');
-            const icon = menuToggle.querySelector('i');
-            icon.classList.remove('fa-times');
-            icon.classList.add('fa-bars');
-          }
-        });
-        
-        // Prevenir fechamento ao clicar dentro do menu
-        mainNav.addEventListener('click', function(e) {
-          e.stopPropagation();
-        });
-      }
-      
-      // Fechar menu ao redimensionar a janela (se voltar para desktop)
-      window.addEventListener('resize', function() {
-        if (window.innerWidth > 768 && mainNav && mainNav.classList.contains('active')) {
-          mainNav.classList.remove('active');
-          if (menuToggle) {
-            menuToggle.classList.remove('active');
-            const icon = menuToggle.querySelector('i');
-            icon.classList.remove('fa-times');
-            icon.classList.add('fa-bars');
-          }
-        }
-      });
-
-      // View toggle buttons (se existirem)
-      const viewPlayerBtn = document.getElementById('viewPlayerBtn');
-      const viewGridBtn = document.getElementById('viewGridBtn');
-      
-      if (viewPlayerBtn) {
-        viewPlayerBtn.addEventListener('click', function() {
-          setView('player');
-        });
-      }
-      
-      if (viewGridBtn) {
-        viewGridBtn.addEventListener('click', function() {
-          setView('grid');
-        });
-      }
-
-      // Category buttons (se existirem)
-      document.querySelectorAll('.category-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-          const category = this.getAttribute('data-category');
-          setCategory(category);
-        });
-      });
-    
-    // Quick tip generator
+    // Funções globais para dicas e nicks
     const tips = [
       "Use fones de ouvido para ouvir passos dos inimigos",
       "Ajuste sua sensibilidade gradualmente até encontrar o ideal",
@@ -436,12 +343,17 @@
     
     function showRandomTip() {
       const randomTip = tips[Math.floor(Math.random() * tips.length)];
-      document.getElementById('tipDisplay').textContent = randomTip;
+      const tipDisplay = document.getElementById('tipDisplay');
+      if (tipDisplay) {
+        tipDisplay.textContent = randomTip;
+      }
     }
     
-    // Generate quick nick
     function generateQuickNick() {
-      const name = document.getElementById('quickNick').value.trim();
+      const nameInput = document.getElementById('quickNick');
+      if (!nameInput) return;
+      
+      const name = nameInput.value.trim();
       if (!name) {
         alert('Digite um nome primeiro!');
         return;
@@ -454,54 +366,130 @@
       const nick = `${symbol1}${name}${symbol2}`;
       
       // Copy to clipboard
-      if (navigator.clipboard) {
+      if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(nick).then(() => {
           alert(`Nick "${nick}" copiado para a área de transferência!`);
         }).catch(err => {
-          console.error('Erro ao copiar para área de transferência: ', err);
-          // Fallback para navegadores mais antigos
-          const textArea = document.createElement('textarea');
-          textArea.value = nick;
-          document.body.appendChild(textArea);
-          textArea.select();
-          try {
-            document.execCommand('copy');
-            alert(`Nick "${nick}" copiado para a área de transferência!`);
-          } catch (err2) {
-            alert(`Nick gerado: ${nick}\nCopie manualmente.`);
-          }
-          document.body.removeChild(textArea);
+          console.error('Erro ao copiar:', err);
+          fallbackCopyToClipboard(nick);
         });
       } else {
-        // Fallback para navegadores sem suporte a clipboard API
-        const textArea = document.createElement('textarea');
-        textArea.value = nick;
-        document.body.appendChild(textArea);
-        textArea.select();
-        try {
-          document.execCommand('copy');
-          alert(`Nick "${nick}" copiado para a área de transferência!`);
-        } catch (err) {
-          alert(`Nick gerado: ${nick}\nCopie manualmente.`);
-        }
-        document.body.removeChild(textArea);
+        fallbackCopyToClipboard(nick);
       }
     }
     
-    // Show initial tip
-    showRandomTip();
-    });
-
-    // Funções auxiliares (se não estiverem em script.js)
-    function setView(viewType) {
-      console.log('Alternando para view:', viewType);
-      // Implemente sua lógica de alternância de visualização aqui
+    function fallbackCopyToClipboard(text) {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-999999px';
+      textArea.style.top = '-999999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      
+      try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+          alert(`Nick "${text}" copiado para a área de transferência!`);
+        } else {
+          alert(`Nick gerado: ${text}\nCopie manualmente.`);
+        }
+      } catch (err) {
+        console.error('Fallback error:', err);
+        alert(`Nick gerado: ${text}\nCopie manualmente.`);
+      }
+      
+      document.body.removeChild(textArea);
     }
     
-    function setCategory(category) {
-      console.log('Categoria selecionada:', category);
-      // Implemente sua lógica de filtragem por categoria aqui
-    }
+    // Inicializar dica aleatória ao carregar
+    document.addEventListener('DOMContentLoaded', function() {
+      showRandomTip();
+    });
+
+    // CÓDIGO PRINCIPAL DO MENU MOBILE
+    document.addEventListener('DOMContentLoaded', function() {
+      const menuToggle = document.getElementById('menuToggle');
+      const mainNav = document.getElementById('mainNav');
+      
+      if (!menuToggle || !mainNav) {
+        console.error('Elementos do menu não encontrados!');
+        return;
+      }
+      
+      console.log('Menu mobile carregado - pronto para usar!');
+      
+      // Função para abrir/fechar menu
+      function toggleMenu() {
+        const isActive = mainNav.classList.contains('active');
+        
+        if (isActive) {
+          // Fechar menu
+          mainNav.classList.remove('active');
+          menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+          menuToggle.setAttribute('aria-label', 'Abrir menu de navegação');
+        } else {
+          // Abrir menu
+          mainNav.classList.add('active');
+          menuToggle.innerHTML = '<i class="fas fa-times"></i>';
+          menuToggle.setAttribute('aria-label', 'Fechar menu de navegação');
+        }
+      }
+      
+      // Função para fechar menu
+      function closeMenu() {
+        mainNav.classList.remove('active');
+        menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+        menuToggle.setAttribute('aria-label', 'Abrir menu de navegação');
+      }
+      
+      // Evento do botão do menu
+      menuToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleMenu();
+      });
+      
+      // Fechar menu ao clicar em um link
+      const navLinks = mainNav.querySelectorAll('a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          // Se for um link interno, fecha o menu
+          if (this.getAttribute('href').startsWith('#')) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+            if (targetElement) {
+              targetElement.scrollIntoView({ behavior: 'smooth' });
+            }
+          }
+          closeMenu();
+        });
+      });
+      
+      // Fechar menu ao clicar fora
+      document.addEventListener('click', function(e) {
+        if (mainNav.classList.contains('active') && 
+            !mainNav.contains(e.target) && 
+            !menuToggle.contains(e.target)) {
+          closeMenu();
+        }
+      });
+      
+      // Fechar menu ao pressionar ESC
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && mainNav.classList.contains('active')) {
+          closeMenu();
+        }
+      });
+      
+      // Fechar menu ao redimensionar para desktop
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 768 && mainNav.classList.contains('active')) {
+          closeMenu();
+        }
+      });
+    });
   </script>
 </body>
 </html>
