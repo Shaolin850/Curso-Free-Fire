@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Fire Booster - Melhore seu jogo</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>">
+</head>
+<body>
+  <div class="animated-bg"></div>
+
+  <header class="header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="logo">FFB</div>
+        <div class="brand-text">
+          <h1>Free Fire Booster</h1>
+          <div class="tagline">Tudo para melhorar seu jogo</div>
+        </div>
+      </div>
+      
+      <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+      </button>
+      
+      <nav class="nav" id="mainNav">
+        <a href="index.html" class="active">
+          <i class="fas fa-home"></i> Início
+        </a>
+        <a href="sensibilidade.html">
+          <i class="fas fa-crosshairs"></i> Sensibilidade
+        </a>
+        <a href="otimizacao.html">
+          <i class="fas fa-sliders-h"></i> Otimização
+        </a>
+        <a href="videos.html">
+          <i class="fas fa-video"></i> Vídeos
+        </a>
+        <a href="gerar-nick.html">
+          <i class="fas fa-user-edit"></i> Gerar Nick
+        </a>
+        <a href="gerar-bio.html">
+          <i class="fas fa-quote-right"></i> Gerar Bio
+        </a>
+        <a href="dicas.html">
+          <i class="fas fa-lightbulb"></i> Dicas
+        </a>
+        <a href="configurador.html">
+          <i class="fas fa-gamepad"></i> Configurador
+        </a>
+        <a href="rank.html">
+          <i class="fas fa-trophy"></i> Rank
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <!-- Hero Section -->
+    <section class="card" style="text-align: center; padding: 40px 20px;">
+      <h1 style="font-size: 2.5rem; margin-bottom: 16px;">
+        Melhore seu desempenho no <span style="color: #00d9ff;">Free Fire</span>
+      </h1>
+      <p style="font-size: 1.2rem; color: var(--muted); max-width: 800px; margin: 0 auto 32px;">
+        Ferramentas gratuitas para otimizar sua jogabilidade, gerar nicks criativos, 
+        configurar sensibilidade perfeita e muito mais!
+      </p>
+      <div class="btn-group" style="justify-content: center;">
+        <a href="#features" class="btn">
+          <i class="fas fa-rocket"></i> Começar agora
+        </a>
+        <a href="videos.html" class="btn btn-secondary">
+          <i class="fas fa-play-circle"></i> Ver tutoriais
+        </a>
+      </div>
+    </section>
+
+    <!-- Features Grid -->
+    <section id="features" class="card">
+      <h2 class="card-title">
+        <i class="fas fa-star"></i> Ferramentas Disponíveis
+      </h2>
+      
+      <div class="grid grid-2">
+        <a href="sensibilidade.html" class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-crosshairs"></i>
+          </div>
+          <h3>Gerador de Sensibilidade</h3>
+          <p>Gere configurações otimizadas para Android e iPhone com um clique</p>
+        </a>
+        
+        <a href="otimizacao.html" class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-sliders-h"></i>
+          </div>
+          <h3>Otimização Completa</h3>
+          <p>Configurações para melhorar FPS e desempenho do seu dispositivo</p>
+        </a>
+        
+        <a href="gerar-nick.html" class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-user-tag"></i>
+          </div>
+          <h3>Gerador de Nicks</h3>
+          <p>Crie nicks personalizados com símbolos especiais para Free Fire</p>
+        </a>
+        
+        <a href="gerar-bio.html" class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-quote-left"></i>
+          </div>
+          <h3>Gerador de Bio</h3>
+          <p>Personalize sua bio com cores e formatação para o perfil do jogo</p>
+        </a>
+        
+        <a href="videos.html" class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-video"></i>
+          </div>
+          <h3>HUD Personalizados</h3>
+          <p>Vídeos tutoriais com layouts de HUD para todos os estilos de jogo</p>
+        </a>
+        
+        <a href="dicas.html" class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-graduation-cap"></i>
+          </div>
+          <h3>Dicas Avançadas</h3>
+          <p>Estratégias e técnicas para evoluir no ranking do Free Fire</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="card">
+      <h2 class="card-title">
+        <i class="fas fa-bolt"></i> Ações Rápidas
+      </h2>
+      
+      <div class="grid grid-3">
+        <div class="quick-action">
+          <h4><i class="fas fa-random" style="color: #00d9ff;"></i> Gerar Sensibilidade</h4>
+          <button class="btn btn-sm" onclick="window.location.href='sensibilidade.html'">
+            Gerar agora
+          </button>
+        </div>
+        
+        <div class="quick-action">
+          <h4><i class="fas fa-magic" style="color: #00d9ff;"></i> Criar Nick</h4>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="quickNick" placeholder="Seu nome" class="input" style="flex: 1;">
+            <button class="btn btn-sm" onclick="generateQuickNick()">Gerar</button>
+          </div>
+        </div>
+        
+        <div class="quick-action">
+          <h4><i class="fas fa-cog" style="color: #00d9ff;"></i> Dicas Rápidas</h4>
+          <div id="tipDisplay" style="padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px; font-size: 14px;">
+            Clique para ver uma dica
+          </div>
+          <button class="btn btn-sm" onclick="showRandomTip()" style="margin-top: 12px;">
+            <i class="fas fa-redo"></i> Nova dica
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="card">
+      <h2 class="card-title">
+        <i class="fas fa-chart-line"></i> Estatísticas
+      </h2>
+      
+      <div class="grid grid-4">
+        <div style="text-align: center;">
+          <div style="font-size: 2.5rem; font-weight: 800; color: #00d9ff;">50+</div>
+          <div style="color: var(--muted);">Configurações</div>
+        </div>
+        
+        <div style="text-align: center;">
+          <div style="font-size: 2.5rem; font-weight: 800; color: #00d9ff;">1000+</div>
+          <div style="color: var(--muted);">Símbolos para Nicks</div>
+        </div>
+        
+        <div style="text-align: center;">
+          <div style="font-size: 2.5rem; font-weight: 800; color: #00d9ff;">24</div>
+          <div style="color: var(--muted);">HUDs Diferentes</div>
+        </div>
+        
+        <div style="text-align: center;">
+          <div style="font-size: 2.5rem; font-weight: 800; color: #00d9ff;">100%</div>
+          <div style="color: var(--muted);">Gratuito</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div style="font-size: 1.5rem; font-weight: 800; margin-bottom: 16px;">
+        Free Fire Booster
+      </div>
+      <p style="max-width: 600px; margin: 0 auto 24px;">
+        Ferramentas gratuitas para jogadores de Free Fire melhorarem sua experiência de jogo.
+        Não somos afiliados à Garena.
+      </p>
+      
+      <div class="footer-links">
+        <a href="index.html">Início</a>
+        <a href="sensibilidade.html">Sensibilidade</a>
+        <a href="otimizacao.html">Otimização</a>
+        <a href="videos.html">Vídeos</a>
+        <a href="gerar-nick.html">Gerar Nick</a>
+        <a href="gerar-bio.html">Gerar Bio</a>
+        <a href="dicas.html">Dicas</a>
+      </div>
+      
+      <div style="margin-top: 24px; color: rgba(255,255,255,0.4); font-size: 13px;">
+        © 2024 Free Fire Booster. Todos os direitos reservados.
+        <br>Desenvolvido para a comunidade Free Fire.
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    // Menu mobile toggle
+    document.getElementById('menuToggle').addEventListener('click', function() {
+      document.getElementById('mainNav').classList.toggle('active');
+    });
+    
+    // Quick tip generator
+    const tips = [
+      "Use fones de ouvido para ouvir passos dos inimigos",
+      "Ajuste sua sensibilidade gradualmente até encontrar o ideal",
+      "Treine no modo treino antes de jogar ranqueada",
+      "Use cobertura sempre que possível",
+      "Comunique-se com seu squad usando o chat de voz",
+      "Aprenda os pontos de queda mais seguros",
+      "Mantenha seu HUD organizado para melhor controle",
+      "Use granadas para forçar inimigos a saírem da cobertura",
+      "Aprenda a usar diferentes tipos de armas",
+      "Atualize seu dispositivo regularmente para melhor performance"
+    ];
+    
+    function showRandomTip() {
+      const randomTip = tips[Math.floor(Math.random() * tips.length)];
+      document.getElementById('tipDisplay').textContent = randomTip;
+    }
+    
+    // Generate quick nick
+    function generateQuickNick() {
+      const name = document.getElementById('quickNick').value.trim();
+      if (!name) {
+        alert('Digite um nome primeiro!');
+        return;
+      }
+      
+      const symbols = ['☆', '꧁', '༺', '≛', '乂', '♛', '㊣', '⍣', '卐', '乇', '刀', 'ﾑ', '乃'];
+      const symbol1 = symbols[Math.floor(Math.random() * symbols.length)];
+      const symbol2 = symbols[Math.floor(Math.random() * symbols.length)];
+      
+      const nick = `${symbol1}${name}${symbol2}`;
+      
+      // Copy to clipboard
+      navigator.clipboard.writeText(nick).then(() => {
+        alert(`Nick "${nick}" copiado para a área de transferência!`);
+      });
+    }
+    
+    // Show initial tip
+    showRandomTip();
+  </script>
+</body>
+</html>

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dicas - Free Fire Booster</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="animated-bg"></div>
+
+  <header class="header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="logo">FFB</div>
+        <div class="brand-text">
+          <h1>Dicas Avançadas</h1>
+          <div class="tagline">Estratégias para melhorar seu jogo</div>
+        </div>
+      </div>
+      
+      <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+      </button>
+      
+      <nav class="nav" id="mainNav">
+        <a href="index.html">
+          <i class="fas fa-home"></i> Início
+        </a>
+        <a href="sensibilidade.html">
+          <i class="fas fa-crosshairs"></i> Sensibilidade
+        </a>
+        <a href="otimizacao.html">
+          <i class="fas fa-sliders-h"></i> Otimização
+        </a>
+        <a href="videos.html">
+          <i class="fas fa-video"></i> Vídeos
+        </a>
+        <a href="gerar-nick.html">
+          <i class="fas fa-user-edit"></i> Gerar Nick
+        </a>
+        <a href="gerar-bio.html">
+          <i class="fas fa-quote-right"></i> Gerar Bio
+        </a>
+        <a href="dicas.html" class="active">
+          <i class="fas fa-lightbulb"></i> Dicas
+        </a>
+        <a href="configurador.html">
+          <i class="fas fa-gamepad"></i> Configurador
+        </a>
+        <a href="rank.html">
+          <i class="fas fa-trophy"></i> Rank
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <!-- Hero Section -->
+    <section class="card" style="text-align: center; padding: 40px 20px;">
+      <h1 style="font-size: 2.5rem; margin-bottom: 16px;">
+        <i class="fas fa-graduation-cap" style="color: #00d9ff;"></i> Dicas Avançadas
+      </h1>
+      <p style="font-size: 1.1rem; color: var(--muted); max-width: 800px; margin: 0 auto 24px;">
+        Aprenda estratégias, técnicas e segredos para evoluir no Free Fire. 
+        Dicas para todos os níveis, desde iniciante até competitivo.
+      </p>
+      
+      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <input type="text" id="tipSearch" placeholder="Buscar dicas..." class="input" style="max-width: 300px;">
+        <button class="btn btn-sm" onclick="searchTips(document.getElementById('tipSearch').value)">
+          <i class="fas fa-search"></i> Buscar
+        </button>
+      </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="card">
+      <h2 class="card-title">
+        <i class="fas fa-filter"></i> Categorias
+      </h2>
+      
+      <div class="btn-group" style="flex-wrap: wrap;">
+        <button class="btn btn-sm tip-category active" data-category="all">
+          Todas as Dicas
+        </button>
+        <button class="btn btn-sm tip-category" data-category="beginner">
+          Iniciante
+        </button>
+        <button class="btn btn-sm tip-category" data-category="intermediate">
+          Intermediário
+        </button>
+        <button class="btn btn-sm tip-category" data-category="advanced">
+          Avançado
+        </button>
+        <button class="btn btn-sm tip-category" data-category="strategy">
+          Estratégia
+        </button>
+        <button class="btn btn-sm tip-category" data-category="weapons">
+          Armas
+        </button>
+        <button class="btn btn-sm tip-category" data-category="movement">
+          Movimentação
+        </button>
+      </div>
+    </section>
+
+    <!-- Tips Grid -->
+    <section class="card">
+      <h2 class="card-title">
+        <i class="fas fa-lightbulb"></i> Coleção de Dicas
+      </h2>
+      
+      <div class="grid grid-2" id="tipsContainer">
+        <!-- Tip 1 -->
+        <div class="tip-card" data-category="beginner movement">
+          <div class="tip-header">
+            <h3>Ouvir Passos</h3>
+            <span class="tip-level beginner">Iniciante</span>
+          </div>
+          <p>Use fones de ouvido para ouvir passos dos inimigos. Isso dá uma grande vantagem tática, permitindo que você prepare emboscadas ou evite confrontos.</p>
+          <div class="tip-footer">
+            <button class="save-tip" data-tip-id="tip1">
+              <i class="far fa-bookmark"></i> Salvar
+            </button>
+            <button class="btn btn-sm copy-btn" data-copy="Dica: Use fones de ouvido para ouvir passos dos inimigos no Free Fire.">
+              <i class="fas fa-copy"></i> Copiar
+            </button>
+          </div>
+        </div>
+        
+        <!-- Tip 2 -->
+        <div class="tip-card" data-category="intermediate strategy">
+          <div class="tip-header">
+            <h3>Controle de Recarga</h3>
+            <span class="tip-level intermediate">Intermediário</span>
+          </div>
+          <p>Recarregue sempre que tiver uma pausa segura. Nunca entre em um combate com o pente pela metade. Aprenda a recarregar atrás de coberturas.</p>
+          <div class="tip-footer">
+            <button class="save-tip" data-tip-id="tip2">
+              <i class="far fa-bookmark"></i> Salvar
+            </button>
+            <button class="btn btn-sm copy-btn" data-copy="Dica: Recarregue sempre atrás de coberturas no Free Fire.">
+              <i class="fas fa-copy"></i> Copiar
+            </button>
+          </div>
+        </div>
+        
+        <!-- Tip 3 -->
+        <div class="tip-card" data-category="advanced weapons">
+          <div class="tip-header">
+            <h3>Troca Rápida de Armas</h3>
+            <span class="tip-level advanced">Avançado</span>
+          </div>
+          <p>Aprenda a trocar rapidamente entre armas. Quando uma arma acabar a munição, troque para a secundária em vez de recarregar no meio do combate.</p>
+          <div class="tip-footer">
+            <button class="save-tip" data-tip-id="tip3">
+              <i class="far fa-bookmark"></i> Salvar
+            </button>
+            <button class="btn btn-sm copy-btn" data-copy="Dica: Troque rapidamente entre armas no Free Fire quando uma acabar a munição.">
+              <i class="fas fa-copy"></i> Copiar
+            </button>
+          </div>
+        </div>
+        
+        <!-- Tip 4 -->
+        <div class="tip-card" data-category="intermediate strategy">
+          <div class="tip-header">
+            <h3>Uso de Granadas</h3>
+            <span class="tip-level intermediate">Intermediário</span>
+          </div>
+          <p>Use granadas para forçar inimigos a saírem da cobertura. Granadas de fumaça são ótimas para reviver aliados ou criar rotas seguras.</p>
+          <div class="tip-footer">
+            <button class="save-tip" data-tip-id="tip4">
+              <i class="far fa-bookmark"></i> Salvar
+            </button>
+            <button class="btn btn-sm copy-btn" data-copy="Dica: Use granadas para forçar inimigos a saírem da cobertura no Free Fire.">
+              <i class="fas fa-copy"></i> Copiar
+            </button>
+          </div>
+        </div>
+        
+        <!-- Tip 5 -->
+        <div class="tip-card" data-category="beginner strategy">
+          <div class="tip-header">
+            <h3>Ponto de Queda Seguro</h3>
+            <span class="tip-level beginner">Iniciante</span>
+          </div>
+          <p>Escolha pontos de queda menos populares para sobreviver mais tempo. Lugares remotos geralmente têm loot suficiente para começar.</p>
+          <div class="tip-footer">
+            <button class="save-tip" data-tip-id="tip5">
+              <i class="far fa-bookmark"></i> Salvar
+            </button>
+            <button class="btn btn-sm copy-btn" data-copy="Dica: Escolha pontos de queda menos populares no Free Fire para sobreviver mais tempo.">
+              <i class="fas fa-copy"></i> Copiar
+            </button>
+          </div>
+        </div>
+        
+        <!-- Tip 6 -->
+        <div class="tip-card" data-category="advanced movement">
+          <div class="tip-header">
+            <h3>Peek e Shoot</h3>
+            <span class="tip-level advanced">Avançado</span>
+          </div>
+          <p>Aprenda a técnica de peek and shoot: saia rapidamente da cobertura, atire e volte. Isso minimiza sua exposição ao inimigo.</p>
+          <div class="tip-footer">
+            <button class="save-tip" data-tip-id="tip6">
+              <i class="far fa-bookmark"></i> Salvar
+            </button>
+            <button class="btn btn-sm copy-btn" data-copy="Dica: Use a técnica de peek and shoot no Free Fire para minimizar exposição.">
+              <i class="fas fa-copy"></i> Copiar
+            </button>
+          </div>
+        </div>
+        
+        <!-- Tip 7 -->
+        <div class="tip-card" data-category="intermediate weapons">
+          <div class="tip-header">
+            <h3>Combinação de Armas Ideal</h3>
+            <span class="tip-level intermediate">Intermediário</span>
+          </div>
+          <p>Carregue uma arma para curta/média distância (SMG ou Shotgun) e uma para longa distância (Sniper ou DMR). Isso cobre todos os cenários.</p>
+          <div class="tip-footer">
+            <button class="save-tip" data-tip-id="tip7">
+              <i class="far fa-bookmark"></i> Salvar
+            </button>
+            <button class="btn btn-sm copy-btn" data-copy="Dica: Carregue uma arma para curta e uma para longa distância no Free Fire.">
+              <i class="fas fa-copy"></i> Copiar
+            </button>
+          </div>
+        </div>
+        
+        <!-- Tip 8 -->
+        <div class="tip-card" data-category="beginner strategy">
+          <div class="tip-header">
+            <h3>Gerenciamento de Inventário</h3>
+            <span class="tip-level beginner">Iniciante</span>
+          </div>
+          <p>Priorize munição, kits médicos e coletes/ capacetes. Não carregue itens desnecessários que ocupam espaço no inventário.</p>
+          <div class="tip-footer">
+            <button class="save-tip" data-tip-id="tip8">
+              <i class="far fa-bookmark"></i> Salvar
+            </button>
+            <button class="btn btn-sm copy-btn" data-copy="Dica: Priorize munição e kits médicos no inventário do Free Fire.">
+              <i class="fas fa-copy"></i> Copiar
+            </button>
+          </div>
+        </div>
+        
+        <!-- Add more tips as needed -->
+      </div>
+      
+      <div style="text-align: center; margin-top: 30px;">
+        <button class="btn" onclick="loadMoreTips()">
+          <i class="fas fa-plus"></i> Carregar Mais Dicas
+        </button>
+      </div>
+    </section>
+
+    <!-- Saved Tips -->
+    <section class="card" id="savedTipsSection">
+      <h2 class="card-title">
+        <i class="fas fa-bookmark"></i> Dicas Salvas
+      </h2>
+      <div id="savedTipsContainer" style="min-height: 100px; padding: 20px; text-align: center; color: var(--muted);">
+        <i class="fas fa-bookmark" style="font-size: 3rem; opacity: 0.3; margin-bottom: 16px;"></i>
+        <p>Suas dicas salvas aparecerão aqui</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div style="font-size: 1.5rem; font-weight: 800; margin-bottom: 16px;">
+        Free Fire Booster
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Início</a>
+        <a href="sensibilidade.html">Sensibilidade</a>
+        <a href="otimizacao.html">Otimização</a>
+        <a href="videos.html">Vídeos</a>
+        <a href="gerar-nick.html">Gerar Nick</a>
+        <a href="gerar-bio.html">Gerar Bio</a>
+        <a href="dicas.html">Dicas</a>
+      </div>
+      <div style="margin-top: 24px; color: rgba(255,255,255,0.4); font-size: 13px;">
+        © 2024 Free Fire Booster. Todos os direitos reservados.
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    // Add styles for tips
+    const style = document.createElement('style');
+    style.textContent = `
+      .tip-card {
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: var(--radius);
+        padding: 20px;
+        border-left: 4px solid #00d9ff;
+        transition: var(--transition);
+      }
+      .tip-card:hover {
+        transform: translateY(-4px);
+        background: rgba(255, 255, 255, 0.05);
+      }
+      .tip-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      .tip-header h3 {
+        font-size: 18px;
+        color: #fff;
+        margin: 0;
+      }
+      .tip-level {
+        font-size: 12px;
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-weight: 600;
+      }
+      .tip-level.beginner {
+        background: rgba(34, 197, 94, 0.2);
+        color: #4ade80;
+      }
+      .tip-level.intermediate {
+        background: rgba(59, 130, 246, 0.2);
+        color: #60a5fa;
+      }
+      .tip-level.advanced {
+        background: rgba(168, 85, 247, 0.2);
+        color: #a855f7;
+      }
+      .tip-card p {
+        color: var(--muted);
+        line-height: 1.6;
+        margin-bottom: 16px;
+      }
+      .tip-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .save-tip {
+        background: none;
+        border: none;
+        color: var(--muted);
+        cursor: pointer;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: var(--transition);
+      }
+      .save-tip:hover {
+        color: #00d9ff;
+      }
+      .save-tip.saved {
+        color: #00d9ff;
+      }
+    `;
+    document.head.appendChild(style);
+    
+    // Initialize tips functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      // Category filter
+      document.querySelectorAll('.tip-category').forEach(button => {
+        button.addEventListener('click', function() {
+          const category = this.getAttribute('data-category');
+          
+          // Update active button
+          document.querySelectorAll('.tip-category').forEach(btn => {
+            btn.classList.remove('active');
+          });
+          this.classList.add('active');
+          
+          // Filter tips
+          const allTips = document.querySelectorAll('.tip-card');
+          allTips.forEach(tip => {
+            if (category === 'all' || tip.getAttribute('data-category').includes(category)) {
+              tip.style.display = 'block';
+            } else {
+              tip.style.display = 'none';
+            }
+          });
+        });
+      });
+      
+      // Search functionality
+      const searchInput = document.getElementById('tipSearch');
+      if (searchInput) {
+        searchInput.addEventListener('input', function() {
+          const query = this.value.toLowerCase();
+          const allTips = document.querySelectorAll('.tip-card');
+          
+          allTips.forEach(tip => {
+            const text = tip.textContent.toLowerCase();
+            if (text.includes(query)) {
+              tip.style.display = 'block';
+            } else {
+              tip.style.display = 'none';
+            }
+          });
+        });
+      }
+      
+      // Save tip functionality
+      document.querySelectorAll('.save-tip').forEach(button => {
+        button.addEventListener('click', function() {
+          const tipId = this.getAttribute('data-tip-id');
+          
+          // Get saved tips from localStorage
+          let savedTips = JSON.parse(localStorage.getItem('savedTips') || '[]');
+          
+          if (savedTips.includes(tipId)) {
+            // Remove
+            savedTips = savedTips.filter(id => id !== tipId);
+            this.innerHTML = '<i class="far fa-bookmark"></i> Salvar';
+            this.classList.remove('saved');
+            showNotification('Dica removida dos favoritos');
+          } else {
+            // Add
+            savedTips.push(tipId);
+            this.innerHTML = '<i class="fas fa-bookmark"></i> Salvo';
+            this.classList.add('saved');
+            showNotification('Dica salva nos favoritos!');
+          }
+          
+          localStorage.setItem('savedTips', JSON.stringify(savedTips));
+          updateSavedTipsDisplay();
+        });
+      });
+      
+      // Load saved tips on page load
+      updateSavedTipsDisplay();
+    });
+    
+    function updateSavedTipsDisplay() {
+      const savedTips = JSON.parse(localStorage.getItem('savedTips') || '[]');
+      const container = document.getElementById('savedTipsContainer');
+      
+      if (!container) return;
+      
+      if (savedTips.length === 0) {
+        container.innerHTML = `
+          <i class="fas fa-bookmark" style="font-size: 3rem; opacity: 0.3; margin-bottom: 16px;"></i>
+          <p>Suas dicas salvas aparecerão aqui</p>
+        `;
+        return;
+      }
+      
+      // Get saved tip elements
+      let savedTipsHTML = '';
+      savedTips.forEach(tipId => {
+        const tipElement = document.querySelector(`.tip-card [data-tip-id="${tipId}"]`);
+        if (tipElement) {
+          const tipCard = tipElement.closest('.tip-card');
+          if (tipCard) {
+            savedTipsHTML += tipCard.outerHTML;
+          }
+        }
+      });
+      
+      container.innerHTML = savedTipsHTML || '<p>Nenhuma dica salva encontrada</p>';
+      
+      // Re-attach event listeners to saved tips
+      container.querySelectorAll('.save-tip').forEach(button => {
+        button.addEventListener('click', function() {
+          const tipId = this.getAttribute('data-tip-id');
+          
+          let savedTips = JSON.parse(localStorage.getItem('savedTips') || '[]');
+          savedTips = savedTips.filter(id => id !== tipId);
+          localStorage.setItem('savedTips', JSON.stringify(savedTips));
+          
+          updateSavedTipsDisplay();
+        });
+      });
+    }
+    
+    function loadMoreTips() {
+      // In a real application, this would load more tips from a server
+      // For now, we'll just show a notification
+      showNotification('Mais dicas serão adicionadas em breve!', 'info');
+    }
+    
+    // Show notification function
+    function showNotification(message, type = 'info') {
+      // Simple notification implementation
+      alert(message);
+    }
+  </script>
+</body>
+</html>

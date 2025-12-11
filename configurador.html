@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configurador HUD - Free Fire Booster</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>">
+</head>
+<body>
+  <div class="animated-bg"></div>
+
+  <header class="header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="logo">FFB</div>
+        <div class="brand-text">
+          <h1>Configurador HUD</h1>
+          <div class="tagline">Crie e teste layouts personalizados</div>
+        </div>
+      </div>
+      
+      <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+      </button>
+      
+      <nav class="nav" id="mainNav">
+        <a href="index.html">
+          <i class="fas fa-home"></i> Início
+        </a>
+        <a href="sensibilidade.html">
+          <i class="fas fa-crosshairs"></i> Sensibilidade
+        </a>
+        <a href="otimizacao.html">
+          <i class="fas fa-sliders-h"></i> Otimização
+        </a>
+        <a href="videos.html">
+          <i class="fas fa-video"></i> Vídeos
+        </a>
+        <a href="gerar-nick.html">
+          <i class="fas fa-user-edit"></i> Gerar Nick
+        </a>
+        <a href="gerar-bio.html">
+          <i class="fas fa-quote-right"></i> Gerar Bio
+        </a>
+        <a href="dicas.html">
+          <i class="fas fa-lightbulb"></i> Dicas
+        </a>
+        <a href="configurador.html" class="active">
+          <i class="fas fa-gamepad"></i> Configurador
+        </a>
+        <a href="rank.html">
+          <i class="fas fa-trophy"></i> Rank
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <!-- HUD Configurator -->
+    <section class="card">
+      <h2 class="card-title">
+        <i class="fas fa-gamepad"></i> Configurador de HUD Virtual
+      </h2>
+      
+      <div class="alert alert-info">
+        <i class="fas fa-info-circle"></i>
+        Arraste os botões para posicioná-los na tela. Ajuste tamanho e transparência.
+        Quando estiver satisfeito, copie as coordenadas para configurar no Free Fire.
+      </div>
+      
+      <div class="configurator-wrapper">
+        <div class="configurator-controls">
+          <div class="control-group">
+            <h3><i class="fas fa-sliders-h"></i> Configurações</h3>
+            
+            <div class="control-item">
+              <label>Layout:</label>
+              <select id="layoutSelect" class="input">
+                <option value="2fingers">2 Dedos</option>
+                <option value="3fingers">3 Dedos</option>
+                <option value="4fingers">4 Dedos</option>
+                <option value="custom">Personalizado</option>
+              </select>
+            </div>
+            
+            <div class="control-item">
+              <label>Transparência:</label>
+              <input type="range" id="opacitySlider" min="0" max="100" value="50" class="slider">
+              <span id="opacityValue">50%</span>
+            </div>
+            
+            <div class="control-item">
+              <label>Tamanho dos Botões:</label>
+              <input type="range" id="sizeSlider" min="20" max="100" value="60" class="slider">
+              <span id="sizeValue">60px</span>
+            </div>
+            
+            <div class="control-actions">
+              <button class="btn btn-sm" onclick="resetLayout()">
+                <i class="fas fa-redo"></i> Resetar
+              </button>
+              <button class="btn btn-sm" onclick="saveLayout()">
+                <i class="fas fa-save"></i> Salvar
+              </button>
+              <button class="btn btn-sm" onclick="loadLayout()">
+                <i class="fas fa-folder-open"></i> Carregar
+              </button>
+              <button class="btn btn-sm" onclick="copyCoordinates()">
+                <i class="fas fa-copy"></i> Copiar Coordenadas
+              </button>
+            </div>
+          </div>
+          
+          <div class="buttons-palette">
+            <h3><i class="fas fa-th-large"></i> Botões Disponíveis</h3>
+            <div class="palette-buttons">
+              <div class="palette-btn" data-type="move" draggable="true">
+                <i class="fas fa-arrows-alt"></i> Movimento
+              </div>
+              <div class="palette-btn" data-type="aim" draggable="true">
+                <i class="fas fa-crosshairs"></i> Mira
+              </div>
+              <div class="palette-btn" data-type="shoot" draggable="true">
+                <i class="fas fa-fist-raised"></i> Atirar
+              </div>
+              <div class="palette-btn" data-type="crouch" draggable="true">
+                <i class="fas fa-chevron-down"></i> Agachar
+              </div>
+              <div class="palette-btn" data-type="jump" draggable="true">
+                <i class="fas fa-chevron-up"></i> Pular
+              </div>
+              <div class="palette-btn" data-type="reload" draggable="true">
+                <i class="fas fa-sync-alt"></i> Recarregar
+              </div>
+              <div class="palette-btn" data-type="scope" draggable="true">
+                <i class="fas fa-search"></i> Mira
+              </div>
+              <div class="palette-btn" data-type="switch" draggable="true">
+                <i class="fas fa-exchange-alt"></i> Trocar Arma
+              </div>
+              <div class="palette-btn" data-type="heal" draggable="true">
+                <i class="fas fa-plus-circle"></i> Curar
+              </div>
+              <div class="palette-btn" data-type="grenade" draggable="true">
+                <i class="fas fa-bomb"></i> Granada
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="configurator-screen">
+          <div class="screen-header">
+            <h3><i class="fas fa-mobile-alt"></i> Tela do Dispositivo</h3>
+            <div class="screen-info">
+              <span id="buttonCount">0 botões</span>
+              <span id="coordsInfo">Arraste para posicionar</span>
+            </div>
+          </div>
+          
+          <div class="hud-screen" id="hudScreen">
+            <!-- Buttons will be placed here by JavaScript -->
+            <div class="screen-overlay">
+              Arraste os botões da paleta para cá
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Preset Layouts -->
+    <section class="card">
+      <h2 class="card-title">
+        <i class="fas fa-th-large"></i> Layouts Pré-configurados
+      </h2>
+      
+      <div class="presets-grid">
+        <div class="preset-card">
+          <div class="preset-preview" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="preset-buttons">
+              <div class="preset-btn" style="left: 20%; top: 70%;"></div>
+              <div class="preset-btn" style="right: 20%; top: 70%;"></div>
+            </div>
+          </div>
+          <div class="preset-info">
+            <h3>2 Dedos - Básico</h3>
+            <p>Layout simples ideal para iniciantes</p>
+            <button class="btn btn-sm" onclick="loadPreset('2fingers-basic')">
+              <i class="fas fa-download"></i> Usar Layout
+            </button>
+          </div>
+        </div>
+        
+        <div class="preset-card">
+          <div class="preset-preview" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+            <div class="preset-buttons">
+              <div class="preset-btn" style="left: 15%; top: 65%;"></div>
+              <div class="preset-btn" style="right: 15%; top: 65%;"></div>
+              <div class="preset-btn" style="right: 25%; top: 30%;"></div>
+            </div>
+          </div>
+          <div class="preset-info">
+            <h3>3 Dedos - Rush</h3>
+            <p>Para jogadores agressivos</p>
+            <button class="btn btn-sm" onclick="loadPreset('3fingers-rush')">
+              <i class="fas fa-download"></i> Usar Layout
+            </button>
+          </div>
+        </div>
+        
+        <div class="preset-card">
+          <div class="preset-preview" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+            <div class="preset-buttons">
+              <div class="preset-btn" style="left: 15%; top: 70%;"></div>
+              <div class="preset-btn" style="right: 15%; top: 70%;"></div>
+              <div class="preset-btn" style="left: 25%; top: 30%;"></div>
+              <div class="preset-btn" style="right: 25%; top: 30%;"></div>
+            </div>
+          </div>
+          <div class="preset-info">
+            <h3>4 Dedos - Competitivo</h3>
+            <p>Usado por jogadores profissionais</p>
+            <button class="btn btn-sm" onclick="loadPreset('4fingers-pro')">
+              <i class="fas fa-download"></i> Usar Layout
+            </button>
+          </div>
+        </div>
+        
+        <div class="preset-card">
+          <div class="preset-preview" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+            <div class="preset-buttons">
+              <div class="preset-btn" style="left: 10%; top: 75%;"></div>
+              <div class="preset-btn" style="right: 10%; top: 75%;"></div>
+              <div class="preset-btn" style="left: 30%; top: 40%;"></div>
+              <div class="preset-btn" style="right: 30%; top: 40%;"></div>
+              <div class="preset-btn" style="right: 20%; top: 20%;"></div>
+            </div>
+          </div>
+          <div class="preset-info">
+            <h3>5 Dedos - Avançado</h3>
+            <p>Para quem busca máximo controle</p>
+            <button class="btn btn-sm" onclick="loadPreset('5fingers-advanced')">
+              <i class="fas fa-download"></i> Usar Layout
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Coordinates Display -->
+    <section class="card" id="coordinatesSection" style="display: none;">
+      <h2 class="card-title">
+        <i class="fas fa-map-marker-alt"></i> Coordenadas do Layout
+      </h2>
+      
+      <div class="coordinates-output">
+        <div class="coordinates-info">
+          <p>
+            Copie estas coordenadas e use nas configurações de HUD do Free Fire.
+            Cada linha representa um botão com suas coordenadas X e Y.
+          </p>
+        </div>
+        
+        <div class="coordinates-code">
+          <pre id="coordinatesCode">Suas coordenadas aparecerão aqui</pre>
+          <button class="btn" onclick="copyCoordinates()">
+            <i class="fas fa-copy"></i> Copiar Todas as Coordenadas
+          </button>
+        </div>
+        
+        <div class="coordinates-help">
+          <h4><i class="fas fa-question-circle"></i> Como Configurar no Free Fire:</h4>
+          <ol>
+            <li>Entre no Free Fire e vá para Configurações</li>
+            <li>Selecione "Controles"</li>
+            <li>Escolha "Personalizar"</li>
+            <li>Arraste cada botão para a posição indicada pelas coordenadas</li>
+            <li>Salve suas configurações</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tips for HUD Configuration -->
+    <section class="card">
+      <h2 class="card-title">
+        <i class="fas fa-lightbulb"></i> Dicas para Configurar HUD
+      </h2>
+      
+      <div class="grid grid-3">
+        <div class="tip-card">
+          <div class="tip-icon">
+            <i class="fas fa-hand-paper"></i>
+          </div>
+          <h3>Posição Natural</h3>
+          <p>Posicione os botões onde seus dedos ficam naturalmente na tela</p>
+        </div>
+        
+        <div class="tip-card">
+          <div class="tip-icon">
+            <i class="fas fa-expand-arrows-alt"></i>
+          </div>
+          <h3>Espaçamento</h3>
+          <p>Deixe espaço entre os botões para evitar toques acidentais</p>
+        </div>
+        
+        <div class="tip-card">
+          <div class="tip-icon">
+            <i class="fas fa-eye"></i>
+          </div>
+          <h3>Visibilidade</h3>
+          <p>Mantenha a área central da tela livre para melhor visão do jogo</p>
+        </div>
+      </div>
+      
+      <div class="advanced-tips">
+        <h4><i class="fas fa-graduation-cap"></i> Dicas Avançadas:</h4>
+        <ul>
+          <li><strong>Botão de Atirar:</strong> Coloque em posição fácil para o dedo indicador</li>
+          <li><strong>Botão de Mira:</strong> Posicione próximo ao botão de atirar para rápido escopo</li>
+          <li><strong>Movimento:</strong> Use joystick fixo para melhor controle</li>
+          <li><strong>Botões de Ação:</strong> Agachar e pular devem ser de fácil acesso</li>
+          <li><strong>Teste:</strong> Sempre teste no modo treino antes de jogar ranqueada</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div style="font-size: 1.5rem; font-weight: 800; margin-bottom: 16px;">
+        Free Fire Booster
+      </div>
+      <p style="max-width: 600px; margin: 0 auto 24px;">
+        Ferramentas gratuitas para jogadores de Free Fire melhorarem sua experiência de jogo.
+        Não somos afiliados à Garena.
+      </p>
+      
+      <div class="footer-links">
+        <a href="index.html">Início</a>
+        <a href="sensibilidade.html">Sensibilidade</a>
+        <a href="otimizacao.html">Otimização</a>
+        <a href="videos.html">Vídeos</a>
+        <a href="gerar-nick.html">Gerar Nick</a>
+        <a href="gerar-bio.html">Gerar Bio</a>
+        <a href="dicas.html">Dicas</a>
+        <a href="configurador.html">Configurador</a>
+        <a href="rank.html">Rank</a>
+      </div>
+      
+      <div style="margin-top: 24px; color: rgba(255,255,255,0.4); font-size: 13px;">
+        © 2024 Free Fire Booster. Todos os direitos reservados.
+        <br>Desenvolvido para a comunidade Free Fire.
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    let hudButtons = [];
+    let buttonIdCounter = 0;
+    let currentOpacity = 50;
+    let currentSize = 60;
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Mobile menu
+      document.getElementById('menuToggle').addEventListener('click', function() {
+        document.getElementById('mainNav').classList.toggle('active');
+      });
+
+      // Initialize draggable buttons from palette
+      initializeDragAndDrop();
+
+      // Update opacity value display
+      const opacitySlider = document.getElementById('opacitySlider');
+      const opacityValue = document.getElementById('opacityValue');
+      
+      opacitySlider.addEventListener('input', function() {
+        currentOpacity = this.value;
+        opacityValue.textContent = this.value + '%';
+        updateButtonsOpacity();
+      });
+
+      // Update size value display
+      const sizeSlider = document.getElementById('sizeSlider');
+      const sizeValue = document.getElementById('sizeValue');
+      
+      sizeSlider.addEventListener('input', function() {
+        currentSize = this.value;
+        sizeValue.textContent = this.value + 'px';
+        updateButtonsSize();
+      });
+
+      // Layout select
+      document.getElementById('layoutSelect').addEventListener('change', function() {
+        loadPreset(this.value);
+      });
+
+      // Initialize with 2 fingers layout
+      loadPreset('2fingers');
+    });
+
+    function initializeDragAndDrop() {
+      const paletteButtons = document.querySelectorAll('.palette-btn');
+      const hudScreen = document.getElementById('hudScreen');
+
+      // Make palette buttons draggable
+      paletteButtons.forEach(btn => {
+        btn.addEventListener('dragstart', function(e) {
+          e.dataTransfer.setData('text/plain', this.getAttribute('data-type'));
+        });
+      });
+
+      // Make HUD screen a drop zone
+      hudScreen.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.classList.add('drag-over');
+      });
+
+      hudScreen.addEventListener('dragleave', function() {
+        this.classList.remove('drag-over');
+      });
+
+      hudScreen.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('drag-over');
+        
+        const buttonType = e.dataTransfer.getData('text/plain');
+        if (buttonType) {
+          createHUDButton(buttonType, e.offsetX, e.offsetY);
+        }
+      });
+    }
+
+    function createHUDButton(type, x, y) {
+      const hudScreen = document.getElementById('hudScreen');
+      const screenRect = hudScreen.getBoundingClientRect();
+      
+      // Calculate percentage position
+      const posX = ((x / screenRect.width) * 100).toFixed(2);
+      const posY = ((y / screenRect.height) * 100).toFixed(2);
+      
+      buttonIdCounter++;
+      const buttonId = `btn-${buttonIdCounter}`;
+      
+      // Create button element
+      const button = document.createElement('div');
+      button.className = 'hud-button';
+      button.id = buttonId;
+      button.setAttribute('data-type', type);
+      button.style.left = `${posX}%`;
+      button.style.top = `${posY}%`;
+      button.style.width = `${currentSize}px`;
+      button.style.height = `${currentSize}px`;
+      button.style.opacity = `${currentOpacity / 100}`;
+      
+      // Set button content based on type
+      let icon = 'fas fa-question';
+      let label = 'Botão';
+      
+      switch(type) {
+        case 'move':
+          icon = 'fas fa-arrows-alt';
+          label = 'Mov';
+          button.style.background = 'rgba(59, 130, 246, 0.7)';
+          break;
+        case 'aim':
+          icon = 'fas fa-crosshairs';
+          label = 'Mira';
+          button.style.background = 'rgba(34, 197, 94, 0.7)';
+          break;
+        case 'shoot':
+          icon = 'fas fa-fist-raised';
+          label = 'Atirar';
+          button.style.background = 'rgba(239, 68, 68, 0.7)';
+          break;
+        case 'crouch':
+          icon = 'fas fa-chevron-down';
+          label = 'Agachar';
+          button.style.background = 'rgba(168, 85, 247, 0.7)';
+          break;
+        case 'jump':
+          icon = 'fas fa-chevron-up';
+          label = 'Pular';
+          button.style.background = 'rgba(245, 158, 11, 0.7)';
+          break;
+        case 'reload':
+          icon = 'fas fa-sync-alt';
+          label = 'Recar';
+          button.style.background = 'rgba(14, 165, 233, 0.7)';
+          break;
+        case 'scope':
+          icon = 'fas fa-search';
+          label = 'Escopo';
+          button.style.background = 'rgba(236, 72, 153, 0.7)';
+          break;
+        case 'switch':
+          icon = 'fas fa-exchange-alt';
+          label = 'Trocar';
+          button.style.background = 'rgba(20, 184, 166, 0.7)';
+          break;
+        case 'heal':
+          icon = 'fas fa-plus-circle';
+          label = 'Curar';
+          button.style.background = 'rgba(139, 92, 246, 0.7)';
+          break;
+        case 'grenade':
+          icon = 'fas fa-bomb';
+          label = 'Granada';
+          button.style.background = 'rgba(249, 115, 22, 0.7)';
+          break;
+      }
+      
+      button.innerHTML = `
+        <i class="${icon}"></i>
+        <span class="button-label">${label}</span>
+        <button class="remove-btn" onclick="removeButton('${buttonId}')">
+          <i class="fas fa-times"></i>
+        </button>
+      `;
+      
+      // Make button draggable
+      makeButtonDraggable(button);
+      
+      // Add to screen
+      hudScreen.appendChild(button);
+      
+      // Store button data
+      hudButtons.push({
+        id: buttonId,
+        type: type,
+        x: parseFloat(posX),
+        y: parseFloat(posY),
+        size: currentSize,
+        opacity: currentOpacity
+      });
+      
+      // Update button count
+      updateButtonCount();
+      
+      // Hide overlay if first button
+      const overlay = document.querySelector('.screen-overlay');
+      if (overlay && hudButtons.length > 0) {
+        overlay.style.display = 'none';
+      }
+    }
+
+    function makeButtonDraggable(button) {
+      let isDragging = false;
+      let startX, startY, initialLeft, initialTop;
+      
+      button.addEventListener('mousedown', startDrag);
+      button.addEventListener('touchstart', startDragTouch);
+      
+      function startDrag(e) {
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        initialLeft = parseFloat(button.style.left);
+        initialTop = parseFloat(button.style.top);
+        
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', stopDrag);
+        
+        e.preventDefault();
+      }
+      
+      function startDragTouch(e) {
+        isDragging = true;
+        const touch = e.touches[0];
+        startX = touch.clientX;
+        startY = touch.clientY;
+        initialLeft = parseFloat(button.style.left);
+        initialTop = parseFloat(button.style.top);
+        
+        document.addEventListener('touchmove', dragTouch);
+        document.addEventListener('touchend', stopDrag);
+        
+        e.preventDefault();
+      }
+      
+      function drag(e) {
+        if (!isDragging) return;
+        
+        const hudScreen = document.getElementById('hudScreen');
+        const screenRect = hudScreen.getBoundingClientRect();
+        
+        const deltaX = e.clientX - startX;
+        const deltaY = e.clientY - startY;
+        
+        const newLeft = initialLeft + (deltaX / screenRect.width) * 100;
+        const newTop = initialTop + (deltaY / screenRect.height) * 100;
+        
+        // Keep within bounds
+        const boundedLeft = Math.max(0, Math.min(newLeft, 100));
+        const boundedTop = Math.max(0, Math.min(newTop, 100));
+        
+        button.style.left = `${boundedLeft}%`;
+        button.style.top = `${boundedTop}%`;
+        
+        // Update button data
+        const buttonId = button.id;
+        const buttonIndex = hudButtons.findIndex(b => b.id === buttonId);
+        if (buttonIndex !== -1) {
+          hudButtons[buttonIndex].x = boundedLeft;
+          hudButtons[buttonIndex].y = boundedTop;
+          
+          // Update coordinates info
+          document.getElementById('coordsInfo').textContent = 
+            `X: ${boundedLeft.toFixed(1)}%, Y: ${boundedTop.toFixed(1)}%`;
+        }
+      }
+      
+      function dragTouch(e) {
+        if (!isDragging) return;
+        
+        const touch = e.touches[0];
+        const hudScreen = document.getElementById('hudScreen');
+        const screenRect = hudScreen.getBoundingClientRect();
+        
+        const deltaX = touch.clientX - startX;
+        const deltaY = touch.clientY - startY;
+        
+        const newLeft = initialLeft + (deltaX / screenRect.width) * 100;
+        const newTop = initialTop + (deltaY / screenRect.height) * 100;
+        
+        // Keep within bounds
+        const boundedLeft = Math.max(0, Math.min(newLeft, 100));
+        const boundedTop = Math.max(0, Math.min(newTop, 100));
+        
+        button.style.left = `${boundedLeft}%`;
+        button.style.top = `${boundedTop}%`;
+        
+        // Update button data
+        const buttonId = button.id;
+        const buttonIndex = hudButtons.findIndex(b => b.id === buttonId);
+        if (buttonIndex !== -1) {
+          hudButtons[buttonIndex].x = boundedLeft;
+          hudButtons[buttonIndex].y = boundedTop;
+        }
+      }
+      
+      function stopDrag() {
+        isDragging = false;
+        document.removeEventListener('mousemove', drag);
+        document.removeEventListener('mouseup', stopDrag);
+        document.removeEventListener('touchmove', dragTouch);
+        document.removeEventListener('touchend', stopDrag);
+      }
+    }
+
+    function removeButton(buttonId) {
+      // Remove from DOM
+      const button = document.getElementById(buttonId);
+      if (button) {
+        button.remove();
+      }
+      
+      // Remove from array
+      hudButtons = hudButtons.filter(b => b.id !== buttonId);
+      
+      // Update button count
+      updateButtonCount();
+      
+      // Show overlay if no buttons
+      if (hudButtons.length === 0) {
+        const overlay = document.querySelector('.screen-overlay');
+        if (overlay) {
+          overlay.style.display = 'flex';
+        }
+      }
+    }
+
+    function updateButtonsOpacity() {
+      hudButtons.forEach(button => {
+        const element = document.getElementById(button.id);
+        if (element) {
+          element.style.opacity = currentOpacity / 100;
+        }
+        button.opacity = currentOpacity;
+      });
+    }
+
+    function updateButtonsSize() {
+      hudButtons.forEach(button => {
+        const element = document.getElementById(button.id);
+        if (element) {
+          element.style.width = `${currentSize}px`;
+          element.style.height = `${currentSize}px`;
+        }
+        button.size = currentSize;
+      });
+    }
+
+    function updateButtonCount() {
+      document.getElementById('buttonCount').textContent = 
+        `${hudButtons.length} botão${hudButtons.length !== 1 ? 's' : ''}`;
+    }
+
+    function resetLayout() {
+      if (confirm('Tem certeza que deseja resetar o layout? Todos os botões serão removidos.')) {
+        // Remove all buttons from DOM
+        document.querySelectorAll('.hud-button').forEach(btn => btn.remove());
+        
+        // Clear array
+        hudButtons = [];
+        
+        // Reset counters
+        buttonIdCounter = 0;
+        
+        // Update display
+        updateButtonCount();
+        
+        // Show overlay
+        const overlay = document.querySelector('.screen-overlay');
+        if (overlay) {
+          overlay.style.display = 'flex';
+        }
+        
+        // Reset sliders
+        document.getElementById('opacitySlider').value = 50;
+        document.getElementById('sizeSlider').value = 60;
+        document.getElementById('opacityValue').textContent = '50%';
+        document.getElementById('sizeValue').textContent = '60px';
+        currentOpacity = 50;
+        currentSize = 60;
+        
+        // Reset layout select
+        document.getElementById('layoutSelect').value = 'custom';
+      }
+    }
+
+    function saveLayout() {
+      if (hudButtons.length === 0) {
+        alert('Adicione botões ao layout antes de salvar!');
+        return;
+      }
+      
+      const layoutName = prompt('Digite um nome para este layout:', `Meu Layout ${new Date().toLocaleDateString()}`);
+      if (layoutName) {
+        const layoutData = {
+          name: layoutName,
+          buttons: hudButtons,
+          opacity: currentOpacity,
+          size: currentSize,
+          date: new Date().toISOString()
+        };
+        
+        // Save to localStorage
+        const savedLayouts = JSON.parse(localStorage.getItem('hudLayouts') || '[]');
+        savedLayouts.push(layoutData);
+        localStorage.setItem('hudLayouts', JSON.stringify(savedLayouts));
+        
+        alert(`Layout "${layoutName}" salvo com sucesso!`);
+      }
+    }
+
+    function loadLayout() {
+      const savedLayouts = JSON.parse(localStorage.getItem('hudLayouts') || '[]');
+      
+      if (savedLayouts.length === 0) {
+        alert('Nenhum layout salvo encontrado!');
+        return;
+      }
+      
+      // For simplicity, load the most recent layout
+      const latestLayout = savedLayouts[savedLayouts.length - 1];
+      
+      if (confirm(`Carregar layout "${latestLayout.name}"?`)) {
+        // Clear current layout
+        resetLayout();
+        
+        // Load buttons
+        latestLayout.buttons.forEach(buttonData => {
+          createHUDButton(buttonData.type, 
+            (buttonData.x / 100) * 300, 
+            (buttonData.y / 100) * 600);
+        });
+        
+        // Load settings
+        document.getElementById('opacitySlider').value = latestLayout.opacity;
+        document.getElementById('sizeSlider').value = latestLayout.size;
+        document.getElementById('opacityValue').textContent = latestLayout.opacity + '%';
+        document.getElementById('sizeValue').textContent = latestLayout.size + 'px';
+        currentOpacity = latestLayout.opacity;
+        currentSize = latestLayout.size;
+        
+        alert(`Layout "${latestLayout.name}" carregado com sucesso!`);
+      }
+    }
+
+    function loadPreset(presetName) {
+      // Clear current layout first
+      resetLayout();
+      
+      // Define preset layouts
+      const presets = {
+        '2fingers': [
+          { type: 'move', x: 20, y: 70 },
+          { type: 'shoot', x: 80, y: 70 }
+        ],
+        '3fingers': [
+          { type: 'move', x: 15, y: 70 },
+          { type: 'aim', x: 80, y: 70 },
+          { type: 'shoot', x: 80, y: 30 }
+        ],
+        '4fingers': [
+          { type: 'move', x: 15, y: 70 },
+          { type: 'aim', x: 85, y: 70 },
+          { type: 'shoot', x: 85, y: 30 },
+          { type: 'crouch', x: 15, y: 30 }
+        ],
+        '2fingers-basic': [
+          { type: 'move', x: 20, y: 70 },
+          { type: 'shoot', x: 80, y: 70 },
+          { type: 'jump', x: 80, y: 40 },
+          { type: 'crouch', x: 70, y: 40 }
+        ],
+        '3fingers-rush': [
+          { type: 'move', x: 15, y: 65 },
+          { type: 'shoot', x: 85, y: 65 },
+          { type: 'aim', x: 75, y: 30 },
+          { type: 'jump', x: 25, y: 30 }
+        ],
+        '4fingers-pro': [
+          { type: 'move', x: 15, y: 70 },
+          { type: 'shoot', x: 85, y: 70 },
+          { type: 'aim', x: 75, y: 30 },
+          { type: 'crouch', x: 25, y: 30 },
+          { type: 'jump', x: 85, y: 40 }
+        ],
+        '5fingers-advanced': [
+          { type: 'move', x: 10, y: 75 },
+          { type: 'shoot', x: 90, y: 75 },
+          { type: 'aim', x: 70, y: 40 },
+          { type: 'crouch', x: 30, y: 40 },
+          { type: 'jump', x: 80, y: 20 },
+          { type: 'scope', x: 20, y: 20 }
+        ]
+      };
+      
+      const preset = presets[presetName];
+      if (!preset) return;
+      
+      // Create buttons from preset
+      preset.forEach(buttonData => {
+        createHUDButton(buttonData.type, 
+          (buttonData.x / 100) * 300, 
+          (buttonData.y / 100) * 600);
+      });
+      
+      // Update layout select
+      document.getElementById('layoutSelect').value = presetName;
+    }
+
+    function copyCoordinates() {
+      if (hudButtons.length === 0) {
+        alert('Adicione botões ao layout antes de copiar as coordenadas!');
+        return;
+      }
+      
+      // Generate coordinates text
+      let coordinatesText = `LAYOUT HUD - Free Fire Booster\n`;
+      coordinatesText += `Gerado em: ${new Date().toLocaleString()}\n`;
+      coordinatesText += `Total de botões: ${hudButtons.length}\n\n`;
+      
+      hudButtons.forEach((button, index) => {
+        coordinatesText += `Botão ${index + 1} (${button.type}):\n`;
+        coordinatesText += `  Posição X: ${button.x.toFixed(1)}%\n`;
+        coordinatesText += `  Posição Y: ${button.y.toFixed(1)}%\n`;
+        coordinatesText += `  Tamanho: ${button.size}px\n\n`;
+      });
+      
+      coordinatesText += `Instruções:\n`;
+      coordinatesText += `1. Vá para Configurações > Controles > Personalizar\n`;
+      coordinatesText += `2. Arraste cada botão para as posições acima\n`;
+      coordinatesText += `3. Ajuste o tamanho conforme indicado\n`;
+      coordinatesText += `4. Teste no modo treino antes de usar em partidas\n`;
+      
+      // Update display
+      document.getElementById('coordinatesCode').textContent = coordinatesText;
+      
+      // Show coordinates section
+      document.getElementById('coordinatesSection').style.display = 'block';
+      document.getElementById('coordinatesSection').scrollIntoView({ behavior: 'smooth' });
+      
+      // Copy to clipboard
+      navigator.clipboard.writeText(coordinatesText).then(() => {
+        alert('Coordenadas copiadas para a área de transferência!');
+      });
+    }
+  </script>
+
+  <style>
+    .configurator-wrapper {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    @media (max-width: 1024px) {
+      .configurator-wrapper {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .configurator-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+    
+    .control-group {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .control-group h3 {
+      margin-bottom: 20px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .control-item {
+      margin-bottom: 20px;
+    }
+    
+    .control-item label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    
+    .slider {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      outline: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+    }
+    
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      background: #00d9ff;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    
+    .control-item span {
+      display: inline-block;
+      margin-left: 10px;
+      color: #00d9ff;
+      font-weight: 600;
+      min-width: 50px;
+    }
+    
+    .control-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 25px;
+    }
+    
+    .buttons-palette h3 {
+      margin-bottom: 15px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .palette-buttons {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    
+    .palette-btn {
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: var(--muted);
+      cursor: move;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .palette-btn:hover {
+      border-color: #00d9ff;
+      color: #fff;
+      transform: translateY(-2px);
+    }
+    
+    .palette-btn i {
+      font-size: 18px;
+    }
+    
+    .configurator-screen {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .screen-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    
+    .screen-header h3 {
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .screen-info {
+      display: flex;
+      gap: 20px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    
+    .hud-screen {
+      position: relative;
+      width: 100%;
+      height: 600px;
+      background: #1a1f2e;
+      border-radius: 12px;
+      border: 2px dashed rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+    }
+    
+    .screen-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.3);
+      font-size: 18px;
+      pointer-events: none;
+    }
+    
+    .hud-screen.drag-over {
+      border-color: #00d9ff;
+      background: rgba(0, 217, 255, 0.05);
+    }
+    
+    .hud-button {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      background: rgba(59, 130, 246, 0.7);
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: move;
+      color: white;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    
+    .hud-button:hover {
+      border-color: #fff;
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+    
+    .hud-button i {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+    
+    .button-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    
+    .remove-btn {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 20px;
+      height: 20px;
+      background: #ef4444;
+      border: none;
+      border-radius: 50%;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    
+    .hud-button:hover .remove-btn {
+      opacity: 1;
+    }
+    
+    .presets-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 25px;
+      margin-top: 20px;
+    }
+    
+    .preset-card {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+    }
+    
+    .preset-card:hover {
+      border-color: rgba(0, 217, 255, 0.3);
+      transform: translateY(-5px);
+    }
+    
+    .preset-preview {
+      height: 150px;
+      position: relative;
+    }
+    
+    .preset-buttons {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+    
+    .preset-btn {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      border: 2px solid rgba(0, 0, 0, 0.3);
+    }
+    
+    .preset-info {
+      padding: 20px;
+    }
+    
+    .preset-info h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+    
+    .preset-info p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+    
+    .coordinates-output {
+      margin-top: 20px;
+    }
+    
+    .coordinates-info {
+      margin-bottom: 25px;
+    }
+    
+    .coordinates-info p {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    
+    .coordinates-code {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .coordinates-code pre {
+      color: #00d9ff;
+      font-family: monospace;
+      white-space: pre-wrap;
+      margin-bottom: 20px;
+      max-height: 300px;
+      overflow-y: auto;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 8px;
+    }
+    
+    .coordinates-help {
+      background: rgba(0, 217, 255, 0.05);
+      border-radius: 12px;
+      padding: 20px;
+      border-left: 4px solid #00d9ff;
+    }
+    
+    .coordinates-help h4 {
+      color: #00d9ff;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .coordinates-help ol {
+      color: var(--muted);
+      padding-left: 20px;
+      line-height: 1.6;
+    }
+    
+    .coordinates-help li {
+      margin-bottom: 10px;
+    }
+    
+    .tip-card {
+      text-align: center;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .tip-icon {
+      width: 50px;
+      height: 50px;
+      background: rgba(0, 217, 255, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 15px;
+      color: #00d9ff;
+      font-size: 20px;
+    }
+    
+    .tip-card h3 {
+      font-size: 16px;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+    
+    .tip-card p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    
+    .advanced-tips {
+      margin-top: 30px;
+      padding-top: 25px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .advanced-tips h4 {
+      color: #fff;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .advanced-tips ul {
+      color: var(--muted);
+      padding-left: 20px;
+    }
+    
+    .advanced-tips li {
+      margin-bottom: 10px;
+      line-height: 1.6;
+    }
+    
+    @media (max-width: 768px) {
+      .configurator-wrapper {
+        gap: 20px;
+      }
+      
+      .presets-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .grid.grid-3 {
+        grid-template-columns: 1fr;
+      }
+      
+      .palette-buttons {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      
+      .hud-screen {
+        height: 400px;
+      }
+    }
+  </style>
+</body>
+</html>

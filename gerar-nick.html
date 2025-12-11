@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerar Nick - Free Fire Booster</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>">
+</head>
+<body>
+  <div class="animated-bg"></div>
+
+  <header class="header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="logo">FFB</div>
+        <div class="brand-text">
+          <h1>Gerador de Nick</h1>
+          <div class="tagline">Nicks personalizados com símbolos especiais</div>
+        </div>
+      </div>
+      
+      <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+      </button>
+      
+      <nav class="nav" id="mainNav">
+        <a href="index.html">
+          <i class="fas fa-home"></i> Início
+        </a>
+        <a href="sensibilidade.html">
+          <i class="fas fa-crosshairs"></i> Sensibilidade
+        </a>
+        <a href="otimizacao.html">
+          <i class="fas fa-sliders-h"></i> Otimização
+        </a>
+        <a href="videos.html">
+          <i class="fas fa-video"></i> Vídeos
+        </a>
+        <a href="gerar-nick.html" class="active">
+          <i class="fas fa-user-edit"></i> Gerar Nick
+        </a>
+        <a href="gerar-bio.html">
+          <i class="fas fa-quote-right"></i> Gerar Bio
+        </a>
+        <a href="dicas.html">
+          <i class="fas fa-lightbulb"></i> Dicas
+        </a>
+        <a href="configurador.html">
+          <i class="fas fa-gamepad"></i> Configurador
+        </a>
+        <a href="rank.html">
+          <i class="fas fa-trophy"></i> Rank
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <!-- Generator Section -->
+    <section class="card">
+      <h2 class="card-title">
+        <i class="fas fa-magic"></i> Gerador de Nicks
+      </h2>
+      
+      <div class="alert alert-info">
+        <i class="fas fa-info-circle"></i>
+        Digite seu nome ou palavra preferida para gerar nicks personalizados com símbolos especiais.
+        Todos os nicks são compatíveis com Free Fire.
+      </div>
+      
+      <div class="generator-form">
+        <div class="input-group">
+          <label class="input-label">Digite seu nome ou palavra:</label>
+          <input type="text" id="nickInput" class="input" placeholder="Ex: Player, Sniper, Pro, etc.">
+        </div>
+        
+        <div class="input-group">
+          <label class="input-label">Estilo do Nick:</label>
+          <div class="style-buttons">
+            <button class="style-btn active" data-style="normal">
+              Normal
+            </button>
+            <button class="style-btn" data-style="aggressive">
+              Agressivo
+            </button>
+            <button class="style-btn" data-style="cool">
+              Estiloso
+            </button>
+            <button class="style-btn" data-style="pro">
+              Pro Player
+            </button>
+            <button class="style-btn" data-style="minimal">
+              Minimalista
+            </button>
+          </div>
+        </div>
+        
+        <div class="input-group">
+          <label class="input-label">Quantidade de nicks:</label>
+          <div class="quantity-selector">
+            <button class="qty-btn" data-qty="10">10</button>
+            <button class="qty-btn active" data-qty="20">20</button>
+            <button class="qty-btn" data-qty="30">30</button>
+            <button class="qty-btn" data-qty="50">50</button>
+          </div>
+        </div>
+        
+        <div class="generator-actions">
+          <button class="btn" id="generateNicksBtn">
+            <i class="fas fa-bolt"></i> Gerar Nicks
+          </button>
+          <button class="btn btn-secondary" id="copyAllNicksBtn">
+            <i class="fas fa-copy"></i> Copiar Todos
+          </button>
+          <button class="btn btn-secondary" id="clearNicksBtn">
+            <i class="fas fa-trash"></i> Limpar
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Generated Nicks -->
+    <section class="card" id="resultsSection" style="display: none;">
+      <div class="section-header">
+        <h2 class="card-title">
+          <i class="fas fa-list"></i> Nicks Gerados
+        </h2>
+        <div class="results-info">
+          <span id="nickCount">0</span> nicks gerados
+        </div>
+      </div>
+      
+      <div class="results-grid" id="nickResults">
+        <!-- Nicks will be generated here -->
+      </div>
+      
+      <div class="load-more">
+        <button class="btn btn-secondary" id="loadMoreNicksBtn">
+          <i class="fas fa-plus"></i> Gerar Mais 10
+        </button>
+      </div>
+    </section>
+
+    <!-- Nick Examples -->
+    <section class="card">
+      <h2 class="card-title">
+        <i class="fas fa-star"></i> Exemplos de Nicks
+      </h2>
+      
+      <div class="examples-grid">
+        <div class="example-category">
+          <h3><i class="fas fa-crown"></i> Nicks para Pro Players</h3>
+          <div class="example-list">
+            <div class="example-item">
+              <span class="example-nick">꧁༒☬ProPlayer☬༒꧂</span>
+              <button class="btn btn-sm copy-btn" data-copy="꧁༒☬ProPlayer☬༒꧂">
+                <i class="fas fa-copy"></i> Copiar
+              </button>
+            </div>
+            <div class="example-item">
+              <span class="example-nick">๖ۣۜS̷h̷a̷d̷o̷w̷๖ۣۜ</span>
+              <button class="btn btn-sm copy-btn" data-copy="๖ۣۜS̷h̷a̷d̷o̷w̷๖ۣۜ">
+                <i class="fas fa-copy"></i> Copiar
+              </button>
+            </div>
+            <div class="example-item">
+              <span class="example-nick">༺₦Ї₦ℑ₳༻</span>
+              <button class="btn btn-sm copy-btn" data-copy="༺₦Ї₦ℑ₳༻">
+                <i class="fas fa-copy"></i> Copiar
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="example-category">
+          <h3><i class="fas fa-fire"></i> Nicks Agressivos</h3>
+          <div class="example-list">
+            <div class="example-item">
+              <span class="example-nick">☠Killer☠</span>
+              <button class="btn btn-sm copy-btn" data-copy="☠Killer☠">
+                <i class="fas fa-copy"></i> Copiar
+              </button>
+            </div>
+            <div class="example-item">
+              <span class="example-nick">꧁༒•Rage•༒꧂</span>
+              <button class="btn btn-sm copy-btn" data-copy="꧁༒•Rage•༒꧂">
+                <i class="fas fa-copy"></i> Copiar
+              </button>
+            </div>
+            <div class="example-item">
+              <span class="example-nick">⚡Thunder⚡</span>
+              <button class="btn btn-sm copy-btn" data-copy="⚡Thunder⚡">
+                <i class="fas fa-copy"></i> Copiar
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="example-category">
+          <h3><i class="fas fa-gamepad"></i> Nicks para Clã</h3>
+          <div class="example-list">
+            <div class="example-item">
+              <span class="example-nick">[FF]๖ۣۜƤŘØ</span>
+              <button class="btn btn-sm copy-btn" data-copy="[FF]๖ۣۜƤŘØ">
+                <i class="fas fa-copy"></i> Copiar
+              </button>
+            </div>
+            <div class="example-item">
+              <span class="example-nick">•Squad•Leader•</span>
+              <button class="btn btn-sm copy-btn" data-copy="•Squad•Leader•">
+                <i class="fas fa-copy"></i> Copiar
+              </button>
+            </div>
+            <div class="example-item">
+              <span class="example-nick">ᴄʟᴀɴ★ᴍᴇᴍʙᴇʀ</span>
+              <button class="btn btn-sm copy-btn" data-copy="ᴄʟᴀɴ★ᴍᴇᴍʙᴇʀ">
+                <i class="fas fa-copy"></i> Copiar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Symbol Library -->
+    <section class="card">
+      <h2 class="card-title">
+        <i class="fas fa-font"></i> Biblioteca de Símbolos
+      </h2>
+      <p style="color: var(--muted); margin-bottom: 20px;">
+        Selecione símbolos para copiar e usar manualmente nos seus nicks:
+      </p>
+      
+      <div class="symbols-grid">
+        <div class="symbols-category">
+          <h3>Simples</h3>
+          <div class="symbols-list">
+            <button class="symbol-btn" data-symbol="★">★</button>
+            <button class="symbol-btn" data-symbol="☆">☆</button>
+            <button class="symbol-btn" data-symbol="☠">☠</button>
+            <button class="symbol-btn" data-symbol="⚡">⚡</button>
+            <button class="symbol-btn" data-symbol="♛">♛</button>
+            <button class="symbol-btn" data-symbol="♚">♚</button>
+            <button class="symbol-btn" data-symbol="☯">☯</button>
+            <button class="symbol-btn" data-symbol="☣">☣</button>
+          </div>
+        </div>
+        
+        <div class="symbols-category">
+          <h3>Duplos</h3>
+          <div class="symbols-list">
+            <button class="symbol-btn" data-symbol="꧁꧂">꧁꧂</button>
+            <button class="symbol-btn" data-symbol="༺༻">༺༻</button>
+            <button class="symbol-btn" data-symbol="『』">『』</button>
+            <button class="symbol-btn" data-symbol="【】">【】</button>
+            <button class="symbol-btn" data-symbol="〖〗">〖〗</button>
+            <button class="symbol-btn" data-symbol="⌘⌘">⌘⌘</button>
+            <button class="symbol-btn" data-symbol="≛≛">≛≛</button>
+            <button class="symbol-btn" data-symbol="⍣⍣">⍣⍣</button>
+          </div>
+        </div>
+        
+        <div class="symbols-category">
+          <h3>Letras Estilizadas</h3>
+          <div class="symbols-list">
+            <button class="symbol-btn" data-symbol="ᴬᴮᶜᴰᴱᶠᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾᵠᴿˢᵀᵁⱽᵂ">ABCF</button>
+            <button class="symbol-btn" data-symbol="ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀꜱᴛᴜᴠᴡ">abcF</button>
+            <button class="symbol-btn" data-symbol="ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ">ABC</button>
+            <button class="symbol-btn" data-symbol="ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ">abc</button>
+            <button class="symbol-btn" data-symbol="𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ">𝔄𝔅ℭ</button>
+          </div>
+        </div>
+        
+        <div class="symbols-category">
+          <h3>Especiais</h3>
+          <div class="symbols-list">
+            <button class="symbol-btn" data-symbol="๖ۣۜ">๖ۣۜ</button>
+            <button class="symbol-btn" data-symbol="乂">乂</button>
+            <button class="symbol-btn" data-symbol="Ⓣⓔⓧⓣ">Ⓣⓔⓧⓣ</button>
+            <button class="symbol-btn" data-symbol="T̶e̶x̶t̶">T̶e̶x̶t̶</button>
+            <button class="symbol-btn" data-symbol="T⃠e⃠x⃠t⃠">T⃠e⃠x⃠t⃠</button>
+            <button class="symbol-btn" data-symbol="T͎e͎x͎t͎">T͎e͎x͎t͎</button>
+            <button class="symbol-btn" data-symbol="T̑̈ȇ̈x̑̈t̑̈">T̑̈ȇ̈x̑̈t̑̈</button>
+            <button class="symbol-btn" data-symbol="T҉e҉x҉t҉">T҉e҉x҉t҉</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="symbol-output">
+        <h4><i class="fas fa-clipboard"></i> Símbolo Copiado:</h4>
+        <div id="symbolPreview" class="symbol-preview">
+          Clique em um símbolo para copiar
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div style="font-size: 1.5rem; font-weight: 800; margin-bottom: 16px;">
+        Free Fire Booster
+      </div>
+      <p style="max-width: 600px; margin: 0 auto 24px;">
+        Ferramentas gratuitas para jogadores de Free Fire melhorarem sua experiência de jogo.
+        Não somos afiliados à Garena.
+      </p>
+      
+      <div class="footer-links">
+        <a href="index.html">Início</a>
+        <a href="sensibilidade.html">Sensibilidade</a>
+        <a href="otimizacao.html">Otimização</a>
+        <a href="videos.html">Vídeos</a>
+        <a href="gerar-nick.html">Gerar Nick</a>
+        <a href="gerar-bio.html">Gerar Bio</a>
+        <a href="dicas.html">Dicas</a>
+        <a href="configurador.html">Configurador</a>
+        <a href="rank.html">Rank</a>
+      </div>
+      
+      <div style="margin-top: 24px; color: rgba(255,255,255,0.4); font-size: 13px;">
+        © 2024 Free Fire Booster. Todos os direitos reservados.
+        <br>Desenvolvido para a comunidade Free Fire.
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    // Symbol library for nick generation
+    const nickSymbols = {
+      normal: ['★', '☆', '⚡', '♛', '♚', '☯', '☣', '✪', '✯', '❖', '⚝', '࿐', '•', 'ᴮᴼˢˢ'],
+      aggressive: ['☠', '⚔', '🛡', '💀', '🔥', 'ⓀⒾⓁⓁⒺⓇ', '†', '✞', '卐', '刀', '乃', 'ﾑ', '乇'],
+      cool: ['꧁', '꧂', '༺', '༻', '『', '』', '【', '】', '〖', '〗', '≛', '⍣', '๖ۣۜ', '乂', '◥▶◀◤'],
+      pro: ['☬', '༒', '₦', 'Ї', 'ℑ', '₳', 'ᴮᵒˢˢ', 'ᴄᴏᴏʟ', 'ᴘʀᴏ', 'ɢᴀᴍᴇʀ', 'ʟᴇɢᴇɴᴅ', 'ᴍᴀꜱᴛᴇʀ'],
+      minimal: ['.', '-', '_', '|', '/', '\\', '~', '=', '+', '×', '·']
+    };
+
+    const letterStyles = {
+      smallCaps: 'ᴀʙᴄᴅᴇꜰɢʜɪᴊᴸᴍɴᴏᴘǫʀꜱᴛᴜᴠᴡxʏᴢ',
+      circled: 'ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ',
+      fullWidth: 'ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
+      script: '𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵'
+    };
+
+    let currentStyle = 'normal';
+    let currentQuantity = 20;
+    let generatedNicks = [];
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Mobile menu
+      document.getElementById('menuToggle').addEventListener('click', function() {
+        document.getElementById('mainNav').classList.toggle('active');
+      });
+
+      // Style buttons
+      document.querySelectorAll('.style-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          currentStyle = this.getAttribute('data-style');
+        });
+      });
+
+      // Quantity buttons
+      document.querySelectorAll('.qty-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.qty-btn').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          currentQuantity = parseInt(this.getAttribute('data-qty'));
+        });
+      });
+
+      // Generate nicks button
+      document.getElementById('generateNicksBtn').addEventListener('click', generateNicks);
+
+      // Copy all nicks button
+      document.getElementById('copyAllNicksBtn').addEventListener('click', function() {
+        if (generatedNicks.length === 0) {
+          alert('Gere nicks primeiro!');
+          return;
+        }
+        
+        const text = generatedNicks.join('\n');
+        navigator.clipboard.writeText(text).then(() => {
+          alert(`${generatedNicks.length} nicks copiados para a área de transferência!`);
+        });
+      });
+
+      // Clear nicks button
+      document.getElementById('clearNicksBtn').addEventListener('click', function() {
+        document.getElementById('nickResults').innerHTML = '';
+        document.getElementById('resultsSection').style.display = 'none';
+        generatedNicks = [];
+      });
+
+      // Load more nicks button
+      document.getElementById('loadMoreNicksBtn').addEventListener('click', function() {
+        const input = document.getElementById('nickInput').value.trim();
+        if (!input) {
+          alert('Digite um nome primeiro!');
+          return;
+        }
+        
+        generateMoreNicks(input, 10);
+      });
+
+      // Symbol buttons
+      document.querySelectorAll('.symbol-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const symbol = this.getAttribute('data-symbol');
+          navigator.clipboard.writeText(symbol).then(() => {
+            document.getElementById('symbolPreview').textContent = symbol;
+            alert(`Símbolo "${symbol}" copiado!`);
+          });
+        });
+      });
+
+      // Initialize copy buttons for examples
+      document.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const text = this.getAttribute('data-copy');
+          navigator.clipboard.writeText(text).then(() => {
+            alert(`Nick "${text}" copiado!`);
+          });
+        });
+      });
+
+      // Enter key to generate
+      document.getElementById('nickInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          generateNicks();
+        }
+      });
+    });
+
+    function generateNicks() {
+      const input = document.getElementById('nickInput').value.trim();
+      if (!input) {
+        alert('Digite um nome ou palavra!');
+        return;
+      }
+
+      generatedNicks = [];
+      document.getElementById('nickResults').innerHTML = '';
+      
+      generateMoreNicks(input, currentQuantity);
+      document.getElementById('resultsSection').style.display = 'block';
+    }
+
+    function generateMoreNicks(baseName, quantity) {
+      const container = document.getElementById('nickResults');
+      
+      for (let i = 0; i < quantity; i++) {
+        let nick = '';
+        const symbols = nickSymbols[currentStyle];
+        
+        // Decide pattern: prefix, suffix, or both
+        const pattern = Math.floor(Math.random() * 5);
+        
+        switch(pattern) {
+          case 0: // Prefix only
+            nick = getRandomSymbol(symbols) + stylizeName(baseName);
+            break;
+          case 1: // Suffix only
+            nick = stylizeName(baseName) + getRandomSymbol(symbols);
+            break;
+          case 2: // Both sides
+            nick = getRandomSymbol(symbols) + stylizeName(baseName) + getRandomSymbol(symbols);
+            break;
+          case 3: // Multiple symbols
+            nick = getRandomSymbol(symbols) + getRandomSymbol(symbols) + 
+                   stylizeName(baseName) + getRandomSymbol(symbols);
+            break;
+          case 4: // Special formatting
+            nick = applySpecialFormat(baseName, currentStyle);
+            break;
+        }
+        
+        // Sometimes add numbers
+        if (Math.random() > 0.7) {
+          nick += Math.floor(Math.random() * 999);
+        }
+        
+        generatedNicks.push(nick);
+        
+        // Create nick element
+        const nickElement = document.createElement('div');
+        nickElement.className = 'nick-item';
+        nickElement.innerHTML = `
+          <div class="nick-text">${nick}</div>
+          <button class="btn btn-sm copy-btn" data-nick="${nick}">
+            <i class="fas fa-copy"></i> Copiar
+          </button>
+        `;
+        
+        container.appendChild(nickElement);
+        
+        // Add event listener to new copy button
+        nickElement.querySelector('.copy-btn').addEventListener('click', function() {
+          const nickText = this.getAttribute('data-nick');
+          navigator.clipboard.writeText(nickText).then(() => {
+            alert(`Nick "${nickText}" copiado!`);
+          });
+        });
+      }
+      
+      // Update count
+      document.getElementById('nickCount').textContent = generatedNicks.length;
+      
+      // Scroll to results
+      document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function getRandomSymbol(symbolArray) {
+      return symbolArray[Math.floor(Math.random() * symbolArray.length)];
+    }
+
+    function stylizeName(name) {
+      // Sometimes apply letter styling
+      if (Math.random() > 0.5) {
+        const style = Object.keys(letterStyles)[Math.floor(Math.random() * Object.keys(letterStyles).length)];
+        return applyLetterStyle(name.toUpperCase(), style);
+      }
+      
+      // Sometimes add random case
+      if (Math.random() > 0.7) {
+        return name.split('').map(c => Math.random() > 0.5 ? c.toUpperCase() : c.toLowerCase()).join('');
+      }
+      
+      return name;
+    }
+
+    function applyLetterStyle(text, style) {
+      // Simple implementation - in a real app this would be more comprehensive
+      if (style === 'smallCaps') {
+        return text.toLowerCase();
+      } else if (style === 'circled') {
+        return text.split('').map(c => c + '⃝').join('');
+      }
+      return text;
+    }
+
+    function applySpecialFormat(name, style) {
+      const formats = {
+        aggressive: `☠${name.toUpperCase()}☠`,
+        cool: `꧁${name}꧂`,
+        pro: `༒${name}༒`,
+        minimal: `_${name}_`
+      };
+      
+      return formats[style] || `★${name}★`;
+    }
+  </script>
+
+  <style>
+    .generator-form {
+      margin-top: 20px;
+    }
+    
+    .style-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    
+    .style-btn {
+      padding: 10px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--muted);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .style-btn:hover {
+      border-color: rgba(0, 217, 255, 0.3);
+      color: #fff;
+    }
+    
+    .style-btn.active {
+      background: rgba(0, 217, 255, 0.1);
+      border-color: #00d9ff;
+      color: #00d9ff;
+    }
+    
+    .quantity-selector {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    
+    .qty-btn {
+      padding: 8px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--muted);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .qty-btn:hover {
+      border-color: rgba(0, 217, 255, 0.3);
+      color: #fff;
+    }
+    
+    .qty-btn.active {
+      background: rgba(0, 217, 255, 0.1);
+      border-color: #00d9ff;
+      color: #00d9ff;
+    }
+    
+    .generator-actions {
+      display: flex;
+      gap: 15px;
+      margin-top: 25px;
+      flex-wrap: wrap;
+    }
+    
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    
+    .results-info {
+      color: var(--muted);
+      font-size: 14px;
+    }
+    
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 15px;
+      max-height: 500px;
+      overflow-y: auto;
+      padding: 10px;
+    }
+    
+    .nick-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+    }
+    
+    .nick-item:hover {
+      border-color: rgba(0, 217, 255, 0.2);
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .nick-text {
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+      word-break: break-all;
+    }
+    
+    .load-more {
+      text-align: center;
+      margin-top: 25px;
+    }
+    
+    .examples-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 25px;
+      margin-top: 20px;
+    }
+    
+    .example-category h3 {
+      font-size: 16px;
+      margin-bottom: 15px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .example-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .example-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 8px;
+    }
+    
+    .example-nick {
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+    }
+    
+    .symbols-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 25px;
+      margin-top: 20px;
+    }
+    
+    .symbols-category h3 {
+      font-size: 14px;
+      margin-bottom: 12px;
+      color: var(--muted);
+    }
+    
+    .symbols-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    
+    .symbol-btn {
+      padding: 8px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+      color: #fff;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-width: 40px;
+      font-size: 14px;
+    }
+    
+    .symbol-btn:hover {
+      border-color: #00d9ff;
+      background: rgba(0, 217, 255, 0.1);
+      transform: translateY(-2px);
+    }
+    
+    .symbol-output {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .symbol-output h4 {
+      color: var(--muted);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .symbol-preview {
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 10px;
+      border: 1px dashed rgba(255, 255, 255, 0.1);
+      text-align: center;
+      font-size: 24px;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #00d9ff;
+    }
+    
+    @media (max-width: 768px) {
+      .examples-grid,
+      .symbols-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .results-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .generator-actions {
+        flex-direction: column;
+      }
+      
+      .generator-actions .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</body>
+</html>

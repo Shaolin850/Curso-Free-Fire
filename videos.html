@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vídeos - Free Fire Booster</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>">
+  <style>
+    /* Estilos específicos para a página de vídeos */
+    .video-player-container {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%; /* Proporção 16:9 */
+      margin-bottom: 30px;
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    
+    .video-player {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    
+    .video-playlist {
+      max-height: 600px;
+      overflow-y: auto;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .playlist-item {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .playlist-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .playlist-item.active {
+      background: rgba(0, 217, 255, 0.1);
+      border-left: 4px solid #00d9ff;
+    }
+    
+    .playlist-thumbnail {
+      width: 120px;
+      height: 68px;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-right: 15px;
+      flex-shrink: 0;
+    }
+    
+    .playlist-thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .playlist-info {
+      flex: 1;
+    }
+    
+    .playlist-info h4 {
+      font-size: 14px;
+      margin-bottom: 5px;
+      color: #fff;
+    }
+    
+    .playlist-info p {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+    
+    .playlist-duration {
+      font-size: 11px;
+      color: #00d9ff;
+      font-weight: 600;
+    }
+    
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+    
+    .video-grid-item {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .video-grid-item:hover {
+      transform: translateY(-5px);
+      border-color: rgba(0, 217, 255, 0.3);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    .video-grid-thumbnail {
+      position: relative;
+      height: 180px;
+      overflow: hidden;
+    }
+    
+    .video-grid-thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .video-grid-item:hover .video-grid-thumbnail img {
+      transform: scale(1.05);
+    }
+    
+    .video-grid-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.8) 100%);
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    
+    .video-grid-tags {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .video-grid-tag {
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    
+    .video-grid-tag.beginner {
+      background: rgba(34, 197, 94, 0.2);
+      color: #4ade80;
+    }
+    
+    .video-grid-tag.intermediate {
+      background: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
+    }
+    
+    .video-grid-tag.advanced {
+      background: rgba(168, 85, 247, 0.2);
+      color: #a855f7;
+    }
+    
+    .video-grid-tag.pro {
+      background: rgba(245, 158, 11, 0.2);
+      color: #f59e0b;
+    }
+    
+    .video-grid-duration {
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      align-self: flex-end;
+    }
+    
+    .video-grid-info {
+      padding: 15px;
+    }
+    
+    .video-grid-info h4 {
+      font-size: 15px;
+      margin-bottom: 8px;
+      color: #fff;
+      line-height: 1.3;
+    }
+    
+    .video-grid-info p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+    
+    .video-grid-stats {
+      display: flex;
+      justify-content: space-between;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 12px;
+    }
+    
+    .video-grid-stats span {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .view-toggle {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .view-toggle-btn {
+      padding: 10px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--muted);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .view-toggle-btn:hover {
+      border-color: rgba(0, 217, 255, 0.3);
+      color: #fff;
+    }
+    
+    .view-toggle-btn.active {
+      background: rgba(0, 217, 255, 0.1);
+      border-color: #00d9ff;
+      color: #00d9ff;
+    }
+    
+    .player-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 15px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    .player-info h3 {
+      font-size: 18px;
+      margin-bottom: 5px;
+      color: #fff;
+    }
+    
+    .player-info p {
+      font-size: 14px;
+      color: var(--muted);
+    }
+    
+    .player-actions {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .video-categories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 20px 0;
+    }
+    
+    .category-btn {
+      padding: 8px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--muted);
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 13px;
+    }
+    
+    .category-btn:hover {
+      border-color: rgba(0, 217, 255, 0.3);
+      color: #fff;
+    }
+    
+    .category-btn.active {
+      background: rgba(0, 217, 255, 0.1);
+      border-color: #00d9ff;
+      color: #00d9ff;
+    }
+    
+    @media (max-width: 768px) {
+      .video-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .playlist-thumbnail {
+        width: 80px;
+        height: 45px;
+      }
+      
+      .video-player-container {
+        margin-bottom: 20px;
+      }
+      
+      .player-controls {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+    
+    .loading-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      border-radius: 12px;
+    }
+    
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      border-top-color: #00d9ff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .fullscreen-btn {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+    }
+    
+    .fullscreen-btn:hover {
+      background: rgba(0, 217, 255, 0.7);
+    }
+  </style>
+</head>
+<body>
+  <div class="animated-bg"></div>
+
+  <header class="header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="logo">FFB</div>
+        <div class="brand-text">
+          <h1>Vídeos HUD</h1>
+          <div class="tagline">Assista e aprenda diretamente na página</div>
+        </div>
+      </div>
+      
+      <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+      </button>
+      
+      <nav class="nav" id="mainNav">
+        <a href="index.html">
+          <i class="fas fa-home"></i> Início
+        </a>
+        <a href="sensibilidade.html">
+          <i class="fas fa-crosshairs"></i> Sensibilidade
+        </a>
+        <a href="otimizacao.html">
+          <i class="fas fa-sliders-h"></i> Otimização
+        </a>
+        <a href="videos.html" class="active">
+          <i class="fas fa-video"></i> Vídeos
+        </a>
+        <a href="gerar-nick.html">
+          <i class="fas fa-user-edit"></i> Gerar Nick
+        </a>
+        <a href="gerar-bio.html">
+          <i class="fas fa-quote-right"></i> Gerar Bio
+        </a>
+        <a href="dicas.html">
+          <i class="fas fa-lightbulb"></i> Dicas
+        </a>
+        <a href="configurador.html">
+          <i class="fas fa-gamepad"></i> Configurador
+        </a>
+        <a href="rank.html">
+          <i class="fas fa-trophy"></i> Rank
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <!-- Player Section -->
+    <section class="card">
+      <div class="view-toggle">
+        <button class="view-toggle-btn active" id="viewPlayerBtn">
+          <i class="fas fa-play-circle"></i> Modo Player
+        </button>
+        <button class="view-toggle-btn" id="viewGridBtn">
+          <i class="fas fa-th-large"></i> Modo Grid
+        </button>
+      </div>
+      
+      <!-- Player View -->
+      <div id="playerView">
+        <div class="video-player-container" id="videoPlayerContainer">
+          <div class="loading-overlay" id="playerLoading" style="display: none;">
+            <div class="loading-spinner"></div>
+          </div>
+          <iframe 
+            class="video-player" 
+            id="mainVideoPlayer"
+            src="https://www.youtube.com/embed/IcVta1RdCyw"
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen
+            loading="lazy">
+          </iframe>
+          <button class="fullscreen-btn" onclick="toggleFullscreen()">
+            <i class="fas fa-expand"></i>
+          </button>
+        </div>
+        
+        <div class="player-controls">
+          <div class="player-info">
+            <h3 id="currentVideoTitle">HUD 2 Dedos - Ideal para Iniciantes</h3>
+            <p id="currentVideoDesc">Layout simples e eficiente para quem está começando no Free Fire</p>
+          </div>
+          
+          <div class="player-actions">
+            <button class="btn btn-sm" onclick="playPreviousVideo()">
+              <i class="fas fa-backward"></i> Anterior
+            </button>
+            <button class="btn btn-sm" onclick="playNextVideo()">
+              Próximo <i class="fas fa-forward"></i>
+            </button>
+          </div>
+        </div>
+        
+        <div class="video-categories">
+          <button class="category-btn active" data-category="all">
+            Todos os Vídeos
+          </button>
+          <button class="category-btn" data-category="2fingers">
+            2 Dedos
+          </button>
+          <button class="category-btn" data-category="3fingers">
+            3 Dedos
+          </button>
+          <button class="category-btn" data-category="4fingers">
+            4 Dedos
+          </button>
+          <button class="category-btn" data-category="pro">
+            Pro Players
+          </button>
+          <button class="category-btn" data-category="custom">
+            Personalizados
+          </button>
+        </div>
+        
+        <div class="video-playlist" id="videoPlaylist">
+          <!-- Playlist items will be loaded here -->
+        </div>
+      </div>
+      
+      <!-- Grid View -->
+      <div id="gridView" style="display: none;">
+        <div class="video-grid" id="videoGridView">
+          <!-- Grid items will be loaded here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Video Guide -->
+    <section class="card">
+      <h2 class="card-title">
+        <i class="fas fa-book-open"></i> Guia de HUD por Nível
+      </h2>
+      
+      <div class="grid grid-3">
+        <div class="guide-card">
+          <div class="guide-icon" style="background: rgba(34, 197, 94, 0.1); color: #4ade80;">
+            <i class="fas fa-hand-point-up"></i>
+          </div>
+          <h3>Iniciante (2 Dedos)</h3>
+          <p>Ideal para quem está começando. Foco em controle básico e aprendizado das mecânicas.</p>
+          <ul>
+            <li>Fácil de aprender</li>
+            <li>Bom para telas pequenas</li>
+            <li>Controle simplificado</li>
+          </ul>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-icon" style="background: rgba(59, 130, 246, 0.1); color: #60a5fa;">
+            <i class="fas fa-hands"></i>
+          </div>
+          <h3>Intermediário (3 Dedos)</h3>
+          <p>Para jogadores que querem mais controle. Permite mira e movimento simultâneos.</p>
+          <ul>
+            <li>Mais versatilidade</li>
+            <li>Bom para rush</li>
+            <li>Transição para avançado</li>
+          </ul>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-icon" style="background: rgba(168, 85, 247, 0.1); color: #a855f7;">
+            <i class="fas fa-hands-helping"></i>
+          </div>
+          <h3>Avançado (4+ Dedos)</h3>
+          <p>Usado por jogadores competitivos. Máximo controle e velocidade de reação.</p>
+          <ul>
+            <li>Controle total</li>
+            <li>Para telas médias/grandes</li>
+            <li>Competitivo</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="tip-box">
+        <h4><i class="fas fa-lightbulb"></i> Como Escolher seu HUD:</h4>
+        <p>
+          1. <strong>Comece simples:</strong> Use HUD 2 dedos para aprender o básico<br>
+          2. <strong>Evolua gradualmente:</strong> Mude para 3 dedos quando se sentir confortável<br>
+          3. <strong>Teste no modo treino:</strong> Experimente diferentes layouts antes de usar em partidas<br>
+          4. <strong>Personalize:</strong> Use o <a href="configurador.html">Configurador HUD</a> para criar seu layout ideal<br>
+          5. <strong>Pratique:</strong> Dedique tempo para se acostumar com cada novo layout
+        </p>
+      </div>
+    </section>
+
+    <!-- Download Section -->
+    <section class="card">
+      <h2 class="card-title">
+        <i class="fas fa-download"></i> Recursos para Download
+      </h2>
+      
+      <div class="grid grid-2">
+        <div class="resource-card">
+          <div class="resource-icon">
+            <i class="fas fa-image"></i>
+          </div>
+          <h3>Imagens dos Layouts</h3>
+          <p>Baixe imagens de referência dos HUDs para usar como guia.</p>
+          <button class="btn btn-sm" onclick="downloadResource('layouts')">
+            <i class="fas fa-download"></i> Baixar (10MB)
+          </button>
+        </div>
+        
+        <div class="resource-card">
+          <div class="resource-icon">
+            <i class="fas fa-file-alt"></i>
+          </div>
+          <h3>Guia Completo PDF</h3>
+          <p>Guia detalhado com todas as configurações e dicas.</p>
+          <button class="btn btn-sm" onclick="downloadResource('guide')">
+            <i class="fas fa-download"></i> Baixar (5MB)
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div style="font-size: 1.5rem; font-weight: 800; margin-bottom: 16px;">
+        Free Fire Booster
+      </div>
+      <p style="max-width: 600px; margin: 0 auto 24px;">
+        Ferramentas gratuitas para jogadores de Free Fire melhorarem sua experiência de jogo.
+        Não somos afiliados à Garena.
+      </p>
+      
+      <div class="footer-links">
+        <a href="index.html">Início</a>
+        <a href="sensibilidade.html">Sensibilidade</a>
+        <a href="otimizacao.html">Otimização</a>
+        <a href="videos.html">Vídeos</a>
+        <a href="gerar-nick.html">Gerar Nick</a>
+        <a href="gerar-bio.html">Gerar Bio</a>
+        <a href="dicas.html">Dicas</a>
+        <a href="configurador.html">Configurador</a>
+        <a href="rank.html">Rank</a>
+      </div>
+      
+      <div style="margin-top: 24px; color: rgba(255,255,255,0.4); font-size: 13px;">
+        © 2024 Free Fire Booster. Todos os direitos reservados.
+        <br>Desenvolvido para a comunidade Free Fire.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Dados dos vídeos
+    const videos = [
+      {
+        id: 1,
+        title: "HUD 2 Dedos - Ideal para Iniciantes",
+        description: "Layout simples e eficiente para quem está começando no Free Fire. Fácil de aprender e com ótimo controle básico.",
+        url: "https://www.youtube.com/embed/IcVta1RdCyw",
+        category: "2fingers",
+        level: "beginner",
+        duration: "8:42",
+        views: "245K",
+        date: "1 semana"
+      },
+      {
+        id: 2,
+        title: "HUD 3 Dedos - Maior Controle",
+        description: "Layout para jogadores que querem mais controle sobre mira e movimento simultaneamente.",
+        url: "https://www.youtube.com/embed/DyQH9nqTC_U",
+        category: "3fingers",
+        level: "intermediate",
+        duration: "12:15",
+        views: "189K",
+        date: "2 semanas"
+      },
+      {
+        id: 3,
+        title: "HUD 4 Dedos - Competitivo",
+        description: "Layout avançado usado por jogadores competitivos. Máximo controle e velocidade de reação.",
+        url: "https://www.youtube.com/embed/uvfWV4Qjufg",
+        category: "4fingers",
+        level: "advanced",
+        duration: "15:30",
+        views: "312K",
+        date: "3 dias"
+      },
+      {
+        id: 4,
+        title: "HUD Rush - Agressivo",
+        description: "Layout focado em gameplay agressiva. Ideal para jogadores que gostam de rush.",
+        url: "https://www.youtube.com/embed/OyPSz-gwt_c",
+        category: "custom",
+        level: "intermediate",
+        duration: "10:45",
+        views: "198K",
+        date: "2 semanas"
+      },
+      {
+        id: 5,
+        title: "HUD Sniper - Precisão",
+        description: "Layout especializado para snipers. Foco em precisão em longa distância.",
+        url: "https://www.youtube.com/embed/osXpi3rxBso",
+        category: "custom",
+        level: "advanced",
+        duration: "14:20",
+        views: "154K",
+        date: "3 semanas"
+      },
+      {
+        id: 6,
+        title: "HUD Competitivo",
+        description: "Layout usado em campeonatos e torneios competitivos de Free Fire.",
+        url: "https://www.youtube.com/embed/V6evnL8e9qg",
+        category: "pro",
+        level: "pro",
+        duration: "18:22",
+        views: "567K",
+        date: "1 mês"
+      },
+      {
+        id: 7,
+        title: "HUD Minimalista",
+        description: "Interface limpa para foco total no jogo. Remove distrações visuais.",
+        url: "https://www.youtube.com/embed/h29RQh97mTE",
+        category: "custom",
+        level: "intermediate",
+        duration: "9:15",
+        views: "123K",
+        date: "1 semana"
+      },
+      {
+        id: 8,
+        title: "HUD Pro Player",
+        description: "Layout inspirado em jogadores profissionais do cenário competitivo.",
+        url: "https://www.youtube.com/embed/iW7CK1Xekk8",
+        category: "pro",
+        level: "pro",
+        duration: "20:10",
+        views: "489K",
+        date: "2 meses"
+      },
+      {
+        id: 9,
+        title: "HUD Personalizado 01",
+        description: "Layout com botões reposicionados para melhor alcance e conforto.",
+        url: "https://www.youtube.com/embed/Wpq_T0hU02k",
+        category: "custom",
+        level: "intermediate",
+        duration: "11:30",
+        views: "98K",
+        date: "3 semanas"
+      },
+      {
+        id: 10,
+        title: "HUD Personalizado 02",
+        description: "Layout equilibrado para suporte e ataque em diferentes situações.",
+        url: "https://www.youtube.com/embed/wDPH50erDq8",
+        category: "custom",
+        level: "intermediate",
+        duration: "13:45",
+        views: "112K",
+        date: "1 mês"
+      },
+      {
+        id: 11,
+        title: "HUD para Solo",
+        description: "Layout adaptado especialmente para partidas solo.",
+        url: "https://www.youtube.com/embed/WSP0mNXv3OA",
+        category: "custom",
+        level: "intermediate",
+        duration: "10:20",
+        views: "87K",
+        date: "2 semanas"
+      },
+      {
+        id: 12,
+        title: "HUD para Squad",
+        description: "Layout recomendado para jogar em squad competitivo.",
+        url: "https://www.youtube.com/embed/PPNI7sk2Kig",
+        category: "custom",
+        level: "advanced",
+        duration: "16:05",
+        views: "145K",
+        date: "3 semanas"
+      },
+      {
+        id: 13,
+        title: "HUD para Telas Pequenas",
+        description: "Layout otimizado para celulares com telas menores.",
+        url: "https://www.youtube.com/embed/RTnhwfMeVdA",
+        category: "2fingers",
+        level: "beginner",
+        duration: "8:50",
+        views: "76K",
+        date: "1 semana"
+      },
+      {
+        id: 14,
+        title: "HUD Dinâmico para Rush",
+        description: "Layout dinâmico ideal para jogadores de rush que estão sempre em movimento.",
+        url: "https://www.youtube.com/embed/6eBp-10X6Do",
+        category: "3fingers",
+        level: "intermediate",
+        duration: "12:40",
+        views: "134K",
+        date: "2 semanas"
+      },
+      {
+        id: 15,
+        title: "HUD Balanceado",
+        description: "Layout balanceado para suporte e ataque em diferentes situações.",
+        url: "https://www.youtube.com/embed/an0TXFouBQU",
+        category: "custom",
+        level: "intermediate",
+        duration: "14:15",
+        views: "121K",
+        date: "3 semanas"
+      },
+      {
+        id: 16,
+        title: "HUD para Jogabilidade Fluida",
+        description: "Layout voltado para jogabilidade fluida e movimentação suave.",
+        url: "https://www.youtube.com/embed/EbNvCSlb3lM",
+        category: "custom",
+        level: "advanced",
+        duration: "17:30",
+        views: "167K",
+        date: "1 mês"
+      },
+      {
+        id: 17,
+        title: "HUD Agressivo para Rush",
+        description: "Layout agressivo especialmente desenvolvido para rushadores.",
+        url: "https://www.youtube.com/embed/EF28ykZzgfE",
+        category: "4fingers",
+        level: "advanced",
+        duration: "19:45",
+        views: "203K",
+        date: "2 meses"
+      },
+      {
+        id: 18,
+        title: "HUD para Partidas em Duo",
+        description: "Layout otimizado para jogar em modo duo.",
+        url: "https://www.youtube.com/embed/dX81OIwJhvc",
+        category: "custom",
+        level: "intermediate",
+        duration: "11:20",
+        views: "94K",
+        date: "2 semanas"
+      },
+      {
+        id: 19,
+        title: "HUD Rápido para Movimentação",
+        description: "Layout rápido para quem prefere movimentação constante.",
+        url: "https://www.youtube.com/embed/FCgZi9CqKvQ",
+        category: "3fingers",
+        level: "intermediate",
+        duration: "13:10",
+        views: "118K",
+        date: "3 semanas"
+      },
+      {
+        id: 20,
+        title: "HUD para Suporte em Squads",
+        description: "Layout especializado para jogadores de suporte em squads.",
+        url: "https://www.youtube.com/embed/Wm9giuzTSwc",
+        category: "custom",
+        level: "intermediate",
+        duration: "15:40",
+        views: "132K",
+        date: "1 mês"
+      },
+      {
+        id: 21,
+        title: "HUD para Telas Grandes",
+        description: "Layout configurado especialmente para tablets e celulares com telas grandes.",
+        url: "https://www.youtube.com/embed/o9-BHvo0VIc",
+        category: "4fingers",
+        level: "advanced",
+        duration: "21:15",
+        views: "178K",
+        date: "2 meses"
+      },
+      {
+        id: 22,
+        title: "HUD Limpo para Visão Total",
+        description: "Layout limpo que maximiza a visão do mapa e do campo de batalha.",
+        url: "https://www.youtube.com/embed/cXZ3heFX044",
+        category: "custom",
+        level: "intermediate",
+        duration: "12:55",
+        views: "109K",
+        date: "3 semanas"
+      },
+      {
+        id: 23,
+        title: "HUD para Movimentação Tática",
+        description: "Layout ideal para jogadores que preferem movimentação tática.",
+        url: "https://www.youtube.com/embed/cswTrJfVA90",
+        category: "custom",
+        level: "advanced",
+        duration: "18:30",
+        views: "156K",
+        date: "1 mês"
+      },
+      {
+        id: 24,
+        title: "HUD com Sensibilidade Ajustada",
+        description: "Layout com foco em sensibilidade perfeitamente ajustada.",
+        url: "https://www.youtube.com/embed/MlXIAR-xrbc",
+        category: "pro",
+        level: "pro",
+        duration: "22:10",
+        views: "234K",
+        date: "2 meses"
+      },
+      {
+        id: 25,
+        title: "HUD Avançado para iPhone/iPad",
+        description: "Layout avançado otimizado para dispositivos iOS.",
+        url: "https://www.youtube.com/embed/S94NmD8kA-E",
+        category: "pro",
+        level: "pro",
+        duration: "24:30",
+        views: "189K",
+        date: "3 meses"
+      },
+      {
+        id: 26,
+        title: "HUD para Android Avançado",
+        description: "Layout otimizado para dispositivos Android de alto desempenho.",
+        url: "https://www.youtube.com/embed/ONcjs1nhpjI",
+        category: "pro",
+        level: "pro",
+        duration: "23:45",
+        views: "201K",
+        date: "3 meses"
+      }
+    ];
+
+    let currentVideoIndex = 0;
+    let currentCategory = 'all';
+    let currentView = 'player';
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Mobile menu
+      document.getElementById('menuToggle').addEventListener('click', function() {
+        document.getElementById('mainNav').classList.toggle('active');
+      });
+
+      // View toggle buttons
+      document.getElementById('viewPlayerBtn').addEventListener('click', function() {
+        setView('player');
+      });
+
+      document.getElementById('viewGridBtn').addEventListener('click', function() {
+        setView('grid');
+      });
+
+      // Category buttons
+      document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const category = this.getAttribute('data-category');
+          setCategory(category);
+        });
+      });
+
+      // Initialize
+      loadPlaylist();
+      loadGrid();
+      updatePlayerInfo();
+
+      // Video player events
+      const videoPlayer = document.getElementById('mainVideoPlayer');
+      videoPlayer.addEventListener('load', function() {
+        document.getElementById('playerLoading').style.display = 'none';
+      });
+    });
+
+    function setView(view) {
+      currentView = view;
+      
+      // Update buttons
+      document.getElementById('viewPlayerBtn').classList.toggle('active', view === 'player');
+      document.getElementById('viewGridBtn').classList.toggle('active', view === 'grid');
+      
+      // Show/hide views
+      document.getElementById('playerView').style.display = view === 'player' ? 'block' : 'none';
+      document.getElementById('gridView').style.display = view === 'grid' ? 'block' : 'none';
+      
+      // Update grid if needed
+      if (view === 'grid') {
+        loadGrid();
+      }
+    }
+
+    function setCategory(category) {
+      currentCategory = category;
+      
+      // Update buttons
+      document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-category') === category);
+      });
+      
+      // Update playlist and grid
+      loadPlaylist();
+      if (currentView === 'grid') {
+        loadGrid();
+      }
+    }
+
+    function loadPlaylist() {
+      const playlist = document.getElementById('videoPlaylist');
+      playlist.innerHTML = '';
+      
+      const filteredVideos = currentCategory === 'all' 
+        ? videos 
+        : videos.filter(video => video.category === currentCategory);
+      
+      filteredVideos.forEach((video, index) => {
+        const item = document.createElement('div');
+        item.className = `playlist-item ${index === currentVideoIndex ? 'active' : ''}`;
+        item.setAttribute('data-index', index);
+        item.setAttribute('data-video-id', video.id);
+        
+        // Get thumbnail URL from YouTube
+        const videoId = video.url.split('/').pop();
+        const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+        
+        item.innerHTML = `
+          <div class="playlist-thumbnail">
+            <img src="${thumbnailUrl}" alt="${video.title}" loading="lazy">
+          </div>
+          <div class="playlist-info">
+            <h4>${video.title}</h4>
+            <p>${video.description.substring(0, 60)}...</p>
+            <div class="playlist-duration">${video.duration}</div>
+          </div>
+        `;
+        
+        item.addEventListener('click', function() {
+          playVideo(index);
+        });
+        
+        playlist.appendChild(item);
+      });
+    }
+
+    function loadGrid() {
+      const grid = document.getElementById('videoGridView');
+      grid.innerHTML = '';
+      
+      const filteredVideos = currentCategory === 'all' 
+        ? videos 
+        : videos.filter(video => video.category === currentCategory);
+      
+      filteredVideos.forEach((video, index) => {
+        const item = document.createElement('div');
+        item.className = 'video-grid-item';
+        item.setAttribute('data-index', index);
+        
+        // Get thumbnail URL from YouTube
+        const videoId = video.url.split('/').pop();
+        const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+        
+        // Determine level class
+        let levelClass = '';
+        switch(video.level) {
+          case 'beginner': levelClass = 'beginner'; break;
+          case 'intermediate': levelClass = 'intermediate'; break;
+          case 'advanced': levelClass = 'advanced'; break;
+          case 'pro': levelClass = 'pro'; break;
+        }
+        
+        item.innerHTML = `
+          <div class="video-grid-thumbnail">
+            <img src="${thumbnailUrl}" alt="${video.title}" loading="lazy">
+            <div class="video-grid-overlay">
+              <div class="video-grid-tags">
+                <span class="video-grid-tag ${levelClass}">${video.level}</span>
+                <span class="video-grid-tag">${getCategoryName(video.category)}</span>
+              </div>
+              <div class="video-grid-duration">${video.duration}</div>
+            </div>
+          </div>
+          <div class="video-grid-info">
+            <h4>${video.title}</h4>
+            <p>${video.description.substring(0, 80)}...</p>
+            <div class="video-grid-stats">
+              <span><i class="fas fa-eye"></i> ${video.views}</span>
+              <span><i class="far fa-clock"></i> ${video.date}</span>
+            </div>
+          </div>
+        `;
+        
+        item.addEventListener('click', function() {
+          playVideo(index);
+          setView('player');
+        });
+        
+        grid.appendChild(item);
+      });
+    }
+
+    function getCategoryName(category) {
+      switch(category) {
+        case '2fingers': return '2 Dedos';
+        case '3fingers': return '3 Dedos';
+        case '4fingers': return '4 Dedos';
+        case 'pro': return 'Pro';
+        case 'custom': return 'Personalizado';
+        default: return category;
+      }
+    }
+
+    function playVideo(index) {
+      const filteredVideos = currentCategory === 'all' 
+        ? videos 
+        : videos.filter(video => video.category === currentCategory);
+      
+      if (index >= 0 && index < filteredVideos.length) {
+        currentVideoIndex = index;
+        const video = filteredVideos[index];
+        
+        // Show loading
+        document.getElementById('playerLoading').style.display = 'flex';
+        
+        // Update player
+        const player = document.getElementById('mainVideoPlayer');
+        player.src = video.url;
+        
+        // Update info
+        document.getElementById('currentVideoTitle').textContent = video.title;
+        document.getElementById('currentVideoDesc').textContent = video.description;
+        
+        // Update playlist active item
+        document.querySelectorAll('.playlist-item').forEach((item, i) => {
+          item.classList.toggle('active', i === index);
+        });
+        
+        // Scroll to player if needed
+        if (window.innerWidth < 768) {
+          document.getElementById('videoPlayerContainer').scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    }
+
+    function playNextVideo() {
+      const filteredVideos = currentCategory === 'all' 
+        ? videos 
+        : videos.filter(video => video.category === currentCategory);
+      
+      let nextIndex = currentVideoIndex + 1;
+      if (nextIndex >= filteredVideos.length) {
+        nextIndex = 0; // Loop back to first video
+      }
+      
+      playVideo(nextIndex);
+    }
+
+    function playPreviousVideo() {
+      const filteredVideos = currentCategory === 'all' 
+        ? videos 
+        : videos.filter(video => video.category === currentCategory);
+      
+      let prevIndex = currentVideoIndex - 1;
+      if (prevIndex < 0) {
+        prevIndex = filteredVideos.length - 1; // Loop to last video
+      }
+      
+      playVideo(prevIndex);
+    }
+
+    function updatePlayerInfo() {
+      const filteredVideos = currentCategory === 'all' 
+        ? videos 
+        : videos.filter(video => video.category === currentCategory);
+      
+      if (filteredVideos.length > 0) {
+        const video = filteredVideos[currentVideoIndex];
+        document.getElementById('currentVideoTitle').textContent = video.title;
+        document.getElementById('currentVideoDesc').textContent = video.description;
+      }
+    }
+
+    function toggleFullscreen() {
+      const playerContainer = document.getElementById('videoPlayerContainer');
+      
+      if (!document.fullscreenElement) {
+        if (playerContainer.requestFullscreen) {
+          playerContainer.requestFullscreen();
+        } else if (playerContainer.webkitRequestFullscreen) {
+          playerContainer.webkitRequestFullscreen();
+        } else if (playerContainer.msRequestFullscreen) {
+          playerContainer.msRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+      }
+    }
+
+    function downloadResource(type) {
+      let message = '';
+      switch(type) {
+        case 'layouts':
+          message = 'O download das imagens dos layouts começará em breve. Verifique sua pasta de downloads.';
+          break;
+        case 'guide':
+          message = 'O download do guia em PDF começará em breve. Verifique sua pasta de downloads.';
+          break;
+      }
+      
+      alert(message);
+      // Em um site real, aqui você faria o download real do arquivo
+    }
+
+    // Fullscreen change event
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    document.addEventListener('msfullscreenchange', handleFullscreenChange);
+
+    function handleFullscreenChange() {
+      const fullscreenBtn = document.querySelector('.fullscreen-btn i');
+      if (document.fullscreenElement) {
+        fullscreenBtn.className = 'fas fa-compress';
+      } else {
+        fullscreenBtn.className = 'fas fa-expand';
+      }
+    }
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      
+      switch(e.key) {
+        case ' ':
+        case 'k':
+          e.preventDefault();
+          // Toggle play/pause would require YouTube API
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          playNextVideo();
+          break;
+        case 'ArrowLeft':
+          e.preventDefault();
+          playPreviousVideo();
+          break;
+        case 'f':
+          e.preventDefault();
+          toggleFullscreen();
+          break;
+      }
+    });
+
+    // Estilos adicionais para os cards
+    const style = document.createElement('style');
+    style.textContent = `
+      .guide-card {
+        text-align: center;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      
+      .guide-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+        font-size: 24px;
+      }
+      
+      .guide-card h3 {
+        font-size: 16px;
+        margin-bottom: 10px;
+        color: #fff;
+      }
+      
+      .guide-card p {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.5;
+        margin-bottom: 15px;
+      }
+      
+      .guide-card ul {
+        list-style: none;
+        padding: 0;
+        text-align: left;
+      }
+      
+      .guide-card li {
+        color: var(--muted);
+        margin-bottom: 8px;
+        font-size: 13px;
+        padding-left: 20px;
+        position: relative;
+      }
+      
+      .guide-card li:before {
+        content: "✓";
+        color: #00d9ff;
+        position: absolute;
+        left: 0;
+      }
+      
+      .tip-box {
+        margin-top: 30px;
+        padding: 20px;
+        background: rgba(0, 217, 255, 0.05);
+        border-radius: 12px;
+        border-left: 4px solid #00d9ff;
+      }
+      
+      .tip-box h4 {
+        color: #00d9ff;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      
+      .tip-box p {
+        color: var(--muted);
+        line-height: 1.6;
+      }
+      
+      .tip-box a {
+        color: #00d9ff;
+        text-decoration: none;
+      }
+      
+      .tip-box a:hover {
+        text-decoration: underline;
+      }
+      
+      .resource-card {
+        text-align: center;
+        padding: 25px;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      
+      .resource-icon {
+        width: 60px;
+        height: 60px;
+        background: rgba(0, 217, 255, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+        color: #00d9ff;
+        font-size: 24px;
+      }
+      
+      .resource-card h3 {
+        font-size: 18px;
+        margin-bottom: 10px;
+        color: #fff;
+      }
+      
+      .resource-card p {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.5;
+        margin-bottom: 20px;
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>
