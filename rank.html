@@ -214,18 +214,26 @@
               <option value="platinum2">Platina II</option>
               <option value="platinum3">Platina III</option>
               <option value="platinum4">Platina IV</option>
+              <option value="platinum5">Platina V</option>
               <option value="diamond1">Diamante I</option>
               <option value="diamond2">Diamante II</option>
               <option value="diamond3">Diamante III</option>
               <option value="diamond4">Diamante IV</option>
-              <option value="heroic">Heróico</option>
-              <option value="grandmaster">Mestre</option>
+              <option value="diamond5">Diamante V</option>
+              <option value="heroic">Mestre</option>
+              <option value="grandmaster1">Mestre de Honra</option>
+              <option value="grandmaster2">Mestre de Honra II</option>
+              <option value="grandmaster3">Mestre de Honra III</option>
+              <option value="elite1">Elite</option>
+              <option value="elite2">Elite II</option>
+              <option value="elite_honor1">Elite de Honra</option>
+              <option value="elite_honor2">Elite de Honra II</option>
             </select>
           </div>
           
           <div class="input-group">
             <label class="input-label">Pontos Atuais:</label>
-            <input type="number" id="currentPoints" class="input" value="0" min="0">
+            <input type="number" id="currentPoints" class="input" value="1000" min="1000">
           </div>
           
           <div class="input-group">
@@ -246,13 +254,21 @@
               <option value="platinum2">Platina II</option>
               <option value="platinum3">Platina III</option>
               <option value="platinum4">Platina IV</option>
+              <option value="platinum5">Platina V</option>
               <option value="diamond1">Diamante I</option>
               <option value="diamond2">Diamante II</option>
               <option value="diamond3">Diamante III</option>
               <option value="diamond4">Diamante IV</option>
-              <option value="heroic" selected>Heróico</option>
-              <option value="grandmaster">Mestre</option>
-              <option value="challenger">Desafiante</option>
+              <option value="diamond5">Diamante V</option>
+              <option value="heroic">Mestre</option>
+              <option value="grandmaster1">Mestre de Honra</option>
+              <option value="grandmaster2">Mestre de Honra II</option>
+              <option value="grandmaster3">Mestre de Honra III</option>
+              <option value="elite1">Elite</option>
+              <option value="elite2">Elite II</option>
+              <option value="elite_honor1">Elite de Honra</option>
+              <option value="elite_honor2">Elite de Honra II</option>
+              <option value="challenger" selected>Desafiante</option>
             </select>
           </div>
           
@@ -312,12 +328,12 @@
           <button class="tab-btn" data-rank="gold">Ouro</button>
           <button class="tab-btn" data-rank="platinum">Platina</button>
           <button class="tab-btn" data-rank="diamond">Diamante</button>
-          <button class="tab-btn" data-rank="heroic">Heróico+</button>
+          <button class="tab-btn" data-rank="heroic">Mestre+</button>
         </div>
         
         <div class="tab-content">
           <div class="tab-pane active" id="bronze-tab">
-            <h3><i class="fas fa-seedling"></i> Bronze - Básico</h3>
+            <h3><i class="fas fa-seedling"></i> Bronze - Básico (1000-1399 pontos)</h3>
             <div class="strategy-content">
               <h4>Objetivo Principal:</h4>
               <p>Aprender os controles básicos e mecânicas do jogo.</p>
@@ -337,7 +353,7 @@
           </div>
           
           <div class="tab-pane" id="silver-tab">
-            <h3><i class="fas fa-star"></i> Prata - Intermediário</h3>
+            <h3><i class="fas fa-star"></i> Prata - Intermediário (1400-1724 pontos)</h3>
             <div class="strategy-content">
               <h4>Objetivo Principal:</h4>
               <p>Melhorar habilidades de combate e entender o mapa.</p>
@@ -357,7 +373,7 @@
           </div>
           
           <div class="tab-pane" id="gold-tab">
-            <h3><i class="fas fa-crown"></i> Ouro - Avançado</h3>
+            <h3><i class="fas fa-crown"></i> Ouro - Avançado (1725-2224 pontos)</h3>
             <div class="strategy-content">
               <h4>Objetivo Principal:</h4>
               <p>Desenvolver estratégias e melhorar K/D ratio.</p>
@@ -377,7 +393,7 @@
           </div>
           
           <div class="tab-pane" id="platinum-tab">
-            <h3><i class="fas fa-gem"></i> Platina - Competitivo</h3>
+            <h3><i class="fas fa-gem"></i> Platina - Competitivo (2225-2899 pontos)</h3>
             <div class="strategy-content">
               <h4>Objetivo Principal:</h4>
               <p>Refinar habilidades e começar a jogar competitivamente.</p>
@@ -397,7 +413,7 @@
           </div>
           
           <div class="tab-pane" id="diamond-tab">
-            <h3><i class="fas fa-diamond"></i> Diamante - Elite</h3>
+            <h3><i class="fas fa-diamond"></i> Diamante - Elite (2900-3799 pontos)</h3>
             <div class="strategy-content">
               <h4>Objetivo Principal:</h4>
               <p>Tornar-se jogador de elite com habilidades excepcionais.</p>
@@ -417,7 +433,7 @@
           </div>
           
           <div class="tab-pane" id="heroic-tab">
-            <h3><i class="fas fa-fire"></i> Heróico+ - Topo</h3>
+            <h3><i class="fas fa-fire"></i> Mestre+ - Topo (3800+ pontos)</h3>
             <div class="strategy-content">
               <h4>Objetivo Principal:</h4>
               <p>Manter-se no topo e competir pelo Desafiante.</p>
@@ -450,6 +466,7 @@
           <thead>
             <tr>
               <th>Rank</th>
+              <th>Pontos</th>
               <th>Diamantes</th>
               <th>Skin</th>
               <th>Moedas</th>
@@ -459,6 +476,7 @@
           <tbody>
             <tr>
               <td><span class="rank-badge bronze">Bronze</span></td>
+              <td>1000-1399</td>
               <td>50-100</td>
               <td>Comum</td>
               <td>1.000</td>
@@ -466,6 +484,7 @@
             </tr>
             <tr>
               <td><span class="rank-badge silver">Prata</span></td>
+              <td>1400-1724</td>
               <td>150-200</td>
               <td>Rara</td>
               <td>2.000</td>
@@ -473,6 +492,7 @@
             </tr>
             <tr>
               <td><span class="rank-badge gold">Ouro</span></td>
+              <td>1725-2224</td>
               <td>250-300</td>
               <td>Épica</td>
               <td>3.500</td>
@@ -480,6 +500,7 @@
             </tr>
             <tr>
               <td><span class="rank-badge platinum">Platina</span></td>
+              <td>2225-2899</td>
               <td>350-400</td>
               <td>Lendária</td>
               <td>5.000</td>
@@ -487,31 +508,51 @@
             </tr>
             <tr>
               <td><span class="rank-badge diamond">Diamante</span></td>
+              <td>2900-3799</td>
               <td>500-600</td>
               <td>Mítica</td>
               <td>7.500</td>
               <td>Avatar Exclusivo</td>
             </tr>
             <tr>
-              <td><span class="rank-badge heroic">Heróico</span></td>
-              <td>800-1000</td>
+              <td><span class="rank-badge heroic">Mestre</span></td>
+              <td>3800-4299</td>
+              <td>800-900</td>
               <td>Exclusiva</td>
               <td>10.000</td>
               <td>Todos os Itens + Bônus</td>
             </tr>
             <tr>
-              <td><span class="rank-badge grandmaster">Mestre</span></td>
-              <td>1200-1500</td>
-              <td>Única</td>
+              <td><span class="rank-badge grandmaster">Mestre de Honra</span></td>
+              <td>4300-6299</td>
+              <td>1000-1200</td>
+              <td>Mítica Especial</td>
               <td>15.000</td>
               <td>Recompensas Especiais</td>
             </tr>
             <tr>
-              <td><span class="rank-badge challenger">Desafiante</span></td>
-              <td>2000+</td>
+              <td><span class="rank-badge elite">Elite</span></td>
+              <td>6300-7999</td>
+              <td>1500-1800</td>
+              <td>Única</td>
+              <td>20.000</td>
+              <td>Todos + Especiais</td>
+            </tr>
+            <tr>
+              <td><span class="rank-badge elite-honor">Elite de Honra</span></td>
+              <td>8000-9999</td>
+              <td>2000-2500</td>
               <td>Lendária Única</td>
-              <td>20.000+</td>
+              <td>25.000+</td>
               <td>Todas + Especiais da Temporada</td>
+            </tr>
+            <tr>
+              <td><span class="rank-badge challenger">Desafiante</span></td>
+              <td>10000+</td>
+              <td>3000+</td>
+              <td>Lendária Única Exclusiva</td>
+              <td>30.000+</td>
+              <td>Todas + Troféu Virtual</td>
             </tr>
           </tbody>
         </table>
@@ -579,7 +620,7 @@
         <p>
           Subir de rank é uma jornada, não uma corrida. Cada vitória conta, cada derrota ensina. 
           Com prática consistente e as estratégias certas, você pode alcançar o rank Desafiante. 
-          Lembre-se: até os melhores jogadores começaram no Bronze.
+          Lembre-se: até os melhores jogadores começaram no Bronze com 1000 pontos.
         </p>
       </div>
     </section>
@@ -616,35 +657,62 @@
 
   <script src="script.js"></script>
   <script>
-    // Rank data
+    // Rank data atualizada - Dados precisos de pontos e patentes do Free Fire (BR)
     const rankData = [
-      { id: 'bronze1', name: 'Bronze I', color: '#CD7F32', points: 0, next: 100 },
-      { id: 'bronze2', name: 'Bronze II', color: '#CD7F32', points: 100, next: 200 },
-      { id: 'bronze3', name: 'Bronze III', color: '#CD7F32', points: 200, next: 300 },
-      { id: 'silver1', name: 'Prata I', color: '#C0C0C0', points: 300, next: 450 },
-      { id: 'silver2', name: 'Prata II', color: '#C0C0C0', points: 450, next: 600 },
-      { id: 'silver3', name: 'Prata III', color: '#C0C0C0', points: 600, next: 750 },
-      { id: 'silver4', name: 'Prata IV', color: '#C0C0C0', points: 750, next: 900 },
-      { id: 'gold1', name: 'Ouro I', color: '#FFD700', points: 900, next: 1100 },
-      { id: 'gold2', name: 'Ouro II', color: '#FFD700', points: 1100, next: 1300 },
-      { id: 'gold3', name: 'Ouro III', color: '#FFD700', points: 1300, next: 1500 },
-      { id: 'gold4', name: 'Ouro IV', color: '#FFD700', points: 1500, next: 1700 },
-      { id: 'platinum1', name: 'Platina I', color: '#00CED1', points: 1700, next: 2000 },
-      { id: 'platinum2', name: 'Platina II', color: '#00CED1', points: 2000, next: 2300 },
-      { id: 'platinum3', name: 'Platina III', color: '#00CED1', points: 2300, next: 2600 },
-      { id: 'platinum4', name: 'Platina IV', color: '#00CED1', points: 2600, next: 2900 },
-      { id: 'diamond1', name: 'Diamante I', color: '#B9F2FF', points: 2900, next: 3400 },
-      { id: 'diamond2', name: 'Diamante II', color: '#B9F2FF', points: 3400, next: 3900 },
-      { id: 'diamond3', name: 'Diamante III', color: '#B9F2FF', points: 3900, next: 4400 },
-      { id: 'diamond4', name: 'Diamante IV', color: '#B9F2FF', points: 4400, next: 4900 },
-      { id: 'heroic', name: 'Heróico', color: '#FF4500', points: 4900, next: 6000 },
-      { id: 'grandmaster', name: 'Mestre', color: '#800080', points: 6000, next: 8000 },
-      { id: 'challenger', name: 'Desafiante', color: '#FF0000', points: 8000, next: null }
+      // Bronze
+      { id: 'bronze1', name: 'Bronze I', color: '#CD7F32', points: 1000, next: 1150 },
+      { id: 'bronze2', name: 'Bronze II', color: '#CD7F32', points: 1150, next: 1300 },
+      { id: 'bronze3', name: 'Bronze III', color: '#CD7F32', points: 1300, next: 1399 },
+      
+      // Prata
+      { id: 'silver1', name: 'Prata I', color: '#C0C0C0', points: 1400, next: 1450 },
+      { id: 'silver2', name: 'Prata II', color: '#C0C0C0', points: 1450, next: 1500 },
+      { id: 'silver3', name: 'Prata III', color: '#C0C0C0', points: 1500, next: 1599 },
+      { id: 'silver4', name: 'Prata IV', color: '#C0C0C0', points: 1600, next: 1724 },
+      
+      // Ouro
+      { id: 'gold1', name: 'Ouro I', color: '#FFD700', points: 1725, next: 1850 },
+      { id: 'gold2', name: 'Ouro II', color: '#FFD700', points: 1850, next: 1975 },
+      { id: 'gold3', name: 'Ouro III', color: '#FFD700', points: 1975, next: 2100 },
+      { id: 'gold4', name: 'Ouro IV', color: '#FFD700', points: 2100, next: 2224 },
+      
+      // Platina
+      { id: 'platinum1', name: 'Platina I', color: '#00CED1', points: 2225, next: 2350 },
+      { id: 'platinum2', name: 'Platina II', color: '#00CED1', points: 2350, next: 2475 },
+      { id: 'platinum3', name: 'Platina III', color: '#00CED1', points: 2475, next: 2600 },
+      { id: 'platinum4', name: 'Platina IV', color: '#00CED1', points: 2600, next: 2750 },
+      { id: 'platinum5', name: 'Platina V', color: '#00CED1', points: 2750, next: 2900 },
+      
+      // Diamante
+      { id: 'diamond1', name: 'Diamante I', color: '#800080', points: 2900, next: 3050 },
+      { id: 'diamond2', name: 'Diamante II', color: '#800080', points: 3050, next: 3200 },
+      { id: 'diamond3', name: 'Diamante III', color: '#800080', points: 3200, next: 3350 },
+      { id: 'diamond4', name: 'Diamante IV', color: '#800080', points: 3350, next: 3500 },
+      { id: 'diamond5', name: 'Diamante V', color: '#800080', points: 3500, next: 3800 },
+      
+      // Mestre
+      { id: 'heroic', name: 'Mestre', color: '#FF0000', points: 3800, next: 4300 },
+      
+      // Mestre de Honra
+      { id: 'grandmaster1', name: 'Mestre de Honra', color: '#FF4500', points: 4300, next: 4900 },
+      { id: 'grandmaster2', name: 'Mestre de Honra II', color: '#FF4500', points: 4900, next: 5500 },
+      { id: 'grandmaster3', name: 'Mestre de Honra III', color: '#FF4500', points: 5500, next: 6300 },
+      
+      // Elite
+      { id: 'elite1', name: 'Elite', color: '#FF8000', points: 6300, next: 7100 },
+      { id: 'elite2', name: 'Elite II', color: '#FF8000', points: 7100, next: 8000 },
+      
+      // Elite de Honra
+      { id: 'elite_honor1', name: 'Elite de Honra', color: '#FF69B4', points: 8000, next: 9000 },
+      { id: 'elite_honor2', name: 'Elite de Honra II', color: '#FF69B4', points: 9000, next: 10000 },
+      
+      // Desafiante
+      { id: 'challenger', name: 'Desafiante', color: '#FFFF00', points: 10000, next: null }
     ];
 
     document.addEventListener('DOMContentLoaded', function() {
       // Mobile menu
-     document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener('DOMContentLoaded', function() {
       const menuToggle = document.getElementById('menuToggle');
       const mainNav = document.getElementById('mainNav');
       
@@ -724,7 +792,7 @@
           closeMenu();
         }
       });
-     });
+    });
 
       // Generate ranks display
       generateRanksDisplay();
@@ -794,6 +862,8 @@
       if (rankId.includes('diamond')) return 'diamond';
       if (rankId.includes('heroic')) return 'fire';
       if (rankId.includes('grandmaster')) return 'chess-queen';
+      if (rankId.includes('elite')) return 'chess-king';
+      if (rankId.includes('elite_honor')) return 'crown';
       if (rankId.includes('challenger')) return 'trophy';
       return 'question';
     }
@@ -840,6 +910,11 @@
         // Points for target rank (if not challenger)
         if (targetRank.next) {
           pointsNeeded += targetRank.next - targetRank.points;
+        } else {
+          // For challenger, calculate from last point to 10000
+          if (currentPoints < 10000) {
+            pointsNeeded += 10000 - Math.max(currentPoints, targetRank.points);
+          }
         }
       }
       
@@ -864,27 +939,32 @@
       let difficulty = 'Fácil';
       let difficultyColor = '#4ade80';
       
-      if (matchesNeeded > 100) {
+      if (pointsNeeded > 5000) {
         difficulty = 'Muito Difícil';
         difficultyColor = '#ef4444';
-      } else if (matchesNeeded > 50) {
+      } else if (pointsNeeded > 3000) {
         difficulty = 'Difícil';
         difficultyColor = '#f59e0b';
-      } else if (matchesNeeded > 25) {
+      } else if (pointsNeeded > 1000) {
         difficulty = 'Média';
         difficultyColor = '#eab308';
+      } else if (pointsNeeded > 500) {
+        difficulty = 'Fácil';
+        difficultyColor = '#4ade80';
       }
       
       // Generate tip
       let tip = '';
-      if (matchesNeeded > 100) {
-        tip = 'Considere aumentar seu K/D ratio para ganhar mais pontos por partida.';
-      } else if (matchesNeeded > 50) {
-        tip = 'Jogue em squad com amigos para melhorar suas chances de vitória.';
-      } else if (matchesNeeded > 25) {
-        tip = 'Mantenha a consistência e evite perder muitos pontos em derrotas.';
+      if (pointsNeeded > 5000) {
+        tip = 'Esta é uma jornada longa. Mantenha a consistência e jogue com um squad fixo para melhores resultados.';
+      } else if (pointsNeeded > 3000) {
+        tip = 'Foque em melhorar seu K/D ratio para ganhar mais pontos por partida. Treine sua mira diariamente.';
+      } else if (pointsNeeded > 1000) {
+        tip = 'Jogue em squad com amigos para melhorar suas chances de vitória e ganhar bônus de squad.';
+      } else if (pointsNeeded > 500) {
+        tip = 'Mantenha a consistência e evite perder muitos pontos em derrotas. Priorize a sobrevivência.';
       } else {
-        tip = 'Você está perto! Mantenha o foco e evite riscos desnecessários.';
+        tip = 'Você está perto! Mantenha o foco, evite riscos desnecessários e aproveite as últimas partidas.';
       }
       
       // Update results
@@ -1184,20 +1264,28 @@
     }
     
     .rank-badge.diamond {
-      background: #B9F2FF;
-      color: #333;
-    }
-    
-    .rank-badge.heroic {
-      background: #FF4500;
-    }
-    
-    .rank-badge.grandmaster {
       background: #800080;
     }
     
-    .rank-badge.challenger {
+    .rank-badge.heroic {
       background: #FF0000;
+    }
+    
+    .rank-badge.grandmaster {
+      background: #FF4500;
+    }
+    
+    .rank-badge.elite {
+      background: #FF8000;
+    }
+    
+    .rank-badge.elite-honor {
+      background: #FF69B4;
+    }
+    
+    .rank-badge.challenger {
+      background: #FFFF00;
+      color: #333;
     }
     
     .tips-grid {
